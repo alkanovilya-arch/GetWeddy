@@ -7,13 +7,16 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:system-ui,-apple-system,sans-serif;background:#FFF9FB;color:#333;padding-bottom:20px}
-.header{background:linear-gradient(135deg,#FF7EB9,#FF65A3);padding:12px 0;text-align:center;position:sticky;top:0;z-index:100}
-.header h1{font-size:24px;color:#fff;letter-spacing:1px}
-.header-actions{display:flex;justify-content:center;gap:6px;margin-top:6px}
-.header-btn{background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.3);padding:4px 12px;border-radius:16px;font-size:11px;font-weight:600;cursor:pointer}
-.tabs{display:flex;justify-content:center;gap:4px;padding:8px 6px;background:#fff;border-bottom:1px solid #eee;position:sticky;top:68px;z-index:99}
-.tab{padding:6px 12px;background:#f0f0f0;border-radius:20px;font-size:12px;font-weight:600;color:#666;text-align:center;flex:1;max-width:80px;cursor:pointer}
+
+/* ===== ШАПКА (увеличена) ===== */
+.header{background:linear-gradient(135deg,#FF7EB9,#FF65A3);padding:16px 0;text-align:center;position:sticky;top:0;z-index:100}
+.header h1{font-size:28px;color:#fff;letter-spacing:1px}
+
+/* ===== ВКЛАДКИ (увеличены) ===== */
+.tabs{display:flex;justify-content:center;gap:6px;padding:10px 6px;background:#fff;border-bottom:1px solid #eee;position:sticky;top:72px;z-index:99}
+.tab{padding:10px 16px;background:#f0f0f0;border-radius:30px;font-size:15px;font-weight:600;color:#666;text-align:center;flex:1;max-width:100px;cursor:pointer}
 .tab.active{background:#FF7EB9;color:#fff;box-shadow:0 2px 8px rgba(255,126,185,0.4)}
+
 .content{display:none;padding:12px 10px;background:#FFF9FB}
 .content.active{display:block}
 .content h2{text-align:center;font-size:20px;color:#FF7EB9;margin:0 0 12px}
@@ -27,20 +30,36 @@ form{max-width:500px;margin:0 auto}
 button{padding:8px 20px;border:none;border-radius:25px;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF7EB9,#FF65A3);box-shadow:0 2px 8px rgba(255,126,185,0.3);cursor:pointer}
 button:active{transform:scale(0.94)}
 button.secondary{background:#888;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+
+/* ===== ТАБЛИЦА ===== */
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:8px;background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
 table{width:100%;border-collapse:collapse;font-size:11px;min-width:500px}
 th{background:#FF7EB9;color:#fff;padding:6px 4px;font-size:10px;font-weight:600;white-space:nowrap;position:sticky;top:0;z-index:10}
-td{padding:6px 4px;border-bottom:1px solid #f0f0f0;text-align:center}
+td{padding:6px 4px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-align:middle}
 .status-upcoming td{background:#fff8e1!important}
 .status-overdue td{background:#ffebee!important}
+
+/* Строка с кнопкой плюс */
+.expand-btn{background:none;border:none;font-size:16px;font-weight:700;cursor:pointer;color:#FF7EB9;padding:0 4px}
+.expand-btn:active{transform:scale(0.85)}
+
+/* Раскрывающаяся строка (скрыта по умолчанию) */
+.expandable-row{display:none}
+.expandable-row.open{display:table-row}
+.expandable-row td{padding:8px 4px;background:#f9f9f9;font-size:10px;color:#555;border-bottom:1px solid #ddd}
+.expandable-row td strong{color:#333}
+
+/* ===== МЕСЯЦЫ (полные названия) ===== */
 .month-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:400px;margin:15px auto 0}
 .month{padding:14px 6px;border-radius:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
 .month:active{transform:scale(0.95)}
-.month h3{font-size:14px;font-weight:600;margin:0 0 4px}
+.month h3{font-size:13px;font-weight:600;margin:0 0 4px;line-height:1.2}
 .month p{font-size:18px;font-weight:700;margin:0}
 .month.default{background:#4CAF50;color:#fff}
 .month.warning{background:#FFC107;color:#333}
 .month.overloaded{background:#F44336;color:#fff}
+
+/* ===== ФИНАНСЫ ===== */
 .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
 .stat-card{background:#fff;padding:10px;border-radius:8px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
 .stat-card h3{font-size:11px;color:#888;margin:0 0 2px;font-weight:500}
@@ -48,6 +67,8 @@ td{padding:6px 4px;border-bottom:1px solid #f0f0f0;text-align:center}
 .chart-container{background:#fff;padding:10px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
 .chart-title{text-align:center;font-size:15px;color:#FF7EB9;margin-bottom:8px}
 .chart-wrap{position:relative;height:180px}
+
+/* ===== ПОИСК ===== */
 .search-input{width:100%;max-width:500px;margin:0 auto 8px;display:block;padding:8px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;background:#fafafa;-webkit-appearance:none;appearance:none}
 .search-input:focus{outline:none;border-color:#FF7EB9;background:#fff;box-shadow:0 0 0 3px rgba(255,126,185,0.15)}
 .empty-state{text-align:center;padding:20px 10px;color:#999}
@@ -58,7 +79,23 @@ td{padding:6px 4px;border-bottom:1px solid #f0f0f0;text-align:center}
 .action-btn.edit{background:#FFC107;color:#333}
 .action-btn.delete{background:#F44336;color:#fff}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:9999;display:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:90%;text-align:center;pointer-events:none}
-@media(max-width:480px){.header h1{font-size:20px}.tab{font-size:10px;padding:4px 8px;max-width:60px}.content{padding:8px 6px}.month-grid{gap:6px;max-width:320px}.month{padding:10px 4px}.month h3{font-size:12px}.month p{font-size:15px}.stats-grid{gap:4px}.stat-card p{font-size:15px}.stat-card{padding:6px}.chart-wrap{height:150px}table{font-size:9px;min-width:400px}th,td{padding:3px 2px}.form-group input,.form-group select{font-size:14px;padding:6px 8px}}
+
+@media(max-width:480px){
+.header h1{font-size:22px}
+.tab{font-size:13px;padding:8px 12px;max-width:80px}
+.content{padding:8px 6px}
+.month-grid{gap:6px;max-width:320px}
+.month{padding:10px 4px}
+.month h3{font-size:12px}
+.month p{font-size:15px}
+.stats-grid{gap:4px}
+.stat-card p{font-size:15px}
+.stat-card{padding:6px}
+.chart-wrap{height:150px}
+table{font-size:9px;min-width:400px}
+th,td{padding:3px 2px}
+.form-group input,.form-group select{font-size:14px;padding:6px 8px}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
@@ -67,14 +104,9 @@ td{padding:6px 4px;border-bottom:1px solid #f0f0f0;text-align:center}
 
 <div class="header">
 <h1>GetWeddy</h1>
-<div class="header-actions">
-<button class="header-btn" onclick="exportData()">📥</button>
-<button class="header-btn" onclick="document.getElementById('importInput').click()">📤</button>
-<input type="file" id="importInput" accept=".json" style="display:none" onchange="importData(event)">
-</div>
 </div>
 
-<!-- ===== ВКЛАДКИ — ТОЛЬКО ONCLICK (ГАРАНТИРОВАННО РАБОТАЕТ НА IPHONE) ===== -->
+<!-- ===== ВКЛАДКИ ===== -->
 <div class="tabs">
 <div class="tab active" onclick="switchTab('weddings')">Главная</div>
 <div class="tab" onclick="switchTab('load')">Загрузка</div>
@@ -82,6 +114,7 @@ td{padding:6px 4px;border-bottom:1px solid #f0f0f0;text-align:center}
 <div class="tab" onclick="switchTab('finance')">Финансы</div>
 </div>
 
+<!-- ===== ГЛАВНАЯ ===== -->
 <div id="weddings" class="content active">
 <h2>Добавить съемку</h2>
 <form id="bookingForm">
@@ -101,19 +134,39 @@ td{padding:6px 4px;border-bottom:1px solid #f0f0f0;text-align:center}
 </form>
 </div>
 
+<!-- ===== ЗАГРУЗКА ===== -->
 <div id="load" class="content">
 <h2>Загрузка сезона</h2>
 <p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 8px;">Часы по месяцам</p>
 <div class="month-grid" id="monthGrid"></div>
 </div>
 
+<!-- ===== КЛИЕНТЫ ===== -->
 <div id="clients" class="content">
 <h2>Клиентская база</h2>
 <input type="text" class="search-input" id="searchClients" placeholder="🔍 Поиск..." oninput="filterClients(this.value)">
-<div class="table-wrap"><table><thead><tr><th>№</th><th>ФИО</th><th>Тел</th><th>Instagram</th><th>Дата</th><th>Ч</th><th>Сумма</th><th>Действия</th></tr></thead><tbody id="clientsTableBody"></tbody></table></div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>➕</th>
+<th>№</th>
+<th>ФИО</th>
+<th>Тел</th>
+<th>Instagram</th>
+<th>Дата</th>
+<th>Часы</th>
+<th>Сумма</th>
+<th>Действия</th>
+</tr>
+</thead>
+<tbody id="clientsTableBody"></tbody>
+</table>
+</div>
 <div id="emptyState" class="empty-state" style="display:none;"><div class="icon">📭</div><h3>Нет клиентов</h3><p>Добавьте первую съемку</p></div>
 </div>
 
+<!-- ===== ФИНАНСЫ ===== -->
 <div id="finance" class="content">
 <h2>Анализ финансов</h2>
 <div class="stats-grid"><div class="stat-card"><h3>Выручка</h3><p id="totalRevenue">0 ₽</p></div><div class="stat-card"><h3>Предоплата</h3><p id="totalPrepayment">0 ₽</p></div><div class="stat-card"><h3>Агентские</h3><p id="totalAgency">0 ₽</p></div><div class="stat-card"><h3>На руки</h3><p id="totalInHand">0 ₽</p></div></div>
@@ -126,7 +179,9 @@ td{padding:6px 4px;border-bottom:1px solid #f0f0f0;text-align:center}
 var bookings = [];
 var editingId = null;
 var financeChart = null;
-var monthNames = ["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"];
+
+// ПОЛНЫЕ НАЗВАНИЯ МЕСЯЦЕВ
+var monthNames = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
 
 function showToast(m) {
     var t = document.getElementById('toast');
@@ -164,6 +219,7 @@ function renderAll() {
     }
 }
 
+// ===== КАЛЕНДАРЬ (ПОЛНЫЕ МЕСЯЦА) =====
 function renderCalendar() {
     var months = {};
     for (var i = 0; i < bookings.length; i++) {
@@ -181,6 +237,7 @@ function renderCalendar() {
     document.getElementById('monthGrid').innerHTML = html;
 }
 
+// ===== ТАБЛИЦА КЛИЕНТОВ (С РАСКРЫТИЕМ) =====
 function renderClientsTable() {
     var tbody = document.getElementById('clientsTableBody');
     var empty = document.getElementById('emptyState');
@@ -200,21 +257,45 @@ function renderClientsTable() {
         var cls = '';
         if (days < 0) cls = 'status-overdue';
         else if (days <= 7) cls = 'status-upcoming';
-        html += '<tr class="' + cls + '">' +
-            '<td>' + b.id + '</td>' +
-            '<td>' + b.name + '</td>' +
-            '<td>' + b.phone + '</td>' +
-            '<td>' + b.instagram + '</td>' +
-            '<td>' + new Date(b.date).toLocaleDateString('ru-RU') + '</td>' +
-            '<td>' + b.hours + '</td>' +
-            '<td>' + b.total.toLocaleString('ru-RU') + ' ₽</td>' +
-            '<td><button class="action-btn edit" onclick="editBooking(' + b.id + ')">✏️</button><button class="action-btn delete" onclick="deleteBooking(' + b.id + ')">🗑️</button></td>' +
-        '</tr>';
+        
+        // Основная строка
+        html += '<tr class="' + cls + '">';
+        html += '<td><button class="expand-btn" onclick="toggleExpand(' + b.id + ')">➕</button></td>';
+        html += '<td>' + b.id + '</td>';
+        html += '<td>' + b.name + '</td>';
+        html += '<td>' + b.phone + '</td>';
+        html += '<td>' + b.instagram + '</td>';
+        html += '<td>' + new Date(b.date).toLocaleDateString('ru-RU') + '</td>';
+        html += '<td>' + b.hours + '</td>';
+        html += '<td>' + b.total.toLocaleString('ru-RU') + ' ₽</td>';
+        html += '<td><button class="action-btn edit" onclick="editBooking(' + b.id + ')">✏️</button><button class="action-btn delete" onclick="deleteBooking(' + b.id + ')">🗑️</button></td>';
+        html += '</tr>';
+        
+        // Раскрывающаяся строка (скрыта по умолчанию)
+        html += '<tr class="expandable-row" id="expand-' + b.id + '">';
+        html += '<td colspan="9" style="text-align:left; padding:8px 12px; font-size:11px; background:#f9f9f9;">';
+        html += '<strong>📋 Детали:</strong> Договор: ' + b.contract + ' | Локация: ' + b.locationStart + ' → ' + b.locationEnd + ' | Выдача: ' + b.delivery + ' мес. | Предоплата: ' + b.prepayment.toLocaleString('ru-RU') + ' ₽ | Агентские: ' + b.agency.toLocaleString('ru-RU') + ' ₽';
+        html += '</td>';
+        html += '</tr>';
     }
     tbody.innerHTML = html;
     empty.style.display = 'none';
+    
     var sv = document.getElementById('searchClients').value;
     if (sv) filterClients(sv);
+}
+
+// ===== РАСКРЫТИЕ СТРОКИ =====
+function toggleExpand(id) {
+    var row = document.getElementById('expand-' + id);
+    if (row) {
+        row.classList.toggle('open');
+        // Меняем текст кнопки
+        var btn = document.querySelector('.expand-btn[onclick="toggleExpand(' + id + ')"]');
+        if (btn) {
+            btn.textContent = row.classList.contains('open') ? '➖' : '➕';
+        }
+    }
 }
 
 function filterClients(q) {
@@ -222,6 +303,7 @@ function filterClients(q) {
     var rows = document.querySelectorAll('#clientsTableBody tr');
     var visible = 0;
     for (var i = 0; i < rows.length; i++) {
+        if (rows[i].classList.contains('expandable-row')) continue; // пропускаем скрытые строки
         var match = rows[i].textContent.toLowerCase().indexOf(q) !== -1;
         rows[i].style.display = match ? '' : 'none';
         if (match) visible++;
@@ -392,23 +474,19 @@ function deleteBooking(id) {
     showToast('Удалено');
 }
 
-// ===== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК (onclick) =====
+// ===== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК =====
 function switchTab(tabId) {
-    // Скрываем все контенты
     var contents = document.querySelectorAll('.content');
     for (var i = 0; i < contents.length; i++) {
         contents[i].classList.remove('active');
     }
-    // Показываем нужный
     var target = document.getElementById(tabId);
     if (target) target.classList.add('active');
     
-    // Убираем активные классы с табов
     var tabs = document.querySelectorAll('.tab');
     for (var i = 0; i < tabs.length; i++) {
         tabs[i].classList.remove('active');
     }
-    // Активируем нужный таб
     for (var i = 0; i < tabs.length; i++) {
         if (tabs[i].getAttribute('onclick') === "switchTab('" + tabId + "')") {
             tabs[i].classList.add('active');
@@ -416,7 +494,6 @@ function switchTab(tabId) {
         }
     }
     
-    // Рендерим данные для конкретной вкладки
     if (tabId === 'load') {
         renderCalendar();
     }
