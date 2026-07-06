@@ -39,11 +39,8 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .status-upcoming td{background:#fff8e1!important}
 .status-overdue td{background:#ffebee!important}
 
-/* Кнопка плюс */
 .expand-btn{background:none;border:none;font-size:20px;font-weight:700;cursor:pointer;color:#FF7EB9;padding:4px 8px;touch-action:manipulation}
 .expand-btn:active{transform:scale(0.85)}
-
-/* Раскрывающаяся строка */
 .expandable-row{display:none}
 .expandable-row.open{display:table-row}
 .expandable-row td{padding:10px 8px;background:#f9f9f9;font-size:11px;color:#555;border-bottom:1px solid #ddd}
@@ -84,6 +81,9 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .action-btn.delete{background:#F44336;color:#fff}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:9999;display:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:90%;text-align:center;pointer-events:none}
 
+/* ===== PULL TO REFRESH (добавлен) ===== */
+#pullToRefresh{position:fixed;top:-50px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.75);color:#fff;padding:8px 16px;border-radius:20px;font-size:13px;font-weight:500;z-index:9999;transition:top 0.2s ease;pointer-events:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);white-space:nowrap}
+
 @media(max-width:480px){
 .header h1{font-size:22px}
 .tab{font-size:13px;padding:8px 12px;max-width:80px}
@@ -100,6 +100,7 @@ table{font-size:10px;min-width:400px}
 th,td{padding:6px 3px}
 .form-group input,.form-group select{font-size:14px;padding:6px 8px}
 .expandable-row .detail-grid{grid-template-columns:1fr}
+#pullToRefresh{font-size:11px;padding:6px 12px}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -111,7 +112,6 @@ th,td{padding:6px 3px}
 <h1>GetWeddy</h1>
 </div>
 
-<!-- ===== ВКЛАДКИ ===== -->
 <div class="tabs">
 <div class="tab active" onclick="switchTab('weddings')">Главная</div>
 <div class="tab" onclick="switchTab('load')">Загрузка</div>
@@ -119,7 +119,6 @@ th,td{padding:6px 3px}
 <div class="tab" onclick="switchTab('finance')">Финансы</div>
 </div>
 
-<!-- ===== ГЛАВНАЯ ===== -->
 <div id="weddings" class="content active">
 <h2>Добавить съемку</h2>
 <form id="bookingForm">
@@ -139,14 +138,12 @@ th,td{padding:6px 3px}
 </form>
 </div>
 
-<!-- ===== ЗАГРУЗКА ===== -->
 <div id="load" class="content">
 <h2>Загрузка сезона</h2>
 <p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 8px;">Часы по месяцам</p>
 <div class="month-grid" id="monthGrid"></div>
 </div>
 
-<!-- ===== КЛИЕНТЫ ===== -->
 <div id="clients" class="content">
 <h2>Клиентская база</h2>
 <input type="text" class="search-input" id="searchClients" placeholder="🔍 Поиск..." oninput="filterClients(this.value)">
@@ -166,7 +163,6 @@ th,td{padding:6px 3px}
 <div id="emptyState" class="empty-state" style="display:none;"><div class="icon">📭</div><h3>Нет клиентов</h3><p>Добавьте первую съемку</p></div>
 </div>
 
-<!-- ===== ФИНАНСЫ ===== -->
 <div id="finance" class="content">
 <h2>Анализ финансов</h2>
 <div class="stats-grid"><div class="stat-card"><h3>Выручка</h3><p id="totalRevenue">0 ₽</p></div><div class="stat-card"><h3>Предоплата</h3><p id="totalPrepayment">0 ₽</p></div><div class="stat-card"><h3>Агентские</h3><p id="totalAgency">0 ₽</p></div><div class="stat-card"><h3>На руки</h3><p id="totalInHand">0 ₽</p></div></div>
@@ -254,7 +250,6 @@ function renderClientsTable() {
         if (days < 0) cls = 'status-overdue';
         else if (days <= 7) cls = 'status-upcoming';
         
-        // Основная строка: №, ФИО, Тел, ➕
         html += '<tr class="' + cls + '">';
         html += '<td>' + b.id + '</td>';
         html += '<td>' + b.name + '</td>';
@@ -262,7 +257,6 @@ function renderClientsTable() {
         html += '<td><button class="expand-btn" onclick="toggleExpand(' + b.id + ')">➕</button></td>';
         html += '</tr>';
         
-        // Раскрывающаяся строка (ВСЕ данные)
         html += '<tr class="expandable-row" id="expand-' + b.id + '">';
         html += '<td colspan="4" style="padding:12px 10px; background:#f9f9f9;">';
         html += '<div class="detail-grid">';
@@ -506,85 +500,46 @@ function switchTab(tabId) {
     }
 }
 
+// ===== PULL TO REFRESH (ДОБАВЛЕН) =====
+(function() {
+    var startY = 0;
+    var pulling = false;
+    var indicator = document.createElement('div');
+    indicator.id = 'pullToRefresh';
+    indicator.textContent = '⬇️ Потяни, чтобы обновить';
+    document.body.appendChild(indicator);
+
+    document.addEventListener('touchstart', function(e) {
+        if (window.scrollY === 0) {
+            startY = e.touches[0].clientY;
+            pulling = true;
+        }
+    }, { passive: true });
+
+    document.addEventListener('touchmove', function(e) {
+        if (!pulling) return;
+        var diff = e.touches[0].clientY - startY;
+        if (diff > 0 && diff < 120) {
+            indicator.style.top = (diff - 50) + 'px';
+            indicator.textContent = diff > 60 ? '🔄 Отпусти, чтобы обновить' : '⬇️ Потяни, чтобы обновить';
+        }
+    }, { passive: true });
+
+    document.addEventListener('touchend', function(e) {
+        if (!pulling) return;
+        pulling = false;
+        var diff = e.changedTouches[0].clientY - startY;
+        indicator.style.top = '-50px';
+        if (diff > 60) {
+            indicator.textContent = '🔄 Обновление...';
+            indicator.style.top = '20px';
+            setTimeout(function() {
+                location.reload();
+            }, 400);
+        }
+    }, { passive: true });
+})();
+
 function init() {
     loadData();
-    document.getElementById('date').min = new Date().toISOString().split('T')[0];
-    document.getElementById('phone').addEventListener('input', function() {
-        formatPhone(this);
-    });
-    
-    document.getElementById('bookingForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        var f = e.target;
-        var dup = false;
-        for (var i = 0; i < bookings.length; i++) {
-            if (bookings[i].contract === f.contract.value && bookings[i].id !== editingId) {
-                dup = true;
-                break;
-            }
-        }
-        if (dup) {
-            showToast('Договор уже существует!');
-            f.contract.focus();
-            return;
-        }
-        var maxId = 0;
-        for (var i = 0; i < bookings.length; i++) {
-            if (bookings[i].id > maxId) maxId = bookings[i].id;
-        }
-        var booking = {
-            id: editingId || maxId + 1,
-            name: f.name.value.trim(),
-            phone: f.phone.value,
-            instagram: f.instagram.value.trim(),
-            contract: f.contract.value.trim(),
-            date: f.date.value,
-            hours: parseInt(f.hours.value) || 0,
-            delivery: parseInt(f.delivery.value) || 0,
-            locationStart: f.locationStart.value.trim(),
-            locationEnd: f.locationEnd.value.trim(),
-            prepayment: parseInt(f.prepayment.value) || 0,
-            agency: parseInt(f.agency.value) || 0,
-            total: parseInt(f.total.value) || 0,
-            amountInHand: (parseInt(f.total.value) || 0) - (parseInt(f.prepayment.value) || 0) - (parseInt(f.agency.value) || 0)
-        };
-        if (booking.prepayment + booking.agency > booking.total) {
-            showToast('Предоплата + агентские > суммы!');
-            return;
-        }
-        if (booking.amountInHand < 0) {
-            showToast('Сумма на руки отрицательная!');
-            return;
-        }
-        if (booking.hours <= 0) {
-            showToast('Часы должны быть > 0');
-            return;
-        }
-        if (editingId) {
-            for (var i = 0; i < bookings.length; i++) {
-                if (bookings[i].id === editingId) {
-                    bookings[i] = booking;
-                    break;
-                }
-            }
-            editingId = null;
-            document.getElementById('submitBtn').textContent = 'Добавить';
-        } else {
-            bookings.push(booking);
-        }
-        f.reset();
-        saveData();
-        showToast('Съемка добавлена!');
-    });
-    
-    renderAll();
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-} else {
-    init();
-}
-</script>
-</body>
-</html>
+    document.getElementById('date
