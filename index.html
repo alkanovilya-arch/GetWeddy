@@ -8,11 +8,11 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:system-ui,-apple-system,sans-serif;background:#FFF9FB;color:#333;padding-bottom:20px}
 
-/* ===== ШАПКА (увеличена) ===== */
+/* ===== ШАПКА ===== */
 .header{background:linear-gradient(135deg,#FF7EB9,#FF65A3);padding:16px 0;text-align:center;position:sticky;top:0;z-index:100}
 .header h1{font-size:28px;color:#fff;letter-spacing:1px}
 
-/* ===== ВКЛАДКИ (увеличены) ===== */
+/* ===== ВКЛАДКИ ===== */
 .tabs{display:flex;justify-content:center;gap:6px;padding:10px 6px;background:#fff;border-bottom:1px solid #eee;position:sticky;top:72px;z-index:99}
 .tab{padding:10px 16px;background:#f0f0f0;border-radius:30px;font-size:15px;font-weight:600;color:#666;text-align:center;flex:1;max-width:100px;cursor:pointer}
 .tab.active{background:#FF7EB9;color:#fff;box-shadow:0 2px 8px rgba(255,126,185,0.4)}
@@ -33,23 +33,27 @@ button.secondary{background:#888;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
 
 /* ===== ТАБЛИЦА ===== */
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:8px;background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
-table{width:100%;border-collapse:collapse;font-size:11px;min-width:500px}
-th{background:#FF7EB9;color:#fff;padding:6px 4px;font-size:10px;font-weight:600;white-space:nowrap;position:sticky;top:0;z-index:10}
-td{padding:6px 4px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-align:middle}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:500px}
+th{background:#FF7EB9;color:#fff;padding:12px 6px;font-size:12px;font-weight:600;white-space:nowrap;position:sticky;top:0;z-index:10}
+td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-align:middle}
 .status-upcoming td{background:#fff8e1!important}
 .status-overdue td{background:#ffebee!important}
 
-/* Строка с кнопкой плюс */
-.expand-btn{background:none;border:none;font-size:16px;font-weight:700;cursor:pointer;color:#FF7EB9;padding:0 4px}
+/* Кнопка плюс */
+.expand-btn{background:none;border:none;font-size:20px;font-weight:700;cursor:pointer;color:#FF7EB9;padding:4px 8px;touch-action:manipulation}
 .expand-btn:active{transform:scale(0.85)}
 
-/* Раскрывающаяся строка (скрыта по умолчанию) */
+/* Раскрывающаяся строка */
 .expandable-row{display:none}
 .expandable-row.open{display:table-row}
-.expandable-row td{padding:8px 4px;background:#f9f9f9;font-size:10px;color:#555;border-bottom:1px solid #ddd}
+.expandable-row td{padding:10px 8px;background:#f9f9f9;font-size:11px;color:#555;border-bottom:1px solid #ddd}
 .expandable-row td strong{color:#333}
+.expandable-row .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;max-width:500px;margin:0 auto}
+.expandable-row .detail-item{display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid #eee}
+.expandable-row .detail-item span:first-child{color:#888;font-weight:500}
+.expandable-row .detail-item span:last-child{font-weight:600;color:#333}
 
-/* ===== МЕСЯЦЫ (полные названия) ===== */
+/* ===== МЕСЯЦЫ ===== */
 .month-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:400px;margin:15px auto 0}
 .month{padding:14px 6px;border-radius:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
 .month:active{transform:scale(0.95)}
@@ -74,7 +78,7 @@ td{padding:6px 4px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-al
 .empty-state{text-align:center;padding:20px 10px;color:#999}
 .empty-state .icon{font-size:28px}
 .empty-state h3{color:#555;font-size:16px;margin:4px 0}
-.action-btn{padding:2px 6px;border:none;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;margin:0 1px}
+.action-btn{padding:4px 8px;border:none;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;margin:0 2px}
 .action-btn:active{transform:scale(0.88)}
 .action-btn.edit{background:#FFC107;color:#333}
 .action-btn.delete{background:#F44336;color:#fff}
@@ -92,9 +96,10 @@ td{padding:6px 4px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-al
 .stat-card p{font-size:15px}
 .stat-card{padding:6px}
 .chart-wrap{height:150px}
-table{font-size:9px;min-width:400px}
-th,td{padding:3px 2px}
+table{font-size:10px;min-width:400px}
+th,td{padding:6px 3px}
 .form-group input,.form-group select{font-size:14px;padding:6px 8px}
+.expandable-row .detail-grid{grid-template-columns:1fr}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -149,15 +154,10 @@ th,td{padding:3px 2px}
 <table>
 <thead>
 <tr>
-<th>➕</th>
 <th>№</th>
 <th>ФИО</th>
 <th>Тел</th>
-<th>Instagram</th>
-<th>Дата</th>
-<th>Часы</th>
-<th>Сумма</th>
-<th>Действия</th>
+<th style="min-width:50px;">➕</th>
 </tr>
 </thead>
 <tbody id="clientsTableBody"></tbody>
@@ -179,8 +179,6 @@ th,td{padding:3px 2px}
 var bookings = [];
 var editingId = null;
 var financeChart = null;
-
-// ПОЛНЫЕ НАЗВАНИЯ МЕСЯЦЕВ
 var monthNames = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
 
 function showToast(m) {
@@ -219,7 +217,6 @@ function renderAll() {
     }
 }
 
-// ===== КАЛЕНДАРЬ (ПОЛНЫЕ МЕСЯЦА) =====
 function renderCalendar() {
     var months = {};
     for (var i = 0; i < bookings.length; i++) {
@@ -237,7 +234,6 @@ function renderCalendar() {
     document.getElementById('monthGrid').innerHTML = html;
 }
 
-// ===== ТАБЛИЦА КЛИЕНТОВ (С РАСКРЫТИЕМ) =====
 function renderClientsTable() {
     var tbody = document.getElementById('clientsTableBody');
     var empty = document.getElementById('emptyState');
@@ -258,23 +254,30 @@ function renderClientsTable() {
         if (days < 0) cls = 'status-overdue';
         else if (days <= 7) cls = 'status-upcoming';
         
-        // Основная строка
+        // Основная строка: №, ФИО, Тел, ➕
         html += '<tr class="' + cls + '">';
-        html += '<td><button class="expand-btn" onclick="toggleExpand(' + b.id + ')">➕</button></td>';
         html += '<td>' + b.id + '</td>';
         html += '<td>' + b.name + '</td>';
         html += '<td>' + b.phone + '</td>';
-        html += '<td>' + b.instagram + '</td>';
-        html += '<td>' + new Date(b.date).toLocaleDateString('ru-RU') + '</td>';
-        html += '<td>' + b.hours + '</td>';
-        html += '<td>' + b.total.toLocaleString('ru-RU') + ' ₽</td>';
-        html += '<td><button class="action-btn edit" onclick="editBooking(' + b.id + ')">✏️</button><button class="action-btn delete" onclick="deleteBooking(' + b.id + ')">🗑️</button></td>';
+        html += '<td><button class="expand-btn" onclick="toggleExpand(' + b.id + ')">➕</button></td>';
         html += '</tr>';
         
-        // Раскрывающаяся строка (скрыта по умолчанию)
+        // Раскрывающаяся строка (ВСЕ данные)
         html += '<tr class="expandable-row" id="expand-' + b.id + '">';
-        html += '<td colspan="9" style="text-align:left; padding:8px 12px; font-size:11px; background:#f9f9f9;">';
-        html += '<strong>📋 Детали:</strong> Договор: ' + b.contract + ' | Локация: ' + b.locationStart + ' → ' + b.locationEnd + ' | Выдача: ' + b.delivery + ' мес. | Предоплата: ' + b.prepayment.toLocaleString('ru-RU') + ' ₽ | Агентские: ' + b.agency.toLocaleString('ru-RU') + ' ₽';
+        html += '<td colspan="4" style="padding:12px 10px; background:#f9f9f9;">';
+        html += '<div class="detail-grid">';
+        html += '<div class="detail-item"><span>📋 Договор</span><span>' + b.contract + '</span></div>';
+        html += '<div class="detail-item"><span>📸 Instagram</span><span>' + b.instagram + '</span></div>';
+        html += '<div class="detail-item"><span>📅 Дата</span><span>' + new Date(b.date).toLocaleDateString('ru-RU') + '</span></div>';
+        html += '<div class="detail-item"><span>⏱ Часы</span><span>' + b.hours + '</span></div>';
+        html += '<div class="detail-item"><span>📍 Локация начала</span><span>' + b.locationStart + '</span></div>';
+        html += '<div class="detail-item"><span>📍 Локация конца</span><span>' + b.locationEnd + '</span></div>';
+        html += '<div class="detail-item"><span>📦 Срок выдачи</span><span>' + b.delivery + ' мес.</span></div>';
+        html += '<div class="detail-item"><span>💰 Предоплата</span><span>' + b.prepayment.toLocaleString('ru-RU') + ' ₽</span></div>';
+        html += '<div class="detail-item"><span>💸 Агентские</span><span>' + b.agency.toLocaleString('ru-RU') + ' ₽</span></div>';
+        html += '<div class="detail-item"><span>💵 Общая сумма</span><span>' + b.total.toLocaleString('ru-RU') + ' ₽</span></div>';
+        html += '<div class="detail-item" style="border-bottom:none;"><span>✏️ Действия</span><span><button class="action-btn edit" onclick="editBooking(' + b.id + ')">✏️</button> <button class="action-btn delete" onclick="deleteBooking(' + b.id + ')">🗑️</button></span></div>';
+        html += '</div>';
         html += '</td>';
         html += '</tr>';
     }
@@ -285,12 +288,10 @@ function renderClientsTable() {
     if (sv) filterClients(sv);
 }
 
-// ===== РАСКРЫТИЕ СТРОКИ =====
 function toggleExpand(id) {
     var row = document.getElementById('expand-' + id);
     if (row) {
         row.classList.toggle('open');
-        // Меняем текст кнопки
         var btn = document.querySelector('.expand-btn[onclick="toggleExpand(' + id + ')"]');
         if (btn) {
             btn.textContent = row.classList.contains('open') ? '➖' : '➕';
@@ -303,7 +304,7 @@ function filterClients(q) {
     var rows = document.querySelectorAll('#clientsTableBody tr');
     var visible = 0;
     for (var i = 0; i < rows.length; i++) {
-        if (rows[i].classList.contains('expandable-row')) continue; // пропускаем скрытые строки
+        if (rows[i].classList.contains('expandable-row')) continue;
         var match = rows[i].textContent.toLowerCase().indexOf(q) !== -1;
         rows[i].style.display = match ? '' : 'none';
         if (match) visible++;
@@ -474,7 +475,6 @@ function deleteBooking(id) {
     showToast('Удалено');
 }
 
-// ===== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК =====
 function switchTab(tabId) {
     var contents = document.querySelectorAll('.content');
     for (var i = 0; i < contents.length; i++) {
