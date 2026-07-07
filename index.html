@@ -129,15 +129,15 @@ th,td{padding:6px 3px}
 <div class="form-group"><label>ФИО</label><input type="text" id="name" placeholder="Иванова Анна" required></div>
 <div class="form-group"><label>Телефон</label><input type="tel" id="phone" placeholder="+7 (999) 999-99-99" required></div>
 <div class="form-group"><label>Instagram</label><input type="text" id="instagram" placeholder="@username" required></div>
-<div class="form-group"><label>Договор</label><input type="text" id="contract" placeholder="2023-001" required></div>
+<div class="form-group"><label>Договор</label><input type="text" id="contract" placeholder="0000-00" required></div>
 <div class="form-group"><label>Дата</label><input type="date" id="date" required></div>
-<div class="form-group"><label>Часы</label><input type="number" id="hours" placeholder="8" min="1" required></div>
+<div class="form-group"><label>Часы</label><input type="number" id="hours" placeholder="" min="1" required></div>
 <div class="form-group"><label>Срок выдачи</label><select id="delivery" required><option value="" disabled selected>Выберите</option><option value="1">1 месяц</option><option value="2">2 месяца</option><option value="3">3 месяца</option><option value="4">4 месяца</option></select></div>
-<div class="form-group"><label>Локация начала</label><input type="text" id="locationStart" placeholder="Ресторан" required></div>
-<div class="form-group"><label>Локация конца</label><input type="text" id="locationEnd" placeholder="Парк" required></div>
-<div class="form-group"><label>Предоплата (руб)</label><input type="number" id="prepayment" placeholder="10000" min="0" required></div>
-<div class="form-group"><label>Агентские (руб)</label><input type="number" id="agency" placeholder="5000" min="0" required></div>
-<div class="form-group"><label>Общая сумма (руб)</label><input type="number" id="total" placeholder="50000" min="0" required></div>
+<div class="form-group"><label>Начальная локация</label><input type="text" id="locationStart" placeholder="" required></div>
+<div class="form-group"><label>Конечная локация</label><input type="text" id="locationEnd" placeholder="" required></div>
+<div class="form-group"><label>Предоплата (руб)</label><input type="number" id="prepayment" placeholder="" min="0" required></div>
+<div class="form-group"><label>Агентские (руб)</label><input type="number" id="agency" placeholder="" min="0" required></div>
+<div class="form-group"><label>Общая сумма (руб)</label><input type="number" id="total" placeholder="" min="0" required></div>
 <div class="form-actions"><button type="submit" id="submitBtn">Добавить</button><button type="button" class="secondary" onclick="clearForm()">Очистить</button></div>
 </form>
 </div>
@@ -269,8 +269,8 @@ function renderClientsTable() {
         html += '<div class="detail-item"><span>📸 Instagram</span><span>' + b.instagram + '</span></div>';
         html += '<div class="detail-item"><span>📅 Дата</span><span>' + new Date(b.date).toLocaleDateString('ru-RU') + '</span></div>';
         html += '<div class="detail-item"><span>⏱ Часы</span><span>' + b.hours + '</span></div>';
-        html += '<div class="detail-item"><span>📍 Локация начала</span><span>' + b.locationStart + '</span></div>';
-        html += '<div class="detail-item"><span>📍 Локация конца</span><span>' + b.locationEnd + '</span></div>';
+        html += '<div class="detail-item"><span>📍 Начальная локация</span><span>' + b.locationStart + '</span></div>';
+        html += '<div class="detail-item"><span>📍 Конечная локация</span><span>' + b.locationEnd + '</span></div>';
         html += '<div class="detail-item"><span>📦 Срок выдачи</span><span>' + b.delivery + ' мес.</span></div>';
         html += '<div class="detail-item"><span>💰 Предоплата</span><span>' + b.prepayment.toLocaleString('ru-RU') + ' ₽</span></div>';
         html += '<div class="detail-item"><span>💸 Агентские</span><span>' + b.agency.toLocaleString('ru-RU') + ' ₽</span></div>';
