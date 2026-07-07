@@ -14,31 +14,31 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#FFF9FB;color:#33
 .header-logo{height:36px;width:auto;display:block;border-radius:6px;position:absolute;left:0;top:50%;transform:translateY(-50%)}
 .header h1{font-size:26px;color:#fff;letter-spacing:1px;margin:0}
 
-/* ===== ВКЛАДКИ — УВЕЛИЧЕННЫЕ ===== */
+/* ===== ВКЛАДКИ — УВЕЛИЧЕННЫЕ, КОНТРАСТНЫЕ ===== */
 .tabs{display:flex;flex-direction:column;gap:10px;padding:14px 12px;background:#fff;border-bottom:1px solid #eee;position:sticky;top:64px;z-index:99}
 .tabs-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
 .tab{
 display:inline-block;
-padding:12px 24px;
+padding:14px 28px;
 border-radius:30px;
-font-size:16px;
+font-size:17px;
 font-weight:600;
-color:#555;
+color:#444;
 text-align:center;
 cursor:pointer;
 touch-action:manipulation;
-min-width:90px;
+min-width:100px;
 transition:all 0.2s ease;
 border:none;
-background:linear-gradient(145deg,#f5f5f5,#e8e8e8);
-box-shadow:0 2px 8px rgba(0,0,0,0.06),inset 0 1px 0 rgba(255,255,255,0.8);
+background:linear-gradient(145deg,#e8e8e8,#d5d5d5);
+box-shadow:0 3px 10px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.6);
 letter-spacing:0.3px;
 }
 .tab:active{transform:scale(0.95)}
 .tab.active{
-background:linear-gradient(145deg,#FF7EB9,#E85A9E);
+background:linear-gradient(145deg,#FF4081,#D81B60);
 color:#fff;
-box-shadow:0 4px 16px rgba(255,126,185,0.4),inset 0 1px 0 rgba(255,255,255,0.25);
+box-shadow:0 6px 20px rgba(255,64,129,0.45),inset 0 1px 0 rgba(255,255,255,0.2);
 }
 
 .content{display:none;padding:12px 10px;background:#FFF9FB}
@@ -123,7 +123,7 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .header h1{font-size:20px}
 .tabs{top:58px;padding:10px 8px;gap:8px}
 .tabs-row{gap:8px}
-.tab{font-size:14px;padding:10px 16px;min-width:70px}
+.tab{font-size:15px;padding:12px 20px;min-width:80px}
 .content{padding:8px 6px}
 .month-grid{gap:6px;max-width:320px}
 .month{padding:10px 4px}
