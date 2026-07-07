@@ -84,6 +84,7 @@ form{max-width:500px;margin:0 auto}
 button{padding:8px 20px;border:none;border-radius:25px;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF7EB9,#FF65A3);box-shadow:0 2px 8px rgba(255,126,185,0.3);cursor:pointer}
 button:active{transform:scale(0.94)}
 button.secondary{background:#888;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+button.historical-btn{background:linear-gradient(135deg,#FF8A65,#E85A5E);box-shadow:0 2px 8px rgba(255,138,101,0.3);margin-bottom:10px;width:100%;max-width:300px}
 
 /* ===== ТАБЛИЦА ===== */
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:8px;background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
@@ -148,6 +149,18 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .stat-card{background:#fff;padding:10px;border-radius:8px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
 .stat-card h3{font-size:11px;color:#888;margin:0 0 2px;font-weight:500}
 .stat-card p{font-size:18px;font-weight:700;color:#FF7EB9;margin:0}
+
+/* ===== ИСТОРИЧЕСКИЕ ДАННЫЕ (БЛОК ВВОДА) ===== */
+.historical-toggle{display:flex;justify-content:center;margin-bottom:10px}
+.historical-panel{display:none;background:#fff;padding:16px 12px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:12px}
+.historical-panel.open{display:block}
+.historical-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;max-width:500px;margin:0 auto}
+.historical-item{display:flex;flex-direction:column}
+.historical-item label{font-size:11px;font-weight:600;color:#555;margin-bottom:2px}
+.historical-item input{width:100%;padding:6px 8px;border:1px solid #ddd;border-radius:6px;font-size:14px;background:#fafafa;-webkit-appearance:none;appearance:none}
+.historical-item input:focus{outline:none;border-color:#FF7EB9;background:#fff;box-shadow:0 0 0 2px rgba(255,126,185,0.15)}
+.historical-actions{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+
 .chart-container{background:#fff;padding:10px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
 .chart-title{text-align:center;font-size:15px;color:#FF7EB9;margin-bottom:8px}
 .chart-wrap{position:relative;height:180px}
@@ -178,6 +191,8 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .slogan-word{font-size:40px}
 .splash-text{font-size:38px}
 .splash-sub{font-size:18px}
+.historical-grid{grid-template-columns:1fr 1fr;gap:6px}
+.historical-item input{font-size:13px;padding:4px 6px}
 .links-grid{grid-template-columns:1fr 1fr;gap:10px}
 .link-card{padding:12px 10px;font-size:13px}
 .month-grid{gap:6px;max-width:320px}
@@ -200,6 +215,7 @@ th,td{padding:6px 3px}
 .slogan-word{font-size:32px}
 .splash-text{font-size:30px}
 .splash-sub{font-size:15px}
+.historical-grid{grid-template-columns:1fr}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -331,7 +347,28 @@ th,td{padding:6px 3px}
 
 <div id="finance" class="content">
 <h2>Анализ финансов</h2>
-<div class="stats-grid"><div class="stat-card"><h3>Выручка</h3><p id="totalRevenue">0 ₽</p></div><div class="stat-card"><h3>Предоплата</h3><p id="totalPrepayment">0 ₽</p></div><div class="stat-card"><h3>Агентские</h3><p id="totalAgency">0 ₽</p></div><div class="stat-card"><h3>На руки</h3><p id="totalInHand">0 ₽</p></div></div>
+<div class="stats-grid">
+<div class="stat-card"><h3>Выручка</h3><p id="totalRevenue">0 ₽</p></div>
+<div class="stat-card"><h3>Предоплата</h3><p id="totalPrepayment">0 ₽</p></div>
+<div class="stat-card"><h3>Агентские</h3><p id="totalAgency">0 ₽</p></div>
+<div class="stat-card"><h3>На руки</h3><p id="totalInHand">0 ₽</p></div>
+</div>
+
+<!-- ===== КНОПКА И БЛОК ИСТОРИЧЕСКИХ ДАННЫХ ===== -->
+<div class="historical-toggle">
+<button class="historical-btn" onclick="toggleHistorical()">📊 Данные 2025</button>
+</div>
+
+<div class="historical-panel" id="historicalPanel">
+<div class="historical-grid" id="historicalGrid">
+<!-- поля ввода генерируются скриптом -->
+</div>
+<div class="historical-actions">
+<button onclick="saveHistoricalData()" style="background:linear-gradient(135deg,#4CAF50,#388E3C);">💾 Сохранить</button>
+<button onclick="clearHistoricalData()" class="secondary">🗑️ Очистить</button>
+<button onclick="toggleHistorical()" class="secondary">✖️ Закрыть</button>
+</div>
+</div>
 
 <div class="chart-container">
 <div class="chart-title">📊 Доход на руки по месяцам</div>
@@ -448,9 +485,151 @@ function renderAll() {
     var financeContent = document.getElementById('finance');
     if (financeContent && financeContent.classList.contains('active')) {
         setTimeout(function() { 
-            renderChart('financeChart', 'amountInHand', 'rgba(122,252,255,0.7)', 'rgba(122,252,255,1)');
-            renderChart('prepaymentChart', 'prepayment', 'rgba(255,165,0,0.7)', 'rgba(255,165,0,1)');
+            renderCharts();
         }, 200);
+    }
+}
+
+// ===== ИСТОРИЧЕСКИЕ ДАННЫЕ =====
+function getHistoricalData() {
+    try {
+        var data = localStorage.getItem('historicalData_2025');
+        return data ? JSON.parse(data) : Array(12).fill(0);
+    } catch(e) {
+        return Array(12).fill(0);
+    }
+}
+
+function saveHistoricalData() {
+    var inputs = document.querySelectorAll('.historical-item input');
+    var data = [];
+    inputs.forEach(function(input) {
+        var val = parseFloat(input.value) || 0;
+        data.push(val);
+    });
+    localStorage.setItem('historicalData_2025', JSON.stringify(data));
+    showToast('Данные 2025 сохранены!');
+    renderCharts();
+    toggleHistorical();
+}
+
+function clearHistoricalData() {
+    if (!confirm('Очистить все данные за 2025 год?')) return;
+    localStorage.removeItem('historicalData_2025');
+    // Очищаем поля ввода
+    var inputs = document.querySelectorAll('.historical-item input');
+    inputs.forEach(function(input) { input.value = ''; });
+    showToast('Данные 2025 удалены');
+    renderCharts();
+}
+
+function toggleHistorical() {
+    var panel = document.getElementById('historicalPanel');
+    panel.classList.toggle('open');
+    if (panel.classList.contains('open')) {
+        fillHistoricalFields();
+    }
+}
+
+function fillHistoricalFields() {
+    var data = getHistoricalData();
+    var grid = document.getElementById('historicalGrid');
+    var html = '';
+    monthNames.forEach(function(name, index) {
+        html += '<div class="historical-item">';
+        html += '<label>' + name + '</label>';
+        html += '<input type="number" id="hist_' + index + '" value="' + (data[index] || '') + '" placeholder="0">';
+        html += '</div>';
+    });
+    grid.innerHTML = html;
+}
+
+// ===== ГРАФИКИ =====
+function renderCharts() {
+    renderChart('financeChart', 'amountInHand', 'rgba(122,252,255,0.7)', 'rgba(122,252,255,1)', 'rgba(255,165,0,0.7)', 'rgba(255,165,0,1)');
+    renderChart('prepaymentChart', 'prepayment', 'rgba(255,165,0,0.7)', 'rgba(255,165,0,1)', null, null);
+}
+
+function renderChart(canvasId, key, bgColor, borderColor, histBgColor, histBorderColor) {
+    var content = document.getElementById('finance');
+    if (!content || !content.classList.contains('active')) return;
+    
+    var data = Array(12).fill(0);
+    for (var i = 0; i < bookings.length; i++) {
+        var m = new Date(bookings[i].date).getMonth();
+        data[m] += bookings[i][key] || 0;
+    }
+    
+    var historicalData = getHistoricalData();
+    var hasHistorical = historicalData.some(function(v) { return v > 0; });
+    
+    var ctx = document.getElementById(canvasId).getContext('2d');
+    var chart = canvasId === 'financeChart' ? financeChart : prepaymentChart;
+    if (chart) { chart.destroy(); }
+    
+    var datasets = [];
+    
+    // Основной набор данных (текущий год)
+    datasets.push({
+        label: 'Текущий год',
+        data: data,
+        backgroundColor: bgColor,
+        borderColor: borderColor,
+        borderWidth: 1,
+        borderRadius: 3
+    });
+    
+    // Исторические данные (2025) — только для главного графика
+    if (canvasId === 'financeChart' && hasHistorical && histBgColor) {
+        datasets.push({
+            label: '2025 год',
+            data: historicalData,
+            backgroundColor: histBgColor,
+            borderColor: histBorderColor,
+            borderWidth: 1,
+            borderRadius: 3
+        });
+    }
+    
+    try {
+        var newChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: monthNames,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { 
+                        display: datasets.length > 1,
+                        position: 'top',
+                        labels: { font: { size: 10 } }
+                    },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: function(v) { return v > 0 ? v.toLocaleString('ru-RU') + '₽' : ''; },
+                        color: '#333',
+                        font: { size: 8, weight: 'bold' },
+                        offset: 1
+                    }
+                },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 9 } } },
+                    x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+                }
+            }
+        });
+        
+        if (canvasId === 'financeChart') {
+            financeChart = newChart;
+        } else {
+            prepaymentChart = newChart;
+        }
+    } catch(e) {
+        showToast('Ошибка графика');
     }
 }
 
@@ -625,64 +804,6 @@ function updateFinance() {
     document.getElementById('totalInHand').textContent = inHand.toLocaleString('ru-RU') + ' ₽';
 }
 
-function renderChart(canvasId, key, bgColor, borderColor) {
-    var content = document.getElementById('finance');
-    if (!content || !content.classList.contains('active')) return;
-    
-    var data = Array(12).fill(0);
-    for (var i = 0; i < bookings.length; i++) {
-        var m = new Date(bookings[i].date).getMonth();
-        data[m] += bookings[i][key] || 0;
-    }
-    
-    var ctx = document.getElementById(canvasId).getContext('2d');
-    var chart = canvasId === 'financeChart' ? financeChart : prepaymentChart;
-    if (chart) { chart.destroy(); }
-    
-    try {
-        var newChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: monthNames,
-                datasets: [{
-                    data: data,
-                    backgroundColor: bgColor,
-                    borderColor: borderColor,
-                    borderWidth: 1,
-                    borderRadius: 3
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'top',
-                        formatter: function(v) { return v > 0 ? v.toLocaleString('ru-RU') + '₽' : ''; },
-                        color: '#333',
-                        font: { size: 8, weight: 'bold' },
-                        offset: 1
-                    }
-                },
-                scales: {
-                    y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 9 } } },
-                    x: { grid: { display: false }, ticks: { font: { size: 9 } } }
-                }
-            }
-        });
-        
-        if (canvasId === 'financeChart') {
-            financeChart = newChart;
-        } else {
-            prepaymentChart = newChart;
-        }
-    } catch(e) {
-        showToast('Ошибка графика');
-    }
-}
-
 function formatPhone(i) {
     var n = i.value.replace(/\D/g, '');
     if (!n) { i.value = ''; return; }
@@ -805,8 +926,7 @@ function switchTab(tabId) {
     if (tabId === 'finance') {
         updateFinance();
         setTimeout(function() { 
-            renderChart('financeChart', 'amountInHand', 'rgba(122,252,255,0.7)', 'rgba(122,252,255,1)');
-            renderChart('prepaymentChart', 'prepayment', 'rgba(255,165,0,0.7)', 'rgba(255,165,0,1)');
+            renderCharts();
         }, 200);
     }
 }
