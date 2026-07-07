@@ -14,7 +14,7 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#FFF9FB;color:#33
 .header-logo{height:38px;width:auto;display:block;border-radius:6px;position:absolute;left:0;top:50%;transform:translateY(-50%)}
 .header h1{font-size:32px;color:#fff;letter-spacing:1.5px;margin:0;text-shadow:0 2px 4px rgba(0,0,0,0.12)}
 
-/* ===== ВКЛАДКИ — ОДИНАКОВОГО РАЗМЕРА ===== */
+/* ===== ВКЛАДКИ ===== */
 .tabs{display:flex;flex-direction:column;gap:12px;padding:16px 12px;background:#fff;border-bottom:1px solid #eee;position:sticky;top:68px;z-index:99}
 .tabs-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
 .tab{
@@ -52,6 +52,10 @@ box-shadow:0 6px 20px rgba(255,64,129,0.45),inset 0 1px 0 rgba(255,255,255,0.2);
 .content.active{display:block}
 .content h2{text-align:center;font-size:22px;color:#FF7EB9;margin:0 0 16px;padding-top:6px}
 .content h2::after{content:'';display:block;width:40px;height:2px;background:#7AFCFF;margin:8px auto 0;border-radius:2px}
+
+/* ===== ФУТЕР ===== */
+.footer{text-align:center;padding:20px 12px 10px;color:#aaa;font-size:12px;border-top:1px solid #f0f0f0;margin-top:12px;font-weight:400;letter-spacing:0.5px}
+.footer .heart{color:#FF7EB9}
 
 /* ===== ФОРМА ===== */
 form{max-width:500px;margin:0 auto}
@@ -153,6 +157,7 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .tab{font-size:14px;padding:12px 6px;height:50px;max-width:120px}
 .content{padding:16px 8px 8px}
 .content h2{font-size:20px;padding-top:4px}
+.footer{font-size:11px;padding:16px 8px 8px}
 .links-grid{grid-template-columns:1fr 1fr;gap:10px}
 .link-card{padding:12px 10px;font-size:13px}
 .month-grid{gap:6px;max-width:320px}
@@ -218,6 +223,7 @@ th,td{padding:6px 3px}
 <div class="form-group"><label>Общая сумма (руб)</label><input type="number" id="total" placeholder="" min="0" required></div>
 <div class="form-actions"><button type="submit" id="submitBtn">Добавить</button><button type="button" class="secondary" onclick="clearForm()">Очистить</button></div>
 </form>
+<div class="footer">Made By <span class="heart">❤️</span> Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
 <!-- ===== ЗАГРУЗКА ===== -->
@@ -225,6 +231,7 @@ th,td{padding:6px 3px}
 <h2>Загрузка сезона</h2>
 <p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 8px;">Часы по месяцам</p>
 <div class="month-grid" id="monthGrid"></div>
+<div class="footer">Made By <span class="heart">❤️</span> Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
 <!-- ===== КЛИЕНТЫ ===== -->
@@ -244,6 +251,7 @@ th,td{padding:6px 3px}
 </table>
 </div>
 <div id="emptyState" class="empty-state" style="display:none;"><div class="icon">📭</div><h3>Нет клиентов</h3><p>Добавьте первую съемку</p></div>
+<div class="footer">Made By <span class="heart">❤️</span> Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
 <!-- ===== ВЫДАЧИ ===== -->
@@ -266,6 +274,7 @@ th,td{padding:6px 3px}
 </table>
 </div>
 <div id="emptyDeliveries" class="empty-state" style="display:none;"><div class="icon">📦</div><h3>Нет выдач</h3><p>Добавьте съемки, чтобы отслеживать сроки выдачи</p></div>
+<div class="footer">Made By <span class="heart">❤️</span> Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
 <!-- ===== ССЫЛКИ ===== -->
@@ -286,6 +295,7 @@ th,td{padding:6px 3px}
 <a class="link-card" href="https://weddywood.ru/" target="_blank"><span class="link-icon">🌳</span><span class="link-label">WeddyWood</span><span class="link-domain">weddywood.ru</span></a>
 <a class="link-card" href="https://svadba.ru/" target="_blank"><span class="link-icon">💕</span><span class="link-label">Свадьба.ру</span><span class="link-domain">svadba.ru</span></a>
 </div>
+<div class="footer">Made By <span class="heart">❤️</span> Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
 <!-- ===== ФИНАНСЫ ===== -->
@@ -293,6 +303,7 @@ th,td{padding:6px 3px}
 <h2>Анализ финансов</h2>
 <div class="stats-grid"><div class="stat-card"><h3>Выручка</h3><p id="totalRevenue">0 ₽</p></div><div class="stat-card"><h3>Предоплата</h3><p id="totalPrepayment">0 ₽</p></div><div class="stat-card"><h3>Агентские</h3><p id="totalAgency">0 ₽</p></div><div class="stat-card"><h3>На руки</h3><p id="totalInHand">0 ₽</p></div></div>
 <div class="chart-container"><div class="chart-title">Доход по месяцам</div><div class="chart-wrap"><canvas id="financeChart"></canvas></div></div>
+<div class="footer">Made By <span class="heart">❤️</span> Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
 <div class="toast" id="toast"></div>
