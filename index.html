@@ -39,9 +39,10 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .status-upcoming td{background:#fff8e1!important}
 .status-overdue td{background:#ffebee!important}
 
-/* Кнопка плюс/минус */
-.expand-btn{background:none;border:none;font-size:22px;font-weight:700;cursor:pointer;color:#FF7EB9;padding:4px 10px;touch-action:manipulation;width:40px}
-.expand-btn:active{transform:scale(0.85)}
+/* ФИО — кликабельно */
+.clickable-name{color:#333;font-weight:600;cursor:pointer;padding:4px 8px;border-radius:6px;transition:all 0.15s ease;display:inline-block;touch-action:manipulation}
+.clickable-name:active{transform:scale(0.92)}
+.clickable-name.expanded{color:#FF7EB9;text-decoration:underline}
 
 /* Раскрывающаяся строка */
 .expandable-row{display:none}
@@ -155,7 +156,6 @@ th,td{padding:6px 3px}
 <table>
 <thead>
 <tr>
-<th style="width:44px;">➕</th>
 <th>№</th>
 <th>ФИО</th>
 <th>Тел</th>
@@ -255,17 +255,16 @@ function renderClientsTable() {
         if (days < 0) cls = 'status-overdue';
         else if (days <= 7) cls = 'status-upcoming';
         
-        // Основная строка: кнопка ➕, №, ФИО, Тел
+        // Основная строка: №, ФИО (кликабельно), Тел
         html += '<tr class="' + cls + '" id="row-' + b.id + '">';
-        html += '<td><button class="expand-btn" onclick="toggleExpand(' + b.id + ')" id="btn-' + b.id + '">➕</button></td>';
-        html += '<td>' + b.id + '</td>';
-        html += '<td>' + b.name + '</td>';
+        html += '<td>' + (i + 1) + '</td>';
+        html += '<td><span class="clickable-name" onclick="toggleExpand(' + b.id + ')" id="name-' + b.id + '">' + b.name + '</span></td>';
         html += '<td>' + b.phone + '</td>';
         html += '</tr>';
         
         // Раскрывающаяся строка (ВСЕ данные)
         html += '<tr class="expandable-row" id="expand-' + b.id + '">';
-        html += '<td colspan="4" style="padding:12px 10px; background:#f9f9f9;">';
+        html += '<td colspan="3" style="padding:12px 10px; background:#f9f9f9;">';
         html += '<div class="detail-grid">';
         html += '<div class="detail-item"><span>📋 Договор</span><span>' + b.contract + '</span></div>';
         html += '<div class="detail-item"><span>📸 Instagram</span><span>' + b.instagram + '</span></div>';
@@ -294,10 +293,10 @@ function renderClientsTable() {
 
 function toggleExpand(id) {
     var row = document.getElementById('expand-' + id);
-    var btn = document.getElementById('btn-' + id);
-    if (row && btn) {
+    var nameEl = document.getElementById('name-' + id);
+    if (row && nameEl) {
         row.classList.toggle('open');
-        btn.textContent = row.classList.contains('open') ? '➖' : '➕';
+        nameEl.classList.toggle('expanded');
     }
 }
 
