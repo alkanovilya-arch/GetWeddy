@@ -6,7 +6,24 @@
 <title>GetWeddy — CRM</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:system-ui,-apple-system,sans-serif;background:#FFF9FB;color:#333;padding-bottom:20px}
+body{font-family:system-ui,-apple-system,sans-serif;background:#FFF9FB;color:#333;padding-bottom:20px;overflow:hidden}
+
+/* ===== ЭКРАН-ЗАСТАВКА ===== */
+#splashScreen{
+position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#FF7EB9,#FF65A3);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.6s ease
+}
+#splashScreen.hide{opacity:0;pointer-events:none}
+.splash-logo{width:80px;height:80px;margin-bottom:20px;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
+.splash-text{font-family:'Playfair Display',serif;font-size:42px;font-weight:700;color:#fff;text-shadow:0 4px 16px rgba(0,0,0,0.15);letter-spacing:2px}
+.splash-sub{font-size:18px;color:rgba(255,255,255,0.85);margin-top:8px;letter-spacing:4px;font-weight:300}
+
+.slogan-container{position:relative;height:80px;display:flex;align-items:center;justify-content:center;margin-top:20px}
+.slogan-word{position:absolute;font-size:52px;font-weight:700;color:#fff;text-shadow:0 4px 20px rgba(0,0,0,0.2);opacity:0;transform:scale(0.8);transition:all 0.6s cubic-bezier(0.34,1.56,0.64,1);letter-spacing:3px}
+.slogan-word.show{opacity:1;transform:scale(1)}
+.slogan-word.hide{opacity:0;transform:scale(1.2)}
+
+/* ===== ОСНОВНОЙ КОНТЕНТ ===== */
+#mainContent{display:none}
 
 /* ===== ШАПКА ===== */
 .header{background:linear-gradient(to right,#FF8AAC,#FF7EB9,#FFB3C6);padding:14px 16px;position:sticky;top:0;z-index:100}
@@ -157,6 +174,10 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .content{padding:16px 8px 8px}
 .content h2{font-size:20px;padding-top:4px}
 .footer{font-size:11px;padding:16px 8px 8px}
+.slogan-word{font-size:36px}
+.splash-logo{width:60px;height:60px}
+.splash-text{font-size:30px}
+.splash-sub{font-size:14px}
 .links-grid{grid-template-columns:1fr 1fr;gap:10px}
 .link-card{padding:12px 10px;font-size:13px}
 .month-grid{gap:6px;max-width:320px}
@@ -175,6 +196,7 @@ th,td{padding:6px 3px}
 @media(max-width:380px){
 .links-grid{grid-template-columns:1fr}
 .tab{font-size:13px;padding:10px 4px;height:44px;max-width:100px}
+.slogan-word{font-size:28px}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -182,7 +204,21 @@ th,td{padding:6px 3px}
 </head>
 <body>
 
-<!-- ===== ШАПКА С ЛОГОТИПОМ ===== -->
+<!-- ===== ЭКРАН-ЗАСТАВКА ===== -->
+<div id="splashScreen">
+<img class="splash-logo" src="logo.png" alt="GetWeddy" onerror="this.style.display='none'">
+<div class="splash-text">GetWeddy</div>
+<div class="splash-sub">CRM для свадебного фотографа</div>
+<div class="slogan-container">
+<div class="slogan-word" id="word1">Ready!</div>
+<div class="slogan-word" id="word2">Weddy!</div>
+<div class="slogan-word" id="word3">Go!</div>
+</div>
+</div>
+
+<!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
+<div id="mainContent">
+
 <div class="header">
 <div class="header-inner">
 <img class="header-logo" src="logo.png" alt="GetWeddy" onerror="this.style.display='none'">
@@ -190,7 +226,6 @@ th,td{padding:6px 3px}
 </div>
 </div>
 
-<!-- ===== ВКЛАДКИ ===== -->
 <div class="tabs">
 <div class="tabs-row">
 <div class="tab active" onclick="switchTab('weddings')">Главная</div>
@@ -204,7 +239,6 @@ th,td{padding:6px 3px}
 </div>
 </div>
 
-<!-- ===== ГЛАВНАЯ ===== -->
 <div id="weddings" class="content active">
 <h2>Добавить съемку</h2>
 <form id="bookingForm">
@@ -225,7 +259,6 @@ th,td{padding:6px 3px}
 <div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
-<!-- ===== ЗАГРУЗКА ===== -->
 <div id="load" class="content">
 <h2>Загрузка сезона</h2>
 <p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 8px;">Часы по месяцам</p>
@@ -233,7 +266,6 @@ th,td{padding:6px 3px}
 <div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
-<!-- ===== КЛИЕНТЫ ===== -->
 <div id="clients" class="content">
 <h2>Клиентская база</h2>
 <input type="text" class="search-input" id="searchClients" placeholder="🔍 Поиск..." oninput="filterClients(this.value)">
@@ -253,7 +285,6 @@ th,td{padding:6px 3px}
 <div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
-<!-- ===== ВЫДАЧИ ===== -->
 <div id="deliveries" class="content">
 <h2>Выдачи материалов</h2>
 <p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 12px;">Контроль сроков выдачи готовых материалов</p>
@@ -276,7 +307,6 @@ th,td{padding:6px 3px}
 <div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
-<!-- ===== ССЫЛКИ ===== -->
 <div id="links" class="content">
 <h2>Полезные ссылки</h2>
 <p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 14px;">Быстрый доступ к основным ресурсам</p>
@@ -297,7 +327,6 @@ th,td{padding:6px 3px}
 <div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
-<!-- ===== ФИНАНСЫ ===== -->
 <div id="finance" class="content">
 <h2>Анализ финансов</h2>
 <div class="stats-grid"><div class="stat-card"><h3>Выручка</h3><p id="totalRevenue">0 ₽</p></div><div class="stat-card"><h3>Предоплата</h3><p id="totalPrepayment">0 ₽</p></div><div class="stat-card"><h3>Агентские</h3><p id="totalAgency">0 ₽</p></div><div class="stat-card"><h3>На руки</h3><p id="totalInHand">0 ₽</p></div></div>
@@ -305,9 +334,75 @@ th,td{padding:6px 3px}
 <div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
+// ===== АНИМАЦИЯ СЛОГАНА =====
+(function() {
+    var splashScreen = document.getElementById('splashScreen');
+    var mainContent = document.getElementById('mainContent');
+    var words = [
+        document.getElementById('word1'),
+        document.getElementById('word2'),
+        document.getElementById('word3')
+    ];
+    var currentIndex = 0;
+    var animationComplete = false;
+
+    // Функция показа контента
+    function showMainContent() {
+        splashScreen.classList.add('hide');
+        mainContent.style.display = 'block';
+        document.body.style.overflow = 'auto';
+        sessionStorage.setItem('splashShown', 'true');
+        animationComplete = true;
+    }
+
+    // Проверяем, показывали ли уже анимацию в этой сессии
+    if (sessionStorage.getItem('splashShown')) {
+        showMainContent();
+        return;
+    }
+
+    // Запускаем анимацию
+    function showNextWord() {
+        if (currentIndex > 0) {
+            words[currentIndex - 1].classList.remove('show');
+            words[currentIndex - 1].classList.add('hide');
+        }
+        
+        if (currentIndex < words.length) {
+            words[currentIndex].classList.remove('hide');
+            words[currentIndex].classList.add('show');
+            currentIndex++;
+            setTimeout(showNextWord, 900);
+        } else {
+            // Все слова показаны
+            setTimeout(function() {
+                words[words.length - 1].classList.remove('show');
+                words[words.length - 1].classList.add('hide');
+                
+                setTimeout(function() {
+                    showMainContent();
+                }, 500);
+            }, 600);
+        }
+    }
+
+    // Запускаем анимацию через 0.5 секунды
+    setTimeout(showNextWord, 500);
+
+    // ЗАПАСНОЙ ВАРИАНТ: если анимация зависла, показываем контент через 5 секунд
+    setTimeout(function() {
+        if (!animationComplete) {
+            showMainContent();
+        }
+    }, 5000);
+})();
+
+// ===== ОСНОВНОЙ СКРИПТ CRM =====
 var bookings = [];
 var editingId = null;
 var financeChart = null;
