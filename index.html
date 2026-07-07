@@ -66,6 +66,12 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .month.warning{background:#FFC107;color:#333}
 .month.overloaded{background:#F44336;color:#fff}
 
+/* ===== ВЫДАЧИ ===== */
+.delivery-status{display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:600}
+.delivery-status.good{background:#E8F5E9;color:#2E7D32}
+.delivery-status.soon{background:#FFF8E1;color:#F57F17}
+.delivery-status.overdue{background:#FFEBEE;color:#C62828}
+
 /* ===== ФИНАНСЫ ===== */
 .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
 .stat-card{background:#fff;padding:10px;border-radius:8px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
@@ -119,6 +125,7 @@ th,td{padding:6px 3px}
 <div class="tab active" onclick="switchTab('weddings')">Главная</div>
 <div class="tab" onclick="switchTab('load')">Загрузка</div>
 <div class="tab" onclick="switchTab('clients')">Клиенты</div>
+<div class="tab" onclick="switchTab('deliveries')">Выдачи</div>
 <div class="tab" onclick="switchTab('finance')">Финансы</div>
 </div>
 
@@ -168,6 +175,28 @@ th,td{padding:6px 3px}
 <div id="emptyState" class="empty-state" style="display:none;"><div class="icon">📭</div><h3>Нет клиентов</h3><p>Добавьте первую съемку</p></div>
 </div>
 
+<!-- ===== ВЫДАЧИ ===== -->
+<div id="deliveries" class="content">
+<h2>Выдачи материалов</h2>
+<p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 12px;">Контроль сроков выдачи готовых материалов</p>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>№</th>
+<th>ФИО</th>
+<th>Дата съемки</th>
+<th>Срок выдачи</th>
+<th>Дата выдачи</th>
+<th>Статус</th>
+</tr>
+</thead>
+<tbody id="deliveriesTableBody"></tbody>
+</table>
+</div>
+<div id="emptyDeliveries" class="empty-state" style="display:none;"><div class="icon">📦</div><h3>Нет выдач</h3><p>Добавьте съемки, чтобы отслеживать сроки выдачи</p></div>
+</div>
+
 <!-- ===== ФИНАНСЫ ===== -->
 <div id="finance" class="content">
 <h2>Анализ финансов</h2>
@@ -212,6 +241,7 @@ function saveData() {
 function renderAll() {
     renderCalendar();
     renderClientsTable();
+    renderDeliveriesTable();
     updateFinance();
     var financeContent = document.getElementById('finance');
     if (financeContent && financeContent.classList.contains('active')) {
@@ -288,6 +318,61 @@ function renderClientsTable() {
     
     var sv = document.getElementById('searchClients').value;
     if (sv) filterClients(sv);
+}
+
+function renderDeliveriesTable() {
+    var tbody = document.getElementById('deliveriesTableBody');
+    var empty = document.getElementById('emptyDeliveries');
+    
+    if (!bookings.length) {
+        tbody.innerHTML = '';
+        empty.style.display = 'block';
+        return;
+    }
+    
+    // Сортируем по дате выдачи (ближайшие сверху)
+    var sorted = bookings.slice().sort(function(a, b) {
+        var dateA = new Date(a.date);
+        dateA.setMonth(dateA.getMonth() + a.delivery);
+        var dateB = new Date(b.date);
+        dateB.setMonth(dateB.getMonth() + b.delivery);
+        return dateA - dateB;
+    });
+    
+    var today = new Date();
+    today.setHours(0,0,0,0);
+    
+    var html = '';
+    for (var i = 0; i < sorted.length; i++) {
+        var b = sorted[i];
+        var deliveryDate = new Date(b.date);
+        deliveryDate.setMonth(deliveryDate.getMonth() + b.delivery);
+        deliveryDate.setHours(0,0,0,0);
+        
+        var daysUntil = Math.ceil((deliveryDate - today) / 86400000);
+        var statusText, statusClass;
+        if (daysUntil < 0) {
+            statusText = '🔴 Просрочено';
+            statusClass = 'overdue';
+        } else if (daysUntil <= 7) {
+            statusText = '🟡 Скоро';
+            statusClass = 'soon';
+        } else {
+            statusText = '✅ В порядке';
+            statusClass = 'good';
+        }
+        
+        html += '<tr>';
+        html += '<td>' + (i + 1) + '</td>';
+        html += '<td>' + b.name + '</td>';
+        html += '<td>' + new Date(b.date).toLocaleDateString('ru-RU') + '</td>';
+        html += '<td>' + b.delivery + ' мес.</td>';
+        html += '<td>' + deliveryDate.toLocaleDateString('ru-RU') + '</td>';
+        html += '<td><span class="delivery-status ' + statusClass + '">' + statusText + '</span></td>';
+        html += '</tr>';
+    }
+    tbody.innerHTML = html;
+    empty.style.display = 'none';
 }
 
 function toggleExpand(id) {
@@ -500,6 +585,9 @@ function switchTab(tabId) {
     if (tabId === 'clients') {
         renderClientsTable();
     }
+    if (tabId === 'deliveries') {
+        renderDeliveriesTable();
+    }
     if (tabId === 'finance') {
         updateFinance();
         setTimeout(function() { renderChart(); }, 200);
@@ -513,78 +601,4 @@ function init() {
         formatPhone(this);
     });
     
-    document.getElementById('bookingForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        var f = e.target;
-        var dup = false;
-        for (var i = 0; i < bookings.length; i++) {
-            if (bookings[i].contract === f.contract.value && bookings[i].id !== editingId) {
-                dup = true;
-                break;
-            }
-        }
-        if (dup) {
-            showToast('Договор уже существует!');
-            f.contract.focus();
-            return;
-        }
-        var maxId = 0;
-        for (var i = 0; i < bookings.length; i++) {
-            if (bookings[i].id > maxId) maxId = bookings[i].id;
-        }
-        var booking = {
-            id: editingId || maxId + 1,
-            name: f.name.value.trim(),
-            phone: f.phone.value,
-            instagram: f.instagram.value.trim(),
-            contract: f.contract.value.trim(),
-            date: f.date.value,
-            hours: parseInt(f.hours.value) || 0,
-            delivery: parseInt(f.delivery.value) || 0,
-            locationStart: f.locationStart.value.trim(),
-            locationEnd: f.locationEnd.value.trim(),
-            prepayment: parseInt(f.prepayment.value) || 0,
-            agency: parseInt(f.agency.value) || 0,
-            total: parseInt(f.total.value) || 0,
-            amountInHand: (parseInt(f.total.value) || 0) - (parseInt(f.prepayment.value) || 0) - (parseInt(f.agency.value) || 0)
-        };
-        if (booking.prepayment + booking.agency > booking.total) {
-            showToast('Предоплата + агентские > суммы!');
-            return;
-        }
-        if (booking.amountInHand < 0) {
-            showToast('Сумма на руки отрицательная!');
-            return;
-        }
-        if (booking.hours <= 0) {
-            showToast('Часы должны быть > 0');
-            return;
-        }
-        if (editingId) {
-            for (var i = 0; i < bookings.length; i++) {
-                if (bookings[i].id === editingId) {
-                    bookings[i] = booking;
-                    break;
-                }
-            }
-            editingId = null;
-            document.getElementById('submitBtn').textContent = 'Добавить';
-        } else {
-            bookings.push(booking);
-        }
-        f.reset();
-        saveData();
-        showToast('Съемка добавлена!');
-    });
-    
-    renderAll();
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-} else {
-    init();
-}
-</script>
-</body>
-</html>
+   
