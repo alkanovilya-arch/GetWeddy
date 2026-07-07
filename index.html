@@ -151,6 +151,7 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .chart-container{background:#fff;padding:10px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
 .chart-title{text-align:center;font-size:15px;color:#FF7EB9;margin-bottom:8px}
 .chart-wrap{position:relative;height:180px}
+.chart-wrap-second{position:relative;height:180px;margin-top:12px}
 
 /* ===== ПОИСК ===== */
 .search-input{width:100%;max-width:500px;margin:0 auto 8px;display:block;padding:8px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;background:#fafafa;-webkit-appearance:none;appearance:none}
@@ -187,6 +188,7 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .stat-card p{font-size:15px}
 .stat-card{padding:6px}
 .chart-wrap{height:150px}
+.chart-wrap-second{height:150px}
 table{font-size:10px;min-width:350px}
 th,td{padding:6px 3px}
 .form-group input,.form-group select{font-size:14px;padding:6px 8px}
@@ -330,7 +332,17 @@ th,td{padding:6px 3px}
 <div id="finance" class="content">
 <h2>Анализ финансов</h2>
 <div class="stats-grid"><div class="stat-card"><h3>Выручка</h3><p id="totalRevenue">0 ₽</p></div><div class="stat-card"><h3>Предоплата</h3><p id="totalPrepayment">0 ₽</p></div><div class="stat-card"><h3>Агентские</h3><p id="totalAgency">0 ₽</p></div><div class="stat-card"><h3>На руки</h3><p id="totalInHand">0 ₽</p></div></div>
-<div class="chart-container"><div class="chart-title">Доход по месяцам</div><div class="chart-wrap"><canvas id="financeChart"></canvas></div></div>
+
+<div class="chart-container">
+<div class="chart-title">📊 Доход на руки по месяцам</div>
+<div class="chart-wrap"><canvas id="financeChart"></canvas></div>
+</div>
+
+<div class="chart-container" style="margin-top:16px;">
+<div class="chart-title">📉 Предоплата (потери) по месяцам</div>
+<div class="chart-wrap-second"><canvas id="prepaymentChart"></canvas></div>
+</div>
+
 <div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
@@ -399,6 +411,7 @@ th,td{padding:6px 3px}
 var bookings = [];
 var editingId = null;
 var financeChart = null;
+var prepaymentChart = null;
 var monthNames = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
 
 function showToast(m) {
@@ -434,7 +447,10 @@ function renderAll() {
     updateFinance();
     var financeContent = document.getElementById('finance');
     if (financeContent && financeContent.classList.contains('active')) {
-        setTimeout(function() { renderChart(); }, 200);
+        setTimeout(function() { 
+            renderChart('financeChart', 'amountInHand', 'rgba(122,252,255,0.7)', 'rgba(122,252,255,1)');
+            renderChart('prepaymentChart', 'prepayment', 'rgba(255,165,0,0.7)', 'rgba(255,165,0,1)');
+        }, 200);
     }
 }
 
@@ -609,25 +625,29 @@ function updateFinance() {
     document.getElementById('totalInHand').textContent = inHand.toLocaleString('ru-RU') + ' ₽';
 }
 
-function renderChart() {
-    var financeContent = document.getElementById('finance');
-    if (!financeContent || !financeContent.classList.contains('active')) return;
+function renderChart(canvasId, key, bgColor, borderColor) {
+    var content = document.getElementById('finance');
+    if (!content || !content.classList.contains('active')) return;
+    
     var data = Array(12).fill(0);
     for (var i = 0; i < bookings.length; i++) {
         var m = new Date(bookings[i].date).getMonth();
-        data[m] += bookings[i].amountInHand || 0;
+        data[m] += bookings[i][key] || 0;
     }
-    var ctx = document.getElementById('financeChart').getContext('2d');
-    if (financeChart) { financeChart.destroy(); financeChart = null; }
+    
+    var ctx = document.getElementById(canvasId).getContext('2d');
+    var chart = canvasId === 'financeChart' ? financeChart : prepaymentChart;
+    if (chart) { chart.destroy(); }
+    
     try {
-        financeChart = new Chart(ctx, {
+        var newChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: monthNames,
                 datasets: [{
                     data: data,
-                    backgroundColor: 'rgba(122,252,255,0.7)',
-                    borderColor: 'rgba(122,252,255,1)',
+                    backgroundColor: bgColor,
+                    borderColor: borderColor,
                     borderWidth: 1,
                     borderRadius: 3
                 }]
@@ -652,6 +672,12 @@ function renderChart() {
                 }
             }
         });
+        
+        if (canvasId === 'financeChart') {
+            financeChart = newChart;
+        } else {
+            prepaymentChart = newChart;
+        }
     } catch(e) {
         showToast('Ошибка графика');
     }
@@ -778,7 +804,10 @@ function switchTab(tabId) {
     }
     if (tabId === 'finance') {
         updateFinance();
-        setTimeout(function() { renderChart(); }, 200);
+        setTimeout(function() { 
+            renderChart('financeChart', 'amountInHand', 'rgba(122,252,255,0.7)', 'rgba(122,252,255,1)');
+            renderChart('prepaymentChart', 'prepayment', 'rgba(255,165,0,0.7)', 'rgba(255,165,0,1)');
+        }, 200);
     }
 }
 
