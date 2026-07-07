@@ -612,4 +612,74 @@ function init() {
         e.preventDefault();
         var f = e.target;
         var dup = false;
-        for (
+        for (var i = 0; i < bookings.length; i++) {
+            if (bookings[i].contract === f.contract.value && bookings[i].id !== editingId) {
+                dup = true;
+                break;
+            }
+        }
+        if (dup) {
+            showToast('Договор уже существует!');
+            f.contract.focus();
+            return;
+        }
+        var maxId = 0;
+        for (var i = 0; i < bookings.length; i++) {
+            if (bookings[i].id > maxId) maxId = bookings[i].id;
+        }
+        var booking = {
+            id: editingId || maxId + 1,
+            name: f.name.value.trim(),
+            phone: f.phone.value,
+            instagram: f.instagram.value.trim(),
+            contract: f.contract.value.trim(),
+            date: f.date.value,
+            hours: parseInt(f.hours.value) || 0,
+            delivery: parseInt(f.delivery.value) || 0,
+            locationStart: f.locationStart.value.trim(),
+            locationEnd: f.locationEnd.value.trim(),
+            prepayment: parseInt(f.prepayment.value) || 0,
+            agency: parseInt(f.agency.value) || 0,
+            total: parseInt(f.total.value) || 0,
+            amountInHand: (parseInt(f.total.value) || 0) - (parseInt(f.prepayment.value) || 0) - (parseInt(f.agency.value) || 0)
+        };
+        if (booking.prepayment + booking.agency > booking.total) {
+            showToast('Предоплата + агентские > суммы!');
+            return;
+        }
+        if (booking.amountInHand < 0) {
+            showToast('Сумма на руки отрицательная!');
+            return;
+        }
+        if (booking.hours <= 0) {
+            showToast('Часы должны быть > 0');
+            return;
+        }
+        if (editingId) {
+            for (var i = 0; i < bookings.length; i++) {
+                if (bookings[i].id === editingId) {
+                    bookings[i] = booking;
+                    break;
+                }
+            }
+            editingId = null;
+            document.getElementById('submitBtn').textContent = 'Добавить';
+        } else {
+            bookings.push(booking);
+        }
+        f.reset();
+        saveData();
+        showToast('Съемка добавлена!');
+    });
+    
+    renderAll();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
+</script>
+</body>
+</html>
