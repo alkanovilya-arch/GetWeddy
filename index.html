@@ -22,11 +22,14 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#FFF9FB;color:#33
 .content h2{text-align:center;font-size:20px;color:#FF7EB9;margin:0 0 12px}
 .content h2::after{content:'';display:block;width:40px;height:2px;background:#7AFCFF;margin:6px auto 0;border-radius:2px}
 form{max-width:500px;margin:0 auto}
-.form-group{margin-bottom:10px}
-.form-group label{display:block;font-size:12px;font-weight:500;margin-bottom:2px;color:#555}
-.form-group input,.form-group select{width:100%;padding:8px 10px;border:1px solid #ddd;border-radius:8px;font-size:15px;background:#fafafa;-webkit-appearance:none;appearance:none}
-.form-group input:focus,.form-group select:focus{outline:none;border-color:#FF7EB9;background:#fff;box-shadow:0 0 0 3px rgba(255,126,185,0.15)}
-.form-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+
+/* ===== ФОРМА — ЦЕНТРИРОВАННЫЕ ПОДПИСИ И ТЕНИ ===== */
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:4px;color:#555;text-align:center}
+.form-group input,.form-group select{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:15px;background:#fafafa;-webkit-appearance:none;appearance:none;transition:all 0.2s ease;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:#FF7EB9;background:#fff;box-shadow:0 4px 12px rgba(255,126,185,0.2),0 0 0 2px rgba(255,126,185,0.15)}
+
+.form-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}
 button{padding:8px 20px;border:none;border-radius:25px;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF7EB9,#FF65A3);box-shadow:0 2px 8px rgba(255,126,185,0.3);cursor:pointer}
 button:active{transform:scale(0.94)}
 button.secondary{background:#888;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
@@ -39,12 +42,10 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .status-upcoming td{background:#fff8e1!important}
 .status-overdue td{background:#ffebee!important}
 
-/* ФИО — кликабельно */
 .clickable-name{color:#333;font-weight:600;cursor:pointer;padding:4px 8px;border-radius:6px;transition:all 0.15s ease;display:inline-block;touch-action:manipulation}
 .clickable-name:active{transform:scale(0.92)}
 .clickable-name.expanded{color:#FF7EB9;text-decoration:underline}
 
-/* Раскрывающаяся строка */
 .expandable-row{display:none}
 .expandable-row.open{display:table-row}
 .expandable-row td{padding:12px 10px;background:#f9f9f9;font-size:11px;color:#555;border-bottom:1px solid #ddd}
@@ -76,7 +77,7 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 
 /* ===== ПОИСК ===== */
 .search-input{width:100%;max-width:500px;margin:0 auto 8px;display:block;padding:8px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;background:#fafafa;-webkit-appearance:none;appearance:none}
-.search-input:focus{outline:none;border-color:#FF7EB9;background:#fff;box-shadow:0 0 0 3px rgba(255,126,185,0.15)}
+.search-input:focus{outline:none;border-color:#FF7EB9;background:#fff;box-shadow:0 4px 12px rgba(255,126,185,0.2),0 0 0 2px rgba(255,126,185,0.15)}
 .empty-state{text-align:center;padding:20px 10px;color:#999}
 .empty-state .icon{font-size:28px}
 .empty-state h3{color:#555;font-size:16px;margin:4px 0}
@@ -255,14 +256,12 @@ function renderClientsTable() {
         if (days < 0) cls = 'status-overdue';
         else if (days <= 7) cls = 'status-upcoming';
         
-        // Основная строка: №, ФИО (кликабельно), Тел
         html += '<tr class="' + cls + '" id="row-' + b.id + '">';
         html += '<td>' + (i + 1) + '</td>';
         html += '<td><span class="clickable-name" onclick="toggleExpand(' + b.id + ')" id="name-' + b.id + '">' + b.name + '</span></td>';
         html += '<td>' + b.phone + '</td>';
         html += '</tr>';
         
-        // Раскрывающаяся строка (ВСЕ данные)
         html += '<tr class="expandable-row" id="expand-' + b.id + '">';
         html += '<td colspan="3" style="padding:12px 10px; background:#f9f9f9;">';
         html += '<div class="detail-grid">';
