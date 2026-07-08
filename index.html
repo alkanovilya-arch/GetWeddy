@@ -84,7 +84,7 @@ form{max-width:500px;margin:0 auto}
 button{padding:8px 20px;border:none;border-radius:25px;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF7EB9,#FF65A3);box-shadow:0 2px 8px rgba(255,126,185,0.3);cursor:pointer}
 button:active{transform:scale(0.94)}
 button.secondary{background:#888;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
-button.historical-btn{background:linear-gradient(135deg,#FF8A65,#E85A5E);box-shadow:0 2px 8px rgba(255,138,101,0.3);margin-bottom:10px;width:100%;max-width:300px}
+button.historical-btn{background:linear-gradient(135deg,#FFB6C1,#FF8AAC);box-shadow:0 2px 8px rgba(255,138,172,0.3);margin-top:10px;width:100%;max-width:300px;color:#fff}
 
 /* ===== ТАБЛИЦА ===== */
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:8px;background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
@@ -151,8 +151,8 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .stat-card p{font-size:18px;font-weight:700;color:#FF7EB9;margin:0}
 
 /* ===== ИСТОРИЧЕСКИЕ ДАННЫЕ (БЛОК ВВОДА) ===== */
-.historical-toggle{display:flex;justify-content:center;margin-bottom:10px}
-.historical-panel{display:none;background:#fff;padding:16px 12px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:12px}
+.historical-toggle{display:flex;justify-content:center;margin-top:16px}
+.historical-panel{display:none;background:#fff;padding:16px 12px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-top:12px}
 .historical-panel.open{display:block}
 .historical-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;max-width:500px;margin:0 auto}
 .historical-item{display:flex;flex-direction:column}
@@ -193,6 +193,7 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .splash-sub{font-size:18px}
 .historical-grid{grid-template-columns:1fr 1fr;gap:6px}
 .historical-item input{font-size:13px;padding:4px 6px}
+.historical-btn{font-size:13px;padding:10px 16px}
 .links-grid{grid-template-columns:1fr 1fr;gap:10px}
 .link-card{padding:12px 10px;font-size:13px}
 .month-grid{gap:6px;max-width:320px}
@@ -354,7 +355,17 @@ th,td{padding:6px 3px}
 <div class="stat-card"><h3>На руки</h3><p id="totalInHand">0 ₽</p></div>
 </div>
 
-<!-- ===== КНОПКА И БЛОК ИСТОРИЧЕСКИХ ДАННЫХ ===== -->
+<div class="chart-container">
+<div class="chart-title">📊 Доход на руки по месяцам</div>
+<div class="chart-wrap"><canvas id="financeChart"></canvas></div>
+</div>
+
+<div class="chart-container" style="margin-top:16px;">
+<div class="chart-title">📉 Агентские (потери) по месяцам</div>
+<div class="chart-wrap-second"><canvas id="prepaymentChart"></canvas></div>
+</div>
+
+<!-- ===== КНОПКА И БЛОК ИСТОРИЧЕСКИХ ДАННЫХ (ВНИЗУ) ===== -->
 <div class="historical-toggle">
 <button class="historical-btn" onclick="toggleHistorical()">📊 Данные 2025</button>
 </div>
@@ -368,16 +379,6 @@ th,td{padding:6px 3px}
 <button onclick="clearHistoricalData()" class="secondary">🗑️ Очистить</button>
 <button onclick="toggleHistorical()" class="secondary">✖️ Закрыть</button>
 </div>
-</div>
-
-<div class="chart-container">
-<div class="chart-title">📊 Доход на руки по месяцам</div>
-<div class="chart-wrap"><canvas id="financeChart"></canvas></div>
-</div>
-
-<div class="chart-container" style="margin-top:16px;">
-<div class="chart-title">📉 Агентские (потери) по месяцам</div>
-<div class="chart-wrap-second"><canvas id="prepaymentChart"></canvas></div>
 </div>
 
 <div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
