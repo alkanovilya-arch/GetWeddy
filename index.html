@@ -516,7 +516,7 @@ th,td{padding:6px 3px}
 <!-- ===== СКРОЛЛИМАЯ ОБЛАСТЬ ===== -->
 <div class="main-scroll" id="mainScroll">
 
-<!-- ===== ГЛАВНАЯ ===== -->
+<!-- ===== ГЛАВНАЯ (ТОЛЬКО КАЛЕНДАРЬ + СТАТИСТИКА) ===== -->
 <div id="weddings" class="content active">
 <div class="calendar-fixed-area">
 <div class="calendar-title">Календарь свадеб</div>
@@ -536,7 +536,7 @@ th,td{padding:6px 3px}
 </div>
 </div>
 
-<!-- ===== ДРУГИЕ ВКЛАДКИ ===== -->
+<!-- ===== ДОБАВИТЬ СЪЕМКУ ===== -->
 <div id="addForm" class="content">
 <h2>Добавить съемку</h2>
 <form id="bookingForm">
@@ -556,12 +556,14 @@ th,td{padding:6px 3px}
 </form>
 </div>
 
+<!-- ===== ЗАГРУЗКА СЕЗОНА ===== -->
 <div id="load" class="content">
 <h2>Загрузка сезона</h2>
 <p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 8px;">Количество свадеб по месяцам</p>
 <div class="month-grid" id="monthGrid"></div>
 </div>
 
+<!-- ===== КЛИЕНТЫ ===== -->
 <div id="clients" class="content">
 <h2>Клиентская база</h2>
 <input type="text" class="search-input" id="searchClients" placeholder="🔍 Поиск..." oninput="filterClients(this.value)">
@@ -574,6 +576,7 @@ th,td{padding:6px 3px}
 <div id="emptyState" class="empty-state" style="display:none;"><div class="icon">📭</div><h3>Нет клиентов</h3><p>Добавьте первую съемку</p></div>
 </div>
 
+<!-- ===== ВЫДАЧИ ===== -->
 <div id="deliveries" class="content">
 <h2>Выдачи материалов</h2>
 <p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 12px;">Контроль сроков выдачи готовых материалов</p>
@@ -586,6 +589,7 @@ th,td{padding:6px 3px}
 <div id="emptyDeliveries" class="empty-state" style="display:none;"><div class="icon">📦</div><h3>Нет выдач</h3><p>Добавьте съемки, чтобы отслеживать сроки выдачи</p></div>
 </div>
 
+<!-- ===== ССЫЛКИ ===== -->
 <div id="links" class="content">
 <h2>Полезные ссылки</h2>
 <p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 14px;">Быстрый доступ к основным ресурсам</p>
@@ -605,6 +609,7 @@ th,td{padding:6px 3px}
 </div>
 </div>
 
+<!-- ===== ФИНАНСЫ (ГРАФИКИ) ===== -->
 <div id="finance" class="content">
 <h2>Анализ финансов</h2>
 <div class="stats-grid">
@@ -921,6 +926,52 @@ function updateMainStats() {
     
     document.getElementById('totalWeddings').textContent = totalWeddings;
     document.getElementById('totalIncome').textContent = totalIncome.toLocaleString('ru-RU') + ' ₽';
+}
+
+// ===== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК =====
+function switchTab(tabId) {
+    var contents = document.querySelectorAll('.content');
+    for (var i = 0; i < contents.length; i++) {
+        contents[i].classList.remove('active');
+    }
+    var target = document.getElementById(tabId);
+    if (target) target.classList.add('active');
+    
+    var tabs = document.querySelectorAll('.tab');
+    for (var i = 0; i < tabs.length; i++) {
+        tabs[i].classList.remove('active');
+    }
+    for (var i = 0; i < tabs.length; i++) {
+        if (tabs[i].getAttribute('onclick') === "switchTab('" + tabId + "')") {
+            tabs[i].classList.add('active');
+            break;
+        }
+    }
+    
+    if (tabId === 'load') {
+        renderCalendarLoad();
+    }
+    if (tabId === 'clients') {
+        renderClientsTable();
+    }
+    if (tabId === 'deliveries') {
+        renderDeliveriesTable();
+    }
+    if (tabId === 'finance') {
+        updateFinance();
+        setTimeout(function() { 
+            renderCharts();
+        }, 200);
+    }
+    if (tabId === 'weddings') {
+        renderCalendar(currentMonth, currentYear);
+        updateMainStats();
+    }
+    
+    var scrollEl = document.getElementById('mainScroll');
+    if (scrollEl) {
+        scrollEl.scrollTop = 0;
+    }
 }
 
 // ===== ОСТАЛЬНЫЕ ФУНКЦИИ =====
@@ -1312,51 +1363,6 @@ function showModal() {
 
 function closeModal() {
     document.getElementById('successModal').classList.remove('show');
-}
-
-function switchTab(tabId) {
-    var contents = document.querySelectorAll('.content');
-    for (var i = 0; i < contents.length; i++) {
-        contents[i].classList.remove('active');
-    }
-    var target = document.getElementById(tabId);
-    if (target) target.classList.add('active');
-    
-    var tabs = document.querySelectorAll('.tab');
-    for (var i = 0; i < tabs.length; i++) {
-        tabs[i].classList.remove('active');
-    }
-    for (var i = 0; i < tabs.length; i++) {
-        if (tabs[i].getAttribute('onclick') === "switchTab('" + tabId + "')") {
-            tabs[i].classList.add('active');
-            break;
-        }
-    }
-    
-    if (tabId === 'load') {
-        renderCalendarLoad();
-    }
-    if (tabId === 'clients') {
-        renderClientsTable();
-    }
-    if (tabId === 'deliveries') {
-        renderDeliveriesTable();
-    }
-    if (tabId === 'finance') {
-        updateFinance();
-        setTimeout(function() { 
-            renderCharts();
-        }, 200);
-    }
-    if (tabId === 'weddings') {
-        renderCalendar(currentMonth, currentYear);
-        updateMainStats();
-    }
-    
-    var scrollEl = document.getElementById('mainScroll');
-    if (scrollEl) {
-        scrollEl.scrollTop = 0;
-    }
 }
 
 // ===== ИНИЦИАЛИЗАЦИЯ =====
