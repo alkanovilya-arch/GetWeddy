@@ -31,16 +31,40 @@ position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(13
 .header-logo{height:38px;width:auto;display:block;border-radius:6px;position:absolute;left:0;top:50%;transform:translateY(-50%)}
 .header h1{font-size:32px;color:#fff;letter-spacing:1.5px;margin:0;text-shadow:0 2px 4px rgba(0,0,0,0.12)}
 
-/* ===== ВКЛАДКИ ===== */
-.tabs{display:flex;flex-direction:column;gap:12px;padding:16px 12px;background:#fff;border-bottom:1px solid #eee;position:sticky;top:68px;z-index:99}
-.tabs-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+/* ===== КОНТЕНТ ===== */
+.content{display:none;padding:20px 12px 12px;background:#FFF9FB}
+.content.active{display:block}
+.content h2{text-align:center;font-size:22px;color:#FF7EB9;margin:0 0 16px;padding-top:6px}
+.content h2::after{content:'';display:block;width:40px;height:2px;background:#7AFCFF;margin:8px auto 0;border-radius:2px}
+
+/* ===== ФУТЕР ===== */
+.footer{text-align:center;padding:20px 12px 10px;color:#aaa;font-size:12px;border-top:1px solid #f0f0f0;margin-top:12px;font-weight:400;letter-spacing:0.5px}
+
+/* ===== ВКЛАДКИ (ВНИЗУ) ===== */
+.tabs{
+display:flex;
+flex-direction:column;
+gap:10px;
+padding:12px 10px 16px 10px;
+background:#fff;
+border-top:1px solid #eee;
+position:sticky;
+bottom:0;
+z-index:99;
+}
+.tabs-row{
+display:flex;
+justify-content:center;
+gap:10px;
+flex-wrap:wrap;
+}
 .tab{
 display:flex;
 align-items:center;
 justify-content:center;
-padding:16px 8px;
+padding:14px 8px;
 border-radius:30px;
-font-size:17px;
+font-size:15px;
 font-weight:600;
 color:#444;
 text-align:center;
@@ -54,7 +78,7 @@ letter-spacing:0.3px;
 flex:1;
 min-width:0;
 max-width:150px;
-height:60px;
+height:56px;
 white-space:nowrap;
 }
 .tab:active{transform:scale(0.95)}
@@ -63,15 +87,6 @@ background:linear-gradient(145deg,#FF4081,#D81B60);
 color:#fff;
 box-shadow:0 6px 20px rgba(255,64,129,0.45),inset 0 1px 0 rgba(255,255,255,0.2);
 }
-
-/* ===== КОНТЕНТ ===== */
-.content{display:none;padding:20px 12px 12px;background:#FFF9FB}
-.content.active{display:block}
-.content h2{text-align:center;font-size:22px;color:#FF7EB9;margin:0 0 16px;padding-top:6px}
-.content h2::after{content:'';display:block;width:40px;height:2px;background:#7AFCFF;margin:8px auto 0;border-radius:2px}
-
-/* ===== ФУТЕР ===== */
-.footer{text-align:center;padding:20px 12px 10px;color:#aaa;font-size:12px;border-top:1px solid #f0f0f0;margin-top:12px;font-weight:400;letter-spacing:0.5px}
 
 /* ===== ФОРМА ===== */
 form{max-width:500px;margin:0 auto}
@@ -150,7 +165,7 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .stat-card h3{font-size:11px;color:#888;margin:0 0 2px;font-weight:500}
 .stat-card p{font-size:18px;font-weight:700;color:#FF7EB9;margin:0}
 
-/* ===== ИСТОРИЧЕСКИЕ ДАННЫЕ (БЛОК ВВОДА) ===== */
+/* ===== ИСТОРИЧЕСКИЕ ДАННЫЕ ===== */
 .historical-toggle{display:flex;justify-content:center;margin-bottom:10px}
 .historical-panel{display:none;background:#fff;padding:16px 12px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:12px}
 .historical-panel.open{display:block}
@@ -176,15 +191,15 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .action-btn:active{transform:scale(0.88)}
 .action-btn.edit{background:#FFC107;color:#333}
 .action-btn.delete{background:#F44336;color:#fff}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:9999;display:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:90%;text-align:center;pointer-events:none}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:9999;display:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:90%;text-align:center;pointer-events:none}
 
 @media(max-width:480px){
 .header{padding:10px 12px}
 .header-logo{height:28px}
 .header h1{font-size:24px}
-.tabs{top:62px;padding:12px 8px;gap:10px}
-.tabs-row{gap:8px}
-.tab{font-size:14px;padding:12px 6px;height:50px;max-width:120px}
+.tabs{padding:8px 6px 12px 6px;gap:8px}
+.tabs-row{gap:6px}
+.tab{font-size:13px;padding:10px 4px;height:44px;max-width:100px}
 .content{padding:16px 8px 8px}
 .content h2{font-size:20px;padding-top:4px}
 .footer{font-size:11px;padding:16px 8px 8px}
@@ -208,10 +223,11 @@ table{font-size:10px;min-width:350px}
 th,td{padding:6px 3px}
 .form-group input,.form-group select{font-size:14px;padding:6px 8px}
 .expandable-row .detail-grid{grid-template-columns:1fr}
+.toast{bottom:80px}
 }
 @media(max-width:380px){
 .links-grid{grid-template-columns:1fr}
-.tab{font-size:13px;padding:10px 4px;height:44px;max-width:100px}
+.tab{font-size:12px;padding:8px 4px;height:40px;max-width:80px}
 .slogan-word{font-size:32px}
 .splash-text{font-size:30px}
 .splash-sub{font-size:15px}
@@ -237,6 +253,7 @@ th,td{padding:6px 3px}
 <!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
 <div id="mainContent">
 
+<!-- ===== ШАПКА ===== -->
 <div class="header">
 <div class="header-inner">
 <img class="header-logo" src="logo.png" alt="GetWeddy" onerror="this.style.display='none'">
@@ -244,19 +261,7 @@ th,td{padding:6px 3px}
 </div>
 </div>
 
-<div class="tabs">
-<div class="tabs-row">
-<div class="tab active" onclick="switchTab('weddings')">Главная</div>
-<div class="tab" onclick="switchTab('load')">Загрузка</div>
-<div class="tab" onclick="switchTab('clients')">Клиенты</div>
-</div>
-<div class="tabs-row">
-<div class="tab" onclick="switchTab('deliveries')">Выдачи</div>
-<div class="tab" onclick="switchTab('links')">Ссылки</div>
-<div class="tab" onclick="switchTab('finance')">Финансы</div>
-</div>
-</div>
-
+<!-- ===== КОНТЕНТЫ ===== -->
 <div id="weddings" class="content active">
 <h2>Добавить съемку</h2>
 <form id="bookingForm">
@@ -381,6 +386,20 @@ th,td{padding:6px 3px}
 </div>
 
 <div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
+</div>
+
+<!-- ===== ВКЛАДКИ (ВНИЗУ) ===== -->
+<div class="tabs">
+<div class="tabs-row">
+<div class="tab active" onclick="switchTab('weddings')">Главная</div>
+<div class="tab" onclick="switchTab('load')">Загрузка</div>
+<div class="tab" onclick="switchTab('clients')">Клиенты</div>
+</div>
+<div class="tabs-row">
+<div class="tab" onclick="switchTab('deliveries')">Выдачи</div>
+<div class="tab" onclick="switchTab('links')">Ссылки</div>
+<div class="tab" onclick="switchTab('finance')">Финансы</div>
+</div>
 </div>
 
 </div>
@@ -516,7 +535,6 @@ function saveHistoricalData() {
 function clearHistoricalData() {
     if (!confirm('Очистить все данные за 2025 год?')) return;
     localStorage.removeItem('historicalData_2025');
-    // Очищаем поля ввода
     var inputs = document.querySelectorAll('.historical-item input');
     inputs.forEach(function(input) { input.value = ''; });
     showToast('Данные 2025 удалены');
@@ -569,7 +587,6 @@ function renderChart(canvasId, key, bgColor, borderColor, histBgColor, histBorde
     
     var datasets = [];
     
-    // Основной набор данных (текущий год)
     datasets.push({
         label: 'Текущий год',
         data: data,
@@ -579,7 +596,6 @@ function renderChart(canvasId, key, bgColor, borderColor, histBgColor, histBorde
         borderRadius: 3
     });
     
-    // Исторические данные (2025) — только для главного графика
     if (canvasId === 'financeChart' && hasHistorical && histBgColor) {
         datasets.push({
             label: '2025 год',
