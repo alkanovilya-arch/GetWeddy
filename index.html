@@ -144,6 +144,49 @@ animation:fadeSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 100%{opacity:1;transform:translateX(0) scale(1)}
 }
 
+/* ===== СТАТИСТИЧЕСКИЕ БЛОКИ ===== */
+.stats-blocks{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+max-width:600px;
+margin:12px auto 0;
+padding:0 16px;
+}
+.stat-block{
+padding:18px 12px;
+border-radius:16px;
+text-align:center;
+background:linear-gradient(145deg,#FF7EB9,#D81B60);
+box-shadow:0 8px 24px rgba(255,126,185,0.35);
+color:#fff;
+transition:all 0.2s ease;
+border:1px solid rgba(255,255,255,0.15);
+}
+.stat-block:active{
+transform:scale(0.96);
+box-shadow:0 4px 12px rgba(255,126,185,0.25);
+}
+.stat-block:nth-child(2){
+background:linear-gradient(145deg,#FFB6C1,#FF8AAC);
+box-shadow:0 8px 24px rgba(255,138,172,0.35);
+}
+.stat-block .stat-label{
+font-size:14px;
+font-weight:500;
+opacity:0.9;
+letter-spacing:0.5px;
+margin-bottom:6px;
+}
+.stat-block .stat-value{
+font-size:28px;
+font-weight:700;
+text-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+.stat-block .stat-value.ruble{
+font-size:24px;
+}
+
 /* ===== ВКЛАДКИ (ПЕРЕНЕСЕНЫ ВНИЗ) ===== */
 .tabs{
 background:#fff;
@@ -285,9 +328,6 @@ box-shadow:0 4px 16px rgba(255,64,129,0.3);
 }
 .modal-box button:active{transform:scale(0.94)}
 
-/* ===== ФУТЕР ===== */
-.footer{text-align:center;padding:20px 12px 10px;color:#aaa;font-size:12px;border-top:1px solid #f0f0f0;margin-top:12px;font-weight:400;letter-spacing:0.5px}
-
 /* ===== ФОРМА ===== */
 form{max-width:500px;margin:0 auto}
 .form-group{margin-bottom:14px}
@@ -406,7 +446,11 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .calendar-grid .day{padding:8px 0;font-size:13px}
 .calendar-grid .day-name{font-size:11px;padding:4px 0}
 .calendar-header .month-year{font-size:17px}
-.footer{font-size:11px;padding:16px 8px 8px}
+.stats-blocks{gap:10px;padding:0 12px;margin-top:8px}
+.stat-block{padding:14px 10px}
+.stat-block .stat-label{font-size:12px}
+.stat-block .stat-value{font-size:22px}
+.stat-block .stat-value.ruble{font-size:19px}
 .slogan-word{font-size:40px}
 .splash-text{font-size:38px}
 .splash-sub{font-size:18px}
@@ -445,6 +489,9 @@ th,td{padding:6px 3px}
 .calendar-grid .day-name{font-size:10px}
 .calendar-wrapper{padding:2px 8px 0}
 .calendar-title{font-size:18px}
+.stat-block .stat-value{font-size:18px}
+.stat-block .stat-value.ruble{font-size:16px}
+.stat-block{padding:10px 8px}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -485,7 +532,16 @@ th,td{padding:6px 3px}
 <div class="calendar-slide active" id="calendarSlide"></div>
 </div>
 </div>
-<div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
+<div class="stats-blocks">
+<div class="stat-block">
+<div class="stat-label">Количество свадеб</div>
+<div class="stat-value" id="totalWeddings">0</div>
+</div>
+<div class="stat-block">
+<div class="stat-label">Общий доход</div>
+<div class="stat-value ruble" id="totalIncome">0 ₽</div>
+</div>
+</div>
 </div>
 
 <div id="addForm" class="content">
@@ -505,14 +561,12 @@ th,td{padding:6px 3px}
 <div class="form-group"><label>Общая сумма (руб)</label><input type="number" id="total" placeholder="" min="0" required></div>
 <div class="form-actions"><button type="submit" id="submitBtn">Добавить</button><button type="button" class="secondary" onclick="clearForm()">Очистить</button></div>
 </form>
-<div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
 <div id="load" class="content">
 <h2>Загрузка сезона</h2>
 <p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 8px;">Количество свадеб по месяцам</p>
 <div class="month-grid" id="monthGrid"></div>
-<div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
 <div id="clients" class="content">
@@ -531,7 +585,6 @@ th,td{padding:6px 3px}
 </table>
 </div>
 <div id="emptyState" class="empty-state" style="display:none;"><div class="icon">📭</div><h3>Нет клиентов</h3><p>Добавьте первую съемку</p></div>
-<div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
 <div id="deliveries" class="content">
@@ -553,7 +606,6 @@ th,td{padding:6px 3px}
 </table>
 </div>
 <div id="emptyDeliveries" class="empty-state" style="display:none;"><div class="icon">📦</div><h3>Нет выдач</h3><p>Добавьте съемки, чтобы отслеживать сроки выдачи</p></div>
-<div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
 <div id="links" class="content">
@@ -573,7 +625,6 @@ th,td{padding:6px 3px}
 <a class="link-card" href="https://weddywood.ru/" target="_blank"><span class="link-icon">🌳</span><span class="link-label">WeddyWood</span><span class="link-domain">weddywood.ru</span></a>
 <a class="link-card" href="https://svadba.ru/" target="_blank"><span class="link-icon">💕</span><span class="link-label">Свадьба.ру</span><span class="link-domain">svadba.ru</span></a>
 </div>
-<div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
 <div id="finance" class="content">
@@ -603,7 +654,6 @@ th,td{padding:6px 3px}
 <button onclick="toggleHistorical()" class="secondary">✖️ Закрыть</button>
 </div>
 </div>
-<div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
 </div><!-- /main-scroll -->
@@ -882,12 +932,24 @@ function renderAll() {
     renderClientsTable();
     renderDeliveriesTable();
     updateFinance();
+    updateMainStats();
     var financeContent = document.getElementById('finance');
     if (financeContent && financeContent.classList.contains('active')) {
         setTimeout(function() { 
             renderCharts();
         }, 200);
     }
+}
+
+function updateMainStats() {
+    var totalWeddings = bookings.length;
+    var totalIncome = 0;
+    for (var i = 0; i < bookings.length; i++) {
+        var b = bookings[i];
+        totalIncome += b.amountInHand || 0;
+    }
+    document.getElementById('totalWeddings').textContent = totalWeddings;
+    document.getElementById('totalIncome').textContent = totalIncome.toLocaleString('ru-RU') + ' ₽';
 }
 
 function renderCalendarLoad() {
@@ -1311,6 +1373,7 @@ function switchTab(tabId) {
     }
     if (tabId === 'weddings') {
         renderCalendar(currentMonth, currentYear);
+        updateMainStats();
     }
     
     var scrollEl = document.getElementById('mainScroll');
@@ -1325,6 +1388,7 @@ function init() {
     // Инициализация календаря
     renderCalendar(currentMonth, currentYear);
     initSwipe();
+    updateMainStats();
     
     document.getElementById('date').min = new Date().toISOString().split('T')[0];
     document.getElementById('phone').addEventListener('input', function() {
