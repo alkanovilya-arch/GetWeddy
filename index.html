@@ -3,14 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<!-- ===== ИКОНКА ДЛЯ РАБОЧЕГО СТОЛА IPHONE ===== -->
 <link rel="apple-touch-icon" href="/logo.png">
 <title>GetWeddy — CRM</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:system-ui,-apple-system,sans-serif;background:#FFF9FB;color:#333;padding-bottom:20px;overflow:hidden;touch-action:pan-y}
+body{font-family:system-ui,-apple-system,sans-serif;background:#FFF9FB;color:#333;overflow:hidden;height:100vh;display:flex;flex-direction:column}
 
-/* ===== ЭКРАН-ЗАСТАВКА ===== */
+/* ===== ЗАСТАВКА ===== */
 #splashScreen{
 position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#D81B60,#FF7EB9);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.6s ease
 }
@@ -22,30 +21,38 @@ position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(13
 .slogan-word.show{opacity:1;transform:scale(1)}
 .slogan-word.hide{opacity:0;transform:scale(1.2)}
 
-/* ===== ОСНОВНОЙ КОНТЕНТ ===== */
-#mainContent{display:none;display:flex;flex-direction:column;min-height:100vh}
+/* ===== ОСНОВНОЙ КОНТЕЙНЕР ===== */
+#mainContent{display:none;flex-direction:column;height:100vh;overflow:hidden}
 
-/* ===== ШАПКА ===== */
-.header{background:linear-gradient(to right,#FF8AAC,#FF7EB9,#FFB3C6);padding:14px 16px;position:sticky;top:0;z-index:100;flex-shrink:0}
+/* ===== ШАПКА (FIXED) ===== */
+.header{background:linear-gradient(to right,#FF8AAC,#FF7EB9,#FFB3C6);padding:14px 16px;flex-shrink:0;z-index:100}
 .header-inner{display:flex;align-items:center;justify-content:center;position:relative;max-width:100%;margin:0 auto}
 .header-logo{height:38px;width:auto;display:block;border-radius:6px;position:absolute;left:0;top:50%;transform:translateY(-50%)}
 .header h1{font-size:32px;color:#fff;letter-spacing:1.5px;margin:0;text-shadow:0 2px 4px rgba(0,0,0,0.12)}
 
-/* ===== ОСНОВНАЯ ОБЛАСТЬ (СКРОЛЛИМАЯ) ===== */
+/* ===== ОСНОВНАЯ ОБЛАСТЬ (СКРОЛЛ) ===== */
 .main-scroll{
 flex:1;
 overflow-y:auto;
 -webkit-overflow-scrolling:touch;
 padding-bottom:8px;
+display:flex;
+flex-direction:column;
 }
 
-/* ===== КАЛЕНДАРЬ ===== */
+/* ===== КАЛЕНДАРЬ (ФИКСИРОВАННАЯ ВЫСОТА, БЕЗ СКРОЛЛА) ===== */
+.calendar-fixed-area{
+flex-shrink:0;
+padding:8px 16px 4px;
+max-width:600px;
+margin:0 auto;
+width:100%;
+}
 .calendar-title{
 text-align:center;
 font-size:22px;
 color:#FF7EB9;
-margin:0 0 8px;
-padding-top:12px;
+margin:0 0 4px;
 }
 .calendar-title::after{
 content:'';
@@ -56,36 +63,66 @@ background:#7AFCFF;
 margin:8px auto 0;
 border-radius:2px;
 }
-.calendar-wrapper{
-padding:8px 16px 8px;
-max-width:600px;
-margin:0 auto;
+
+/* Контейнер для свайпа — только горизонтальный */
+.calendar-swipe-container{
+overflow:hidden;
+position:relative;
+touch-action:pan-x; /* ТОЛЬКО горизонтальный свайп */
+cursor:grab;
+user-select:none;
+-webkit-user-select:none;
 }
-/* Фиксированная высота календаря - всегда 6 строк */
+.calendar-swipe-container:active{cursor:grabbing}
+
+.calendar-slide{
+display:none;
+}
+.calendar-slide.active{
+display:block;
+animation:fadeSlide 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes fadeSlide{
+0%{opacity:0.3;transform:translateX(20px) scale(0.97)}
+100%{opacity:1;transform:translateX(0) scale(1)}
+}
+
+/* Сетка календаря — фиксированная высота 6 строк */
 .calendar-grid{
 display:grid;
 grid-template-columns:repeat(7,1fr);
-gap:4px;
-min-height:280px;
+gap:3px;
+min-height:260px;
 align-content:start;
 }
 .calendar-header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:8px 4px 12px;
+padding:6px 4px 10px;
 }
 .calendar-header .month-year{
 font-size:20px;
 font-weight:600;
 color:#D81B60;
 }
+.calendar-header .nav-btn{
+background:none;
+border:none;
+font-size:24px;
+color:#D81B60;
+cursor:pointer;
+padding:4px 12px;
+touch-action:manipulation;
+}
+.calendar-header .nav-btn:active{transform:scale(0.85)}
+
 .calendar-grid .day-name{
 text-align:center;
 font-size:12px;
 font-weight:600;
 color:#888;
-padding:6px 0;
+padding:4px 0;
 }
 .calendar-grid .day{
 text-align:center;
@@ -130,35 +167,19 @@ color:#ccc;
 transform:scale(0.92);
 }
 
-/* Контейнер для свайпа */
-.calendar-swipe-container{
-overflow:hidden;
-position:relative;
-touch-action:pan-y;
-}
-.calendar-slide{
-display:none;
-}
-.calendar-slide.active{
-display:block;
-animation:fadeSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-@keyframes fadeSlide{
-0%{opacity:0.3;transform:translateX(20px) scale(0.97)}
-100%{opacity:1;transform:translateX(0) scale(1)}
-}
-
 /* ===== СТАТИСТИЧЕСКИЕ БЛОКИ ===== */
 .stats-blocks{
 display:grid;
 grid-template-columns:1fr 1fr;
-gap:14px;
+gap:12px;
 max-width:600px;
-margin:12px auto 0;
+margin:6px auto 0;
 padding:0 16px;
+flex-shrink:0;
+width:100%;
 }
 .stat-block{
-padding:18px 12px;
+padding:16px 12px;
 border-radius:16px;
 text-align:center;
 background:linear-gradient(145deg,#FF7EB9,#D81B60);
@@ -180,7 +201,7 @@ font-size:14px;
 font-weight:500;
 opacity:0.9;
 letter-spacing:0.5px;
-margin-bottom:6px;
+margin-bottom:4px;
 }
 .stat-block .stat-value{
 font-size:28px;
@@ -191,14 +212,11 @@ text-shadow:0 2px 8px rgba(0,0,0,0.1);
 font-size:24px;
 }
 
-/* ===== ВКЛАДКИ (ПЕРЕНЕСЕНЫ ВНИЗ) ===== */
+/* ===== ВКЛАДКИ (FIXED) ===== */
 .tabs{
 background:#fff;
 border-top:1px solid #eee;
 padding:10px 12px 12px;
-position:sticky;
-bottom:0;
-z-index:99;
 flex-shrink:0;
 box-shadow:0 -2px 12px rgba(0,0,0,0.06);
 }
@@ -235,7 +253,7 @@ justify-content:center;
 gap:10px;
 flex-wrap:wrap;
 }
-.tabs-row + .tabs-row{margin-top:8px}
+.tabs-row + .tabs-row{margin-top:6px}
 .tab{
 display:flex;
 align-items:center;
@@ -267,19 +285,36 @@ box-shadow:0 6px 20px rgba(255,64,129,0.45),inset 0 1px 0 rgba(255,255,255,0.2);
 }
 
 /* ===== КОНТЕНТ ===== */
-.content{display:none;padding:20px 12px 12px;background:#FFF9FB}
+.content{display:none;padding:20px 12px 12px;background:#FFF9FB;flex:1}
 .content.active{display:block}
 .content h2{text-align:center;font-size:22px;color:#FF7EB9;margin:0 0 16px;padding-top:6px}
 .content h2::after{content:'';display:block;width:40px;height:2px;background:#7AFCFF;margin:8px auto 0;border-radius:2px}
 
-/* ===== МОДАЛЬНОЕ ОКНО ===== */
+/* ===== ГЛАВНАЯ — ФИКСИРОВАННЫЙ БЛОК ===== */
+#weddings{
+display:none;
+flex-direction:column;
+padding:0!important;
+background:#FFF9FB;
+}
+#weddings.active{
+display:flex;
+}
+#weddings .calendar-fixed-area{
+flex-shrink:0;
+}
+#weddings .stats-blocks{
+flex-shrink:0;
+}
+#weddings .main-scroll{
+padding-bottom:0;
+}
+
+/* ===== МОДАЛКА ===== */
 .modal-overlay{
 display:none;
 position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
+top:0;left:0;width:100%;height:100%;
 background:rgba(0,0,0,0.5);
 z-index:9998;
 align-items:center;
@@ -287,10 +322,7 @@ justify-content:center;
 backdrop-filter:blur(4px);
 -webkit-backdrop-filter:blur(4px);
 }
-.modal-overlay.show{
-display:flex;
-animation:fadeIn 0.3s ease;
-}
+.modal-overlay.show{display:flex;animation:fadeIn 0.3s ease}
 @keyframes fadeIn{
 0%{opacity:0;transform:scale(0.9)}
 100%{opacity:1;transform:scale(1)}
@@ -304,35 +336,14 @@ max-width:340px;
 width:90%;
 box-shadow:0 20px 60px rgba(0,0,0,0.3);
 }
-.modal-box .icon{
-font-size:48px;
-display:block;
-margin-bottom:8px;
-}
-.modal-box h3{
-font-size:22px;
-color:#D81B60;
-margin:0 0 6px;
-}
-.modal-box p{
-font-size:15px;
-color:#666;
-margin:0 0 16px;
-}
-.modal-box button{
-padding:10px 32px;
-border:none;
-border-radius:30px;
-font-size:16px;
-font-weight:600;
-color:#fff;
-background:linear-gradient(135deg,#FF4081,#D81B60);
-cursor:pointer;
-box-shadow:0 4px 16px rgba(255,64,129,0.3);
-}
+.modal-box .icon{font-size:48px;display:block;margin-bottom:8px}
+.modal-box h3{font-size:22px;color:#D81B60;margin:0 0 6px}
+.modal-box p{font-size:15px;color:#666;margin:0 0 16px}
+.modal-box button{padding:10px 32px;border:none;border-radius:30px;font-size:16px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF4081,#D81B60);cursor:pointer;box-shadow:0 4px 16px rgba(255,64,129,0.3)}
 .modal-box button:active{transform:scale(0.94)}
 
-/* ===== ФОРМА ===== */
+/* ===== ОСТАЛЬНЫЕ СТИЛИ (БЕЗ ИЗМЕНЕНИЙ) ===== */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:9999;display:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:90%;text-align:center;pointer-events:none}
 form{max-width:500px;margin:0 auto}
 .form-group{margin-bottom:14px}
 .form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:4px;color:#555;text-align:center}
@@ -344,7 +355,6 @@ button:active{transform:scale(0.94)}
 button.secondary{background:#888;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
 button.historical-btn{background:linear-gradient(135deg,#FFB6C1,#FF8AAC);box-shadow:0 2px 8px rgba(255,138,172,0.3);margin-top:10px;width:100%;max-width:300px;color:#fff}
 
-/* ===== ТАБЛИЦА ===== */
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:8px;background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
 table{width:100%;border-collapse:collapse;font-size:12px;min-width:400px}
 th{background:#FF7EB9;color:#fff;padding:12px 6px;font-size:12px;font-weight:600;white-space:nowrap;position:sticky;top:0;z-index:10}
@@ -364,7 +374,6 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .expandable-row .detail-item span:last-child{font-weight:600;color:#333}
 .expandable-row .detail-actions{display:flex;gap:8px;justify-content:center;margin-top:6px}
 
-/* ===== МЕСЯЦЫ (ЗАГРУЗКА) ===== */
 .month-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:400px;margin:15px auto 0}
 .month{padding:14px 6px;border-radius:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
 .month:active{transform:scale(0.95)}
@@ -374,13 +383,11 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .month.warning{background:#FFC107;color:#333}
 .month.overloaded{background:#F44336;color:#fff}
 
-/* ===== ВЫДАЧИ ===== */
 .delivery-status{display:inline-block;padding:2px 12px;border-radius:12px;font-size:11px;font-weight:600}
 .delivery-status.good{background:#E8F5E9;color:#2E7D32}
 .delivery-status.soon{background:#FFF8E1;color:#F57F17}
 .delivery-status.overdue{background:#FFEBEE;color:#C62828}
 
-/* ===== ССЫЛКИ ===== */
 .links-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;max-width:600px;margin:10px auto 0}
 .link-card{display:block;padding:16px 12px;border-radius:16px;text-align:center;text-decoration:none;font-weight:600;font-size:14px;color:#fff;background:linear-gradient(145deg,#FF7EB9,#E85A9E);box-shadow:0 4px 16px rgba(255,126,185,0.35);transition:all 0.2s ease;border:1px solid rgba(255,255,255,0.15);letter-spacing:0.3px}
 .link-card:active{transform:scale(0.95);box-shadow:0 2px 8px rgba(255,126,185,0.25)}
@@ -400,13 +407,11 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .link-card .link-label{font-size:13px;opacity:0.9}
 .link-card .link-domain{font-size:11px;opacity:0.7;display:block;margin-top:2px;font-weight:400}
 
-/* ===== ФИНАНСЫ ===== */
 .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
 .stat-card{background:#fff;padding:10px;border-radius:8px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
 .stat-card h3{font-size:11px;color:#888;margin:0 0 2px;font-weight:500}
 .stat-card p{font-size:18px;font-weight:700;color:#FF7EB9;margin:0}
 
-/* ===== ИСТОРИЧЕСКИЕ ДАННЫЕ ===== */
 .historical-toggle{display:flex;justify-content:center;margin-top:16px}
 .historical-panel{display:none;background:#fff;padding:16px 12px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-top:12px}
 .historical-panel.open{display:block}
@@ -421,7 +426,6 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .chart-wrap{position:relative;height:180px}
 .chart-wrap-second{position:relative;height:180px;margin-top:12px}
 
-/* ===== ПОИСК ===== */
 .search-input{width:100%;max-width:500px;margin:0 auto 8px;display:block;padding:8px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;background:#fafafa;-webkit-appearance:none;appearance:none}
 .search-input:focus{outline:none;border-color:#FF7EB9;background:#fff;box-shadow:0 4px 12px rgba(255,126,185,0.2),0 0 0 2px rgba(255,126,185,0.15)}
 .empty-state{text-align:center;padding:20px 10px;color:#999}
@@ -431,7 +435,6 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .action-btn:active{transform:scale(0.88)}
 .action-btn.edit{background:#FFC107;color:#333}
 .action-btn.delete{background:#F44336;color:#fff}
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:9999;display:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:90%;text-align:center;pointer-events:none}
 
 @media(max-width:480px){
 .header{padding:10px 12px}
@@ -445,13 +448,14 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .fab{width:48px;height:48px;font-size:28px}
 .content{padding:16px 8px 8px}
 .content h2{font-size:20px;padding-top:4px}
-.calendar-title{font-size:20px;padding-top:8px;margin-bottom:4px}
-.calendar-wrapper{padding:4px 12px 4px}
-.calendar-grid{min-height:230px}
+.calendar-title{font-size:20px}
+.calendar-fixed-area{padding:4px 12px 2px}
+.calendar-grid{min-height:220px}
 .calendar-grid .day{padding:8px 0;font-size:13px}
 .calendar-grid .day-name{font-size:11px;padding:4px 0}
 .calendar-header .month-year{font-size:17px}
-.stats-blocks{gap:10px;padding:0 12px;margin-top:8px}
+.calendar-header .nav-btn{font-size:20px;padding:2px 8px}
+.stats-blocks{gap:10px;padding:0 12px;margin:4px auto 0}
 .stat-block{padding:14px 10px}
 .stat-block .stat-label{font-size:12px}
 .stat-block .stat-value{font-size:22px}
@@ -490,10 +494,10 @@ th,td{padding:6px 3px}
 .splash-text{font-size:30px}
 .splash-sub{font-size:15px}
 .historical-grid{grid-template-columns:1fr}
-.calendar-grid{min-height:200px}
+.calendar-grid{min-height:190px}
 .calendar-grid .day{padding:6px 0;font-size:12px}
 .calendar-grid .day-name{font-size:10px}
-.calendar-wrapper{padding:2px 8px 0}
+.calendar-fixed-area{padding:2px 8px 0}
 .calendar-title{font-size:18px}
 .stat-block .stat-value{font-size:18px}
 .stat-block .stat-value.ruble{font-size:16px}
@@ -505,7 +509,7 @@ th,td{padding:6px 3px}
 </head>
 <body>
 
-<!-- ===== ЭКРАН-ЗАСТАВКА ===== -->
+<!-- ===== ЗАСТАВКА ===== -->
 <div id="splashScreen">
 <div class="splash-text">GetWeddy</div>
 <div class="splash-sub">CRM для свадебного фотографа</div>
@@ -530,10 +534,10 @@ th,td{padding:6px 3px}
 <!-- ===== СКРОЛЛИМАЯ ОБЛАСТЬ ===== -->
 <div class="main-scroll" id="mainScroll">
 
-<!-- ===== ГЛАВНАЯ СТРАНИЦА С КАЛЕНДАРЕМ ===== -->
+<!-- ===== ГЛАВНАЯ (КАЛЕНДАРЬ + СТАТИСТИКА) ===== -->
 <div id="weddings" class="content active">
+<div class="calendar-fixed-area">
 <div class="calendar-title">Календарь свадеб</div>
-<div class="calendar-wrapper">
 <div class="calendar-swipe-container" id="calendarSwipe">
 <div class="calendar-slide active" id="calendarSlide"></div>
 </div>
@@ -550,6 +554,7 @@ th,td{padding:6px 3px}
 </div>
 </div>
 
+<!-- ===== ДРУГИЕ ВКЛАДКИ ===== -->
 <div id="addForm" class="content">
 <h2>Добавить съемку</h2>
 <form id="bookingForm">
@@ -580,13 +585,7 @@ th,td{padding:6px 3px}
 <input type="text" class="search-input" id="searchClients" placeholder="🔍 Поиск..." oninput="filterClients(this.value)">
 <div class="table-wrap">
 <table>
-<thead>
-<tr>
-<th>№</th>
-<th>ФИО</th>
-<th>Тел</th>
-</tr>
-</thead>
+<thead><tr><th>№</th><th>ФИО</th><th>Тел</th></tr></thead>
 <tbody id="clientsTableBody"></tbody>
 </table>
 </div>
@@ -598,16 +597,7 @@ th,td{padding:6px 3px}
 <p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 12px;">Контроль сроков выдачи готовых материалов</p>
 <div class="table-wrap">
 <table>
-<thead>
-<tr>
-<th>№</th>
-<th>ФИО</th>
-<th>Дата съемки</th>
-<th>Срок выдачи</th>
-<th>Дата выдачи</th>
-<th>Статус</th>
-</tr>
-</thead>
+<thead><tr><th>№</th><th>ФИО</th><th>Дата съемки</th><th>Срок выдачи</th><th>Дата выдачи</th><th>Статус</th></tr></thead>
 <tbody id="deliveriesTableBody"></tbody>
 </table>
 </div>
@@ -664,7 +654,7 @@ th,td{padding:6px 3px}
 
 </div><!-- /main-scroll -->
 
-<!-- ===== ВКЛАДКИ (ПЕРЕНЕСЕНЫ ВНИЗ) ===== -->
+<!-- ===== ВКЛАДКИ (FIXED) ===== -->
 <div class="tabs">
 <div class="tabs-row-top">
 <button class="fab" id="fabButton" onclick="openAddForm()">+</button>
@@ -683,7 +673,7 @@ th,td{padding:6px 3px}
 
 </div><!-- /mainContent -->
 
-<!-- ===== МОДАЛЬНОЕ ОКНО ===== -->
+<!-- ===== МОДАЛКА ===== -->
 <div class="modal-overlay" id="successModal">
 <div class="modal-box">
 <span class="icon">✅</span>
@@ -696,7 +686,7 @@ th,td{padding:6px 3px}
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== АНИМАЦИЯ СЛОГАНА =====
+// ===== АНИМАЦИЯ ЗАСТАВКИ =====
 (function() {
     var splashScreen = document.getElementById('splashScreen');
     var mainContent = document.getElementById('mainContent');
@@ -711,7 +701,7 @@ th,td{padding:6px 3px}
     function showMainContent() {
         splashScreen.classList.add('hide');
         mainContent.style.display = 'flex';
-        document.body.style.overflow = 'auto';
+        document.body.style.overflow = 'hidden';
         sessionStorage.setItem('splashShown', 'true');
         animationComplete = true;
     }
@@ -749,161 +739,18 @@ th,td{padding:6px 3px}
     }, 5000);
 })();
 
-// ===== КАЛЕНДАРЬ =====
+// ===== ОСНОВНОЙ СКРИПТ =====
+var bookings = [];
+var editingId = null;
+var financeChart = null;
+var prepaymentChart = null;
+var monthNames = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
 var currentMonth = new Date().getMonth();
 var currentYear = new Date().getFullYear();
 var touchStartX = 0;
 var touchEndX = 0;
 var isSwiping = false;
 var isAnimating = false;
-
-function getWeddingDates() {
-    var dates = [];
-    for (var i = 0; i < bookings.length; i++) {
-        var d = new Date(bookings[i].date);
-        dates.push(d);
-    }
-    return dates;
-}
-
-function renderCalendar(month, year) {
-    var slide = document.getElementById('calendarSlide');
-    var firstDay = new Date(year, month, 1).getDay();
-    var daysInMonth = new Date(year, month + 1, 0).getDate();
-    var today = new Date();
-    var weddingDates = getWeddingDates();
-    
-    var monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
-    
-    var html = '<div class="calendar-header">';
-    html += '<span class="month-year">' + monthNames[month] + ' ' + year + '</span>';
-    html += '</div>';
-    
-    html += '<div class="calendar-grid">';
-    var dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-    for (var i = 0; i < 7; i++) {
-        html += '<div class="day-name">' + dayNames[i] + '</div>';
-    }
-    
-    // Всегда показываем 6 строк (42 ячейки)
-    var totalCellsPadded = 42;
-    var startOffset = firstDay === 0 ? 6 : firstDay - 1;
-    
-    for (var i = 0; i < totalCellsPadded; i++) {
-        var dayNum = i - startOffset + 1;
-        var classes = 'day';
-        
-        if (dayNum < 1 || dayNum > daysInMonth) {
-            classes += ' empty';
-            html += '<div class="' + classes + '"></div>';
-            continue;
-        }
-        
-        var dateObj = new Date(year, month, dayNum);
-        
-        if (dateObj.getDate() === today.getDate() && 
-            dateObj.getMonth() === today.getMonth() && 
-            dateObj.getFullYear() === today.getFullYear()) {
-            classes += ' today';
-        }
-        
-        for (var j = 0; j < weddingDates.length; j++) {
-            var wd = weddingDates[j];
-            if (wd.getDate() === dayNum && 
-                wd.getMonth() === month && 
-                wd.getFullYear() === year) {
-                classes += ' wedding';
-                break;
-            }
-        }
-        
-        html += '<div class="' + classes + '">' + dayNum + '</div>';
-    }
-    
-    html += '</div>';
-    slide.innerHTML = html;
-    slide.classList.remove('active');
-    setTimeout(function() {
-        slide.classList.add('active');
-    }, 10);
-}
-
-function initSwipe() {
-    var container = document.getElementById('calendarSwipe');
-    
-    container.addEventListener('touchstart', function(e) {
-        if (isAnimating) return;
-        touchStartX = e.changedTouches[0].screenX;
-        isSwiping = true;
-    }, {passive: true});
-    
-    container.addEventListener('touchmove', function(e) {
-        if (!isSwiping || isAnimating) return;
-        touchEndX = e.changedTouches[0].screenX;
-    }, {passive: true});
-    
-    container.addEventListener('touchend', function(e) {
-        if (!isSwiping || isAnimating) return;
-        isSwiping = false;
-        var diff = touchStartX - touchEndX;
-        if (Math.abs(diff) > 40) {
-            isAnimating = true;
-            if (diff > 0) {
-                nextMonth();
-            } else {
-                prevMonth();
-            }
-            setTimeout(function() {
-                isAnimating = false;
-            }, 500);
-        }
-    }, {passive: true});
-}
-
-function nextMonth() {
-    currentMonth++;
-    if (currentMonth > 11) {
-        currentMonth = 0;
-        currentYear++;
-    }
-    renderCalendar(currentMonth, currentYear);
-}
-
-function prevMonth() {
-    currentMonth--;
-    if (currentMonth < 0) {
-        currentMonth = 11;
-        currentYear--;
-    }
-    renderCalendar(currentMonth, currentYear);
-}
-
-// ===== ФУНКЦИЯ ДЛЯ КНОПКИ ПЛЮС =====
-function openAddForm() {
-    switchTab('addForm');
-    var scrollEl = document.getElementById('mainScroll');
-    if (scrollEl) {
-        setTimeout(function() {
-            scrollEl.scrollTop = 0;
-        }, 100);
-    }
-}
-
-// ===== МОДАЛЬНОЕ ОКНО =====
-function showModal() {
-    document.getElementById('successModal').classList.add('show');
-}
-
-function closeModal() {
-    document.getElementById('successModal').classList.remove('show');
-}
-
-// ===== ОСНОВНОЙ СКРИПТ CRM =====
-var bookings = [];
-var editingId = null;
-var financeChart = null;
-var prepaymentChart = null;
-var monthNames = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
 
 function showToast(m) {
     var t = document.getElementById('toast');
@@ -946,6 +793,137 @@ function renderAll() {
     }
 }
 
+// ===== КАЛЕНДАРЬ =====
+function getWeddingDates() {
+    var dates = [];
+    for (var i = 0; i < bookings.length; i++) {
+        var d = new Date(bookings[i].date);
+        dates.push(d);
+    }
+    return dates;
+}
+
+function renderCalendar(month, year) {
+    var slide = document.getElementById('calendarSlide');
+    var firstDay = new Date(year, month, 1).getDay();
+    var daysInMonth = new Date(year, month + 1, 0).getDate();
+    var today = new Date();
+    var weddingDates = getWeddingDates();
+    
+    var html = '<div class="calendar-header">';
+    html += '<button class="nav-btn" onclick="prevMonth()">‹</button>';
+    html += '<span class="month-year">' + monthNames[month] + ' ' + year + '</span>';
+    html += '<button class="nav-btn" onclick="nextMonth()">›</button>';
+    html += '</div>';
+    
+    html += '<div class="calendar-grid">';
+    var dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    for (var i = 0; i < 7; i++) {
+        html += '<div class="day-name">' + dayNames[i] + '</div>';
+    }
+    
+    var totalCellsPadded = 42;
+    var startOffset = firstDay === 0 ? 6 : firstDay - 1;
+    
+    for (var i = 0; i < totalCellsPadded; i++) {
+        var dayNum = i - startOffset + 1;
+        var classes = 'day';
+        
+        if (dayNum < 1 || dayNum > daysInMonth) {
+            classes += ' empty';
+            html += '<div class="' + classes + '"></div>';
+            continue;
+        }
+        
+        var dateObj = new Date(year, month, dayNum);
+        
+        if (dateObj.getDate() === today.getDate() && 
+            dateObj.getMonth() === today.getMonth() && 
+            dateObj.getFullYear() === today.getFullYear()) {
+            classes += ' today';
+        }
+        
+        for (var j = 0; j < weddingDates.length; j++) {
+            var wd = weddingDates[j];
+            if (wd.getDate() === dayNum && 
+                wd.getMonth() === month && 
+                wd.getFullYear() === year) {
+                classes += ' wedding';
+                break;
+            }
+        }
+        
+        html += '<div class="' + classes + '">' + dayNum + '</div>';
+    }
+    
+    html += '</div>';
+    slide.innerHTML = html;
+    slide.classList.remove('active');
+    setTimeout(function() {
+        slide.classList.add('active');
+    }, 10);
+}
+
+function nextMonth(e) {
+    if (e) e.stopPropagation();
+    currentMonth++;
+    if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+    renderCalendar(currentMonth, currentYear);
+    updateMainStats();
+}
+
+function prevMonth(e) {
+    if (e) e.stopPropagation();
+    currentMonth--;
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    }
+    renderCalendar(currentMonth, currentYear);
+    updateMainStats();
+}
+
+// ===== СВАЙП ТОЛЬКО ПО ГОРИЗОНТАЛИ =====
+function initSwipe() {
+    var container = document.getElementById('calendarSwipe');
+    
+    container.addEventListener('touchstart', function(e) {
+        if (isAnimating) return;
+        touchStartX = e.changedTouches[0].screenX;
+        isSwiping = true;
+    }, {passive: true});
+    
+    container.addEventListener('touchmove', function(e) {
+        if (!isSwiping || isAnimating) return;
+        touchEndX = e.changedTouches[0].screenX;
+        var diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 10) {
+            e.preventDefault();
+        }
+    }, {passive: false});
+    
+    container.addEventListener('touchend', function(e) {
+        if (!isSwiping || isAnimating) return;
+        isSwiping = false;
+        var diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 40) {
+            isAnimating = true;
+            if (diff > 0) {
+                nextMonth();
+            } else {
+                prevMonth();
+            }
+            setTimeout(function() {
+                isAnimating = false;
+            }, 500);
+        }
+    }, {passive: true});
+}
+
+// ===== СТАТИСТИКА =====
 function updateMainStats() {
     var totalWeddings = bookings.length;
     var totalIncome = 0;
@@ -957,36 +935,25 @@ function updateMainStats() {
     document.getElementById('totalIncome').textContent = totalIncome.toLocaleString('ru-RU') + ' ₽';
 }
 
+// ===== ОСТАЛЬНЫЕ ФУНКЦИИ (БЕЗ ИЗМЕНЕНИЙ) =====
 function renderCalendarLoad() {
     var months = {};
     for (var i = 0; i < bookings.length; i++) {
         var b = bookings[i];
-        var isWedding = b.name.toLowerCase().includes('свадьб') || 
-                        b.name.toLowerCase().includes('wedding') ||
-                        b.contract.toLowerCase().includes('св') ||
-                        b.instagram.toLowerCase().includes('wed');
         var m = new Date(b.date).getMonth();
-        if (isWedding) {
-            months[m] = (months[m] || 0) + 1;
-        } else {
-            months[m] = (months[m] || 0) + 1;
-        }
+        months[m] = (months[m] || 0) + 1;
     }
     var html = '';
     for (var i = 0; i < 12; i++) {
         var count = months[i] || 0;
         var cls = 'default';
-        if (count >= 8) {
-            cls = 'overloaded';
-        } else if (count >= 5) {
-            cls = 'warning';
-        }
+        if (count >= 8) cls = 'overloaded';
+        else if (count >= 5) cls = 'warning';
         html += '<div class="month ' + cls + '"><h3>' + monthNames[i] + '</h3><p>' + count + '</p></div>';
     }
     document.getElementById('monthGrid').innerHTML = html;
 }
 
-// ===== ИСТОРИЧЕСКИЕ ДАННЫЕ =====
 function getHistoricalData() {
     try {
         var data = localStorage.getItem('historicalData_2025');
@@ -1039,7 +1006,6 @@ function fillHistoricalFields() {
     grid.innerHTML = html;
 }
 
-// ===== ГРАФИКИ =====
 function renderCharts() {
     renderChart('financeChart', 'amountInHand', 'rgba(122,252,255,0.7)', 'rgba(122,252,255,1)', 'rgba(255,165,0,0.7)', 'rgba(255,165,0,1)');
     renderChart('prepaymentChart', 'agency', 'rgba(255,165,0,0.7)', 'rgba(255,165,0,1)', null, null);
@@ -1342,6 +1308,24 @@ function deleteBooking(id) {
     showToast('Удалено');
 }
 
+function openAddForm() {
+    switchTab('addForm');
+    var scrollEl = document.getElementById('mainScroll');
+    if (scrollEl) {
+        setTimeout(function() {
+            scrollEl.scrollTop = 0;
+        }, 100);
+    }
+}
+
+function showModal() {
+    document.getElementById('successModal').classList.add('show');
+}
+
+function closeModal() {
+    document.getElementById('successModal').classList.remove('show');
+}
+
 function switchTab(tabId) {
     var contents = document.querySelectorAll('.content');
     for (var i = 0; i < contents.length; i++) {
@@ -1387,10 +1371,10 @@ function switchTab(tabId) {
     }
 }
 
+// ===== ИНИЦИАЛИЗАЦИЯ =====
 function init() {
     loadData();
     
-    // Инициализация календаря
     renderCalendar(currentMonth, currentYear);
     initSwipe();
     updateMainStats();
