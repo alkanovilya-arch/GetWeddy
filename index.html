@@ -61,6 +61,14 @@ padding:8px 16px 8px;
 max-width:600px;
 margin:0 auto;
 }
+/* Фиксированная высота календаря - всегда 6 строк */
+.calendar-grid{
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:4px;
+min-height:280px;
+align-content:start;
+}
 .calendar-header{
 display:flex;
 justify-content:space-between;
@@ -71,11 +79,6 @@ padding:8px 4px 12px;
 font-size:20px;
 font-weight:600;
 color:#D81B60;
-}
-.calendar-grid{
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:4px;
 }
 .calendar-grid .day-name{
 text-align:center;
@@ -100,6 +103,7 @@ background:transparent;
 background:transparent!important;
 color:transparent!important;
 cursor:default;
+visibility:hidden;
 }
 .calendar-grid .day.today{
 background:#FF7EB9;
@@ -443,6 +447,7 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .content h2{font-size:20px;padding-top:4px}
 .calendar-title{font-size:20px;padding-top:8px;margin-bottom:4px}
 .calendar-wrapper{padding:4px 12px 4px}
+.calendar-grid{min-height:230px}
 .calendar-grid .day{padding:8px 0;font-size:13px}
 .calendar-grid .day-name{font-size:11px;padding:4px 0}
 .calendar-header .month-year{font-size:17px}
@@ -485,6 +490,7 @@ th,td{padding:6px 3px}
 .splash-text{font-size:30px}
 .splash-sub{font-size:15px}
 .historical-grid{grid-template-columns:1fr}
+.calendar-grid{min-height:200px}
 .calendar-grid .day{padding:6px 0;font-size:12px}
 .calendar-grid .day-name{font-size:10px}
 .calendar-wrapper{padding:2px 8px 0}
@@ -779,10 +785,9 @@ function renderCalendar(month, year) {
         html += '<div class="day-name">' + dayNames[i] + '</div>';
     }
     
+    // Всегда показываем 6 строк (42 ячейки)
+    var totalCellsPadded = 42;
     var startOffset = firstDay === 0 ? 6 : firstDay - 1;
-    var totalCells = startOffset + daysInMonth;
-    var rows = Math.ceil(totalCells / 7);
-    var totalCellsPadded = rows * 7;
     
     for (var i = 0; i < totalCellsPadded; i++) {
         var dayNum = i - startOffset + 1;
