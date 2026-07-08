@@ -63,9 +63,8 @@ transform:translateY(-50%) scale(0.95);
 .header h1{
 font-size:32px;
 color:#fff;
-letter-spacing:2px;
+letter-spacing:3px;
 margin:0;
-text-shadow:0 3px 12px rgba(0,0,0,0.15),0 1px 0 rgba(255,255,255,0.2);
 font-weight:700;
 background:linear-gradient(180deg,#ffffff 0%,#fff5f7 100%);
 -webkit-background-clip:text;
@@ -73,19 +72,6 @@ background:linear-gradient(180deg,#ffffff 0%,#fff5f7 100%);
 background-clip:text;
 text-shadow:none;
 filter:drop-shadow(0 2px 12px rgba(0,0,0,0.12));
-letter-spacing:3px;
-position:relative;
-}
-.header h1::after{
-content:'✦';
-position:absolute;
-right:-28px;
-top:50%;
-transform:translateY(-50%);
-font-size:14px;
-color:rgba(255,255,255,0.4);
--webkit-text-fill-color:initial;
-filter:none;
 }
 
 /* ===== ОСНОВНАЯ ОБЛАСТЬ (СКРОЛЛИМАЯ) ===== */
@@ -496,7 +482,6 @@ box-shadow:0 4px 16px rgba(255,126,185,0.2),inset 0 1px 0 rgba(255,255,255,0.3);
 }
 .header-logo{height:28px;border-radius:8px}
 .header h1{font-size:24px;letter-spacing:2px}
-.header h1::after{right:-22px;font-size:11px}
 .tabs{
 padding:8px 8px 10px;
 border-radius:18px 18px 0 0;
@@ -564,7 +549,6 @@ padding:10px 12px;
 border-radius:0 0 14px 14px;
 }
 .header h1{font-size:20px;letter-spacing:1.5px}
-.header h1::after{right:-18px;font-size:9px}
 .header-logo{height:24px}
 }
 </style>
