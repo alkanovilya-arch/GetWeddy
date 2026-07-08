@@ -50,7 +50,43 @@ z-index:99;
 flex-shrink:0;
 box-shadow:0 -2px 12px rgba(0,0,0,0.06);
 }
-.tabs-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;align-items:flex-start}
+
+/* Ряд с плюсом */
+.tabs-row-top{
+display:flex;
+justify-content:center;
+align-items:center;
+margin-bottom:6px;
+}
+.fab{
+width:56px;
+height:56px;
+border-radius:50%;
+background:linear-gradient(145deg,#FF4081,#D81B60);
+border:none;
+color:#fff;
+font-size:32px;
+font-weight:300;
+cursor:pointer;
+touch-action:manipulation;
+box-shadow:0 6px 20px rgba(255,64,129,0.45);
+transition:all 0.2s ease;
+display:flex;
+align-items:center;
+justify-content:center;
+line-height:1;
+padding:0;
+flex-shrink:0;
+}
+.fab:active{transform:scale(0.92);box-shadow:0 3px 12px rgba(255,64,129,0.35)}
+
+/* Основные ряды кнопок */
+.tabs-row{
+display:flex;
+justify-content:center;
+gap:10px;
+flex-wrap:wrap;
+}
 .tabs-row + .tabs-row{margin-top:8px}
 .tab{
 display:flex;
@@ -80,47 +116,6 @@ white-space:nowrap;
 background:linear-gradient(145deg,#FF4081,#D81B60);
 color:#fff;
 box-shadow:0 6px 20px rgba(255,64,129,0.45),inset 0 1px 0 rgba(255,255,255,0.2);
-}
-
-/* ===== КРУГЛАЯ КНОПКА С ПЛЮСОМ ===== */
-.fab-wrapper{
-display:flex;
-justify-content:center;
-align-items:center;
-position:relative;
-margin-top:-32px;
-margin-bottom:0;
-}
-.fab{
-width:56px;
-height:56px;
-border-radius:50%;
-background:linear-gradient(145deg,#FF4081,#D81B60);
-border:none;
-color:#fff;
-font-size:32px;
-font-weight:300;
-cursor:pointer;
-touch-action:manipulation;
-box-shadow:0 6px 20px rgba(255,64,129,0.45);
-transition:all 0.2s ease;
-display:flex;
-align-items:center;
-justify-content:center;
-line-height:1;
-padding:0;
-flex-shrink:0;
-}
-.fab:active{transform:scale(0.92);box-shadow:0 3px 12px rgba(255,64,129,0.35)}
-
-/* Контейнер для кнопки Загрузка с плюсом над ней */
-.load-wrapper{
-display:flex;
-flex-direction:column;
-align-items:center;
-flex:1;
-min-width:0;
-max-width:150px;
 }
 
 /* ===== КОНТЕНТ ===== */
@@ -244,10 +239,9 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .tabs{padding:8px 8px 10px}
 .tabs-row{gap:6px}
 .tabs-row + .tabs-row{margin-top:6px}
+.tabs-row-top{margin-bottom:4px}
 .tab{font-size:14px;padding:10px 6px;height:44px;max-width:110px}
 .fab{width:48px;height:48px;font-size:28px}
-.fab-wrapper{margin-top:-28px}
-.load-wrapper{max-width:110px}
 .content{padding:16px 8px 8px}
 .content h2{font-size:20px;padding-top:4px}
 .footer{font-size:11px;padding:16px 8px 8px}
@@ -278,8 +272,6 @@ th,td{padding:6px 3px}
 .links-grid{grid-template-columns:1fr}
 .tab{font-size:13px;padding:8px 4px;height:40px;max-width:90px}
 .fab{width:42px;height:42px;font-size:24px}
-.fab-wrapper{margin-top:-24px}
-.load-wrapper{max-width:90px}
 .slogan-word{font-size:32px}
 .splash-text{font-size:30px}
 .splash-sub{font-size:15px}
@@ -446,16 +438,17 @@ th,td{padding:6px 3px}
 
 <!-- ===== ВКЛАДКИ (ПЕРЕНЕСЕНЫ ВНИЗ) ===== -->
 <div class="tabs">
-<div class="tabs-row">
-<div class="tab active" onclick="switchTab('weddings')">Главная</div>
-<div class="load-wrapper">
-<div class="fab-wrapper">
+<!-- Ряд с кнопкой плюс -->
+<div class="tabs-row-top">
 <button class="fab" id="fabButton" onclick="void(0)">+</button>
 </div>
-<div class="tab" onclick="switchTab('load')" style="width:100%;max-width:150px;flex:none;margin-top:0;">Загрузка</div>
-</div>
+<!-- Первый ряд кнопок -->
+<div class="tabs-row">
+<div class="tab active" onclick="switchTab('weddings')">Главная</div>
+<div class="tab" onclick="switchTab('load')">Загрузка</div>
 <div class="tab" onclick="switchTab('clients')">Клиенты</div>
 </div>
+<!-- Второй ряд кнопок -->
 <div class="tabs-row">
 <div class="tab" onclick="switchTab('deliveries')">Выдачи</div>
 <div class="tab" onclick="switchTab('links')">Ссылки</div>
