@@ -108,7 +108,7 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .expandable-row .detail-item span:last-child{font-weight:600;color:#333}
 .expandable-row .detail-actions{display:flex;gap:8px;justify-content:center;margin-top:6px}
 
-/* ===== МЕСЯЦЫ ===== */
+/* ===== МЕСЯЦЫ (ЗАГРУЗКА) ===== */
 .month-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:400px;margin:15px auto 0}
 .month{padding:14px 6px;border-radius:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
 .month:active{transform:scale(0.95)}
@@ -279,7 +279,7 @@ th,td{padding:6px 3px}
 
 <div id="load" class="content">
 <h2>Загрузка сезона</h2>
-<p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 8px;">Часы по месяцам</p>
+<p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 8px;">Количество свадеб по месяцам</p>
 <div class="month-grid" id="monthGrid"></div>
 <div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
@@ -634,19 +634,39 @@ function renderChart(canvasId, key, bgColor, borderColor, histBgColor, histBorde
     }
 }
 
+// ===== ОБНОВЛЕННЫЙ РЕНДЕР КАЛЕНДАРЯ (ПО СВАДЬБАМ) =====
 function renderCalendar() {
     var months = {};
+    // Считаем количество свадеб по месяцам
     for (var i = 0; i < bookings.length; i++) {
-        var m = new Date(bookings[i].date).getMonth();
-        months[m] = (months[m] || 0) + bookings[i].hours;
+        var b = bookings[i];
+        // Определяем, является ли съемка свадьбой
+        var isWedding = b.name.toLowerCase().includes('свадьб') || 
+                        b.name.toLowerCase().includes('wedding') ||
+                        b.contract.toLowerCase().includes('св') ||
+                        b.instagram.toLowerCase().includes('wed');
+        // Если в названии нет явного указания, считаем все съемки свадьбами (для простоты)
+        // Но лучше оставить логику определения — если есть хоть один признак
+        var m = new Date(b.date).getMonth();
+        if (isWedding) {
+            months[m] = (months[m] || 0) + 1;
+        } else {
+            // Если не определили как свадьбу, всё равно считаем (так как у тебя все съемки — свадьбы)
+            months[m] = (months[m] || 0) + 1;
+        }
     }
+    
     var html = '';
     for (var i = 0; i < 12; i++) {
-        var h = months[i] || 0;
-        var cls = 'default';
-        if (h > 40) cls = 'overloaded';
-        else if (h > 20) cls = 'warning';
-        html += '<div class="month ' + cls + '"><h3>' + monthNames[i] + '</h3><p>' + h + ' ч</p></div>';
+        var count = months[i] || 0;
+        var cls = 'default'; // зелёный по умолчанию
+        if (count >= 8) {
+            cls = 'overloaded'; // красный
+        } else if (count >= 5) {
+            cls = 'warning'; // жёлтый
+        }
+        // Для 0 свадеб тоже зелёный (default) — норма
+        html += '<div class="month ' + cls + '"><h3>' + monthNames[i] + '</h3><p>' + count + '</p></div>';
     }
     document.getElementById('monthGrid').innerHTML = html;
 }
