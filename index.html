@@ -8,7 +8,7 @@
 <title>GetWeddy — CRM</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:system-ui,-apple-system,sans-serif;background:#FFF9FB;color:#333;padding-bottom:20px;overflow:hidden}
+body{font-family:system-ui,-apple-system,sans-serif;background:#FFF9FB;color:#333;padding-bottom:20px;overflow:hidden;touch-action:pan-y}
 
 /* ===== ЭКРАН-ЗАСТАВКА ===== */
 #splashScreen{
@@ -39,6 +39,95 @@ overflow-y:auto;
 padding-bottom:8px;
 }
 
+/* ===== КАЛЕНДАРЬ ===== */
+.calendar-wrapper{
+padding:16px 16px 8px;
+max-width:600px;
+margin:0 auto;
+}
+.calendar-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:8px 4px 12px;
+}
+.calendar-header .month-year{
+font-size:20px;
+font-weight:600;
+color:#D81B60;
+}
+.calendar-grid{
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:4px;
+}
+.calendar-grid .day-name{
+text-align:center;
+font-size:12px;
+font-weight:600;
+color:#888;
+padding:6px 0;
+}
+.calendar-grid .day{
+text-align:center;
+padding:10px 0;
+border-radius:50%;
+font-size:15px;
+font-weight:500;
+color:#333;
+cursor:default;
+touch-action:manipulation;
+transition:all 0.15s ease;
+background:transparent;
+}
+.calendar-grid .day.empty{
+background:transparent!important;
+color:transparent!important;
+cursor:default;
+}
+.calendar-grid .day.today{
+background:#FF7EB9;
+color:#fff;
+font-weight:700;
+box-shadow:0 2px 12px rgba(255,126,185,0.3);
+}
+.calendar-grid .day.wedding{
+background:#4CAF50;
+color:#fff;
+font-weight:600;
+box-shadow:0 2px 12px rgba(76,175,80,0.3);
+}
+.calendar-grid .day.today.wedding{
+background:linear-gradient(135deg,#FF7EB9,#4CAF50);
+color:#fff;
+font-weight:700;
+box-shadow:0 2px 12px rgba(255,126,185,0.3);
+}
+.calendar-grid .day.other-month{
+color:#ccc;
+}
+.calendar-grid .day:active{
+transform:scale(0.92);
+}
+
+/* Контейнер для свайпа */
+.calendar-swipe-container{
+overflow:hidden;
+position:relative;
+touch-action:pan-y;
+}
+.calendar-slide{
+display:none;
+}
+.calendar-slide.active{
+display:block;
+animation:fadeSlide 0.3s ease;
+}
+@keyframes fadeSlide{
+0%{opacity:0.6;transform:translateX(8px)}
+100%{opacity:1;transform:translateX(0)}
+}
+
 /* ===== ВКЛАДКИ (ПЕРЕНЕСЕНЫ ВНИЗ) ===== */
 .tabs{
 background:#fff;
@@ -50,8 +139,6 @@ z-index:99;
 flex-shrink:0;
 box-shadow:0 -2px 12px rgba(0,0,0,0.06);
 }
-
-/* Ряд с плюсом */
 .tabs-row-top{
 display:flex;
 justify-content:center;
@@ -79,8 +166,6 @@ padding:0;
 flex-shrink:0;
 }
 .fab:active{transform:scale(0.92);box-shadow:0 3px 12px rgba(255,64,129,0.35)}
-
-/* Основные ряды кнопок */
 .tabs-row{
 display:flex;
 justify-content:center;
@@ -124,6 +209,66 @@ box-shadow:0 6px 20px rgba(255,64,129,0.45),inset 0 1px 0 rgba(255,255,255,0.2);
 .content h2{text-align:center;font-size:22px;color:#FF7EB9;margin:0 0 16px;padding-top:6px}
 .content h2::after{content:'';display:block;width:40px;height:2px;background:#7AFCFF;margin:8px auto 0;border-radius:2px}
 
+/* ===== МОДАЛЬНОЕ ОКНО ===== */
+.modal-overlay{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.5);
+z-index:9998;
+align-items:center;
+justify-content:center;
+backdrop-filter:blur(4px);
+-webkit-backdrop-filter:blur(4px);
+}
+.modal-overlay.show{
+display:flex;
+animation:fadeIn 0.3s ease;
+}
+@keyframes fadeIn{
+0%{opacity:0;transform:scale(0.9)}
+100%{opacity:1;transform:scale(1)}
+}
+.modal-box{
+background:#fff;
+padding:32px 28px 24px;
+border-radius:20px;
+text-align:center;
+max-width:340px;
+width:90%;
+box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+.modal-box .icon{
+font-size:48px;
+display:block;
+margin-bottom:8px;
+}
+.modal-box h3{
+font-size:22px;
+color:#D81B60;
+margin:0 0 6px;
+}
+.modal-box p{
+font-size:15px;
+color:#666;
+margin:0 0 16px;
+}
+.modal-box button{
+padding:10px 32px;
+border:none;
+border-radius:30px;
+font-size:16px;
+font-weight:600;
+color:#fff;
+background:linear-gradient(135deg,#FF4081,#D81B60);
+cursor:pointer;
+box-shadow:0 4px 16px rgba(255,64,129,0.3);
+}
+.modal-box button:active{transform:scale(0.94)}
+
 /* ===== ФУТЕР ===== */
 .footer{text-align:center;padding:20px 12px 10px;color:#aaa;font-size:12px;border-top:1px solid #f0f0f0;margin-top:12px;font-weight:400;letter-spacing:0.5px}
 
@@ -133,7 +278,6 @@ form{max-width:500px;margin:0 auto}
 .form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:4px;color:#555;text-align:center}
 .form-group input,.form-group select{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:15px;background:#fafafa;-webkit-appearance:none;appearance:none;transition:all 0.2s ease;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
 .form-group input:focus,.form-group select:focus{outline:none;border-color:#FF7EB9;background:#fff;box-shadow:0 4px 12px rgba(255,126,185,0.2),0 0 0 2px rgba(255,126,185,0.15)}
-
 .form-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}
 button{padding:8px 20px;border:none;border-radius:25px;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(135deg,#FF7EB9,#FF65A3);box-shadow:0 2px 8px rgba(255,126,185,0.3);cursor:pointer}
 button:active{transform:scale(0.94)}
@@ -147,11 +291,9 @@ th{background:#FF7EB9;color:#fff;padding:12px 6px;font-size:12px;font-weight:600
 td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-align:middle}
 .status-upcoming td{background:#fff8e1!important}
 .status-overdue td{background:#ffebee!important}
-
 .clickable-name{color:#333;font-weight:600;cursor:pointer;padding:4px 8px;border-radius:6px;transition:all 0.15s ease;display:inline-block;touch-action:manipulation}
 .clickable-name:active{transform:scale(0.92)}
 .clickable-name.expanded{color:#FF7EB9;text-decoration:underline}
-
 .expandable-row{display:none}
 .expandable-row.open{display:table-row}
 .expandable-row td{padding:12px 10px;background:#f9f9f9;font-size:11px;color:#555;border-bottom:1px solid #ddd}
@@ -204,7 +346,7 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .stat-card h3{font-size:11px;color:#888;margin:0 0 2px;font-weight:500}
 .stat-card p{font-size:18px;font-weight:700;color:#FF7EB9;margin:0}
 
-/* ===== ИСТОРИЧЕСКИЕ ДАННЫЕ (БЛОК ВВОДА) ===== */
+/* ===== ИСТОРИЧЕСКИЕ ДАННЫЕ ===== */
 .historical-toggle{display:flex;justify-content:center;margin-top:16px}
 .historical-panel{display:none;background:#fff;padding:16px 12px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-top:12px}
 .historical-panel.open{display:block}
@@ -214,7 +356,6 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .historical-item input{width:100%;padding:6px 8px;border:1px solid #ddd;border-radius:6px;font-size:14px;background:#fafafa;-webkit-appearance:none;appearance:none}
 .historical-item input:focus{outline:none;border-color:#FF7EB9;background:#fff;box-shadow:0 0 0 2px rgba(255,126,185,0.15)}
 .historical-actions{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
-
 .chart-container{background:#fff;padding:10px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
 .chart-title{text-align:center;font-size:15px;color:#FF7EB9;margin-bottom:8px}
 .chart-wrap{position:relative;height:180px}
@@ -244,6 +385,10 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .fab{width:48px;height:48px;font-size:28px}
 .content{padding:16px 8px 8px}
 .content h2{font-size:20px;padding-top:4px}
+.calendar-wrapper{padding:12px 12px 4px}
+.calendar-grid .day{padding:8px 0;font-size:13px}
+.calendar-grid .day-name{font-size:11px;padding:4px 0}
+.calendar-header .month-year{font-size:17px}
 .footer{font-size:11px;padding:16px 8px 8px}
 .slogan-word{font-size:40px}
 .splash-text{font-size:38px}
@@ -267,6 +412,9 @@ th,td{padding:6px 3px}
 .form-group input,.form-group select{font-size:14px;padding:6px 8px}
 .expandable-row .detail-grid{grid-template-columns:1fr}
 .toast{bottom:70px;font-size:12px;padding:6px 16px}
+.modal-box{padding:24px 20px 20px;max-width:300px}
+.modal-box h3{font-size:19px}
+.modal-box .icon{font-size:40px}
 }
 @media(max-width:380px){
 .links-grid{grid-template-columns:1fr}
@@ -276,6 +424,9 @@ th,td{padding:6px 3px}
 .splash-text{font-size:30px}
 .splash-sub{font-size:15px}
 .historical-grid{grid-template-columns:1fr}
+.calendar-grid .day{padding:6px 0;font-size:12px}
+.calendar-grid .day-name{font-size:10px}
+.calendar-wrapper{padding:8px 8px 0}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -308,23 +459,13 @@ th,td{padding:6px 3px}
 <!-- ===== СКРОЛЛИМАЯ ОБЛАСТЬ ===== -->
 <div class="main-scroll" id="mainScroll">
 
+<!-- ===== ГЛАВНАЯ СТРАНИЦА С КАЛЕНДАРЕМ ===== -->
 <div id="weddings" class="content active">
-<h2>Добавить съемку</h2>
-<form id="bookingForm">
-<div class="form-group"><label>ФИО</label><input type="text" id="name" placeholder="Иванова Анна" required></div>
-<div class="form-group"><label>Телефон</label><input type="tel" id="phone" placeholder="+7 (999) 999-99-99" required></div>
-<div class="form-group"><label>Instagram</label><input type="text" id="instagram" placeholder="@username" required></div>
-<div class="form-group"><label>Договор</label><input type="text" id="contract" placeholder="0000-00" required></div>
-<div class="form-group"><label>Дата</label><input type="date" id="date" required></div>
-<div class="form-group"><label>Часы</label><input type="number" id="hours" placeholder="" min="1" required></div>
-<div class="form-group"><label>Срок выдачи</label><select id="delivery" required><option value="" disabled selected>Выберите</option><option value="1">1 месяц</option><option value="2">2 месяца</option><option value="3">3 месяца</option><option value="4">4 месяца</option></select></div>
-<div class="form-group"><label>Начальная локация</label><input type="text" id="locationStart" placeholder="" required></div>
-<div class="form-group"><label>Конечная локация</label><input type="text" id="locationEnd" placeholder="" required></div>
-<div class="form-group"><label>Предоплата (руб)</label><input type="number" id="prepayment" placeholder="" min="0" required></div>
-<div class="form-group"><label>Агентские (руб)</label><input type="number" id="agency" placeholder="" min="0" required></div>
-<div class="form-group"><label>Общая сумма (руб)</label><input type="number" id="total" placeholder="" min="0" required></div>
-<div class="form-actions"><button type="submit" id="submitBtn">Добавить</button><button type="button" class="secondary" onclick="clearForm()">Очистить</button></div>
-</form>
+<div class="calendar-wrapper">
+<div class="calendar-swipe-container" id="calendarSwipe">
+<div class="calendar-slide active" id="calendarSlide"></div>
+</div>
+</div>
 <div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
@@ -404,33 +545,25 @@ th,td{padding:6px 3px}
 <div class="stat-card"><h3>Агентские</h3><p id="totalAgency">0 ₽</p></div>
 <div class="stat-card"><h3>На руки</h3><p id="totalInHand">0 ₽</p></div>
 </div>
-
 <div class="chart-container">
 <div class="chart-title">📊 Доход на руки по месяцам</div>
 <div class="chart-wrap"><canvas id="financeChart"></canvas></div>
 </div>
-
 <div class="chart-container" style="margin-top:16px;">
 <div class="chart-title">📉 Агентские (потери) по месяцам</div>
 <div class="chart-wrap-second"><canvas id="prepaymentChart"></canvas></div>
 </div>
-
-<!-- ===== КНОПКА И БЛОК ИСТОРИЧЕСКИХ ДАННЫХ (ВНИЗУ) ===== -->
 <div class="historical-toggle">
 <button class="historical-btn" onclick="toggleHistorical()">📊 Данные 2025</button>
 </div>
-
 <div class="historical-panel" id="historicalPanel">
-<div class="historical-grid" id="historicalGrid">
-<!-- поля ввода генерируются скриптом -->
-</div>
+<div class="historical-grid" id="historicalGrid"></div>
 <div class="historical-actions">
 <button onclick="saveHistoricalData()" style="background:linear-gradient(135deg,#4CAF50,#388E3C);">💾 Сохранить</button>
 <button onclick="clearHistoricalData()" class="secondary">🗑️ Очистить</button>
 <button onclick="toggleHistorical()" class="secondary">✖️ Закрыть</button>
 </div>
 </div>
-
 <div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
@@ -438,17 +571,14 @@ th,td{padding:6px 3px}
 
 <!-- ===== ВКЛАДКИ (ПЕРЕНЕСЕНЫ ВНИЗ) ===== -->
 <div class="tabs">
-<!-- Ряд с кнопкой плюс -->
 <div class="tabs-row-top">
-<button class="fab" id="fabButton" onclick="void(0)">+</button>
+<button class="fab" id="fabButton" onclick="openAddForm()">+</button>
 </div>
-<!-- Первый ряд кнопок -->
 <div class="tabs-row">
 <div class="tab active" onclick="switchTab('weddings')">Главная</div>
 <div class="tab" onclick="switchTab('load')">Загрузка</div>
 <div class="tab" onclick="switchTab('clients')">Клиенты</div>
 </div>
-<!-- Второй ряд кнопок -->
 <div class="tabs-row">
 <div class="tab" onclick="switchTab('deliveries')">Выдачи</div>
 <div class="tab" onclick="switchTab('links')">Ссылки</div>
@@ -457,6 +587,16 @@ th,td{padding:6px 3px}
 </div>
 
 </div><!-- /mainContent -->
+
+<!-- ===== МОДАЛЬНОЕ ОКНО ===== -->
+<div class="modal-overlay" id="successModal">
+<div class="modal-box">
+<span class="icon">✅</span>
+<h3>Съемка добавлена</h3>
+<p>Данные успешно сохранены</p>
+<button onclick="closeModal()">Отлично</button>
+</div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -491,7 +631,6 @@ th,td{padding:6px 3px}
             words[currentIndex - 1].classList.remove('show');
             words[currentIndex - 1].classList.add('hide');
         }
-        
         if (currentIndex < words.length) {
             words[currentIndex].classList.remove('hide');
             words[currentIndex].classList.add('show');
@@ -507,15 +646,153 @@ th,td{padding:6px 3px}
             }, 600);
         }
     }
-
     setTimeout(showNextWord, 500);
-
     setTimeout(function() {
         if (!animationComplete) {
             showMainContent();
         }
     }, 5000);
 })();
+
+// ===== КАЛЕНДАРЬ =====
+var currentMonth = new Date().getMonth();
+var currentYear = new Date().getFullYear();
+var touchStartX = 0;
+var touchEndX = 0;
+var isSwiping = false;
+
+function getWeddingDates() {
+    var dates = [];
+    for (var i = 0; i < bookings.length; i++) {
+        var d = new Date(bookings[i].date);
+        dates.push(d);
+    }
+    return dates;
+}
+
+function renderCalendar(month, year) {
+    var slide = document.getElementById('calendarSlide');
+    var firstDay = new Date(year, month, 1).getDay();
+    var daysInMonth = new Date(year, month + 1, 0).getDate();
+    var today = new Date();
+    var weddingDates = getWeddingDates();
+    
+    var monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+    
+    var html = '<div class="calendar-header">';
+    html += '<span class="month-year">' + monthNames[month] + ' ' + year + '</span>';
+    html += '</div>';
+    
+    html += '<div class="calendar-grid">';
+    var dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    for (var i = 0; i < 7; i++) {
+        html += '<div class="day-name">' + dayNames[i] + '</div>';
+    }
+    
+    var startOffset = firstDay === 0 ? 6 : firstDay - 1;
+    var totalCells = startOffset + daysInMonth;
+    var rows = Math.ceil(totalCells / 7);
+    var totalCellsPadded = rows * 7;
+    
+    for (var i = 0; i < totalCellsPadded; i++) {
+        var dayNum = i - startOffset + 1;
+        var classes = 'day';
+        
+        if (dayNum < 1 || dayNum > daysInMonth) {
+            classes += ' empty';
+            html += '<div class="' + classes + '"></div>';
+            continue;
+        }
+        
+        var dateObj = new Date(year, month, dayNum);
+        
+        if (dateObj.getDate() === today.getDate() && 
+            dateObj.getMonth() === today.getMonth() && 
+            dateObj.getFullYear() === today.getFullYear()) {
+            classes += ' today';
+        }
+        
+        for (var j = 0; j < weddingDates.length; j++) {
+            var wd = weddingDates[j];
+            if (wd.getDate() === dayNum && 
+                wd.getMonth() === month && 
+                wd.getFullYear() === year) {
+                classes += ' wedding';
+                break;
+            }
+        }
+        
+        html += '<div class="' + classes + '">' + dayNum + '</div>';
+    }
+    
+    html += '</div>';
+    slide.innerHTML = html;
+}
+
+function initSwipe() {
+    var container = document.getElementById('calendarSwipe');
+    
+    container.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+        isSwiping = true;
+    }, {passive: true});
+    
+    container.addEventListener('touchmove', function(e) {
+        if (!isSwiping) return;
+        touchEndX = e.changedTouches[0].screenX;
+    }, {passive: true});
+    
+    container.addEventListener('touchend', function(e) {
+        if (!isSwiping) return;
+        isSwiping = false;
+        var diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+                nextMonth();
+            } else {
+                prevMonth();
+            }
+        }
+    }, {passive: true});
+}
+
+function nextMonth() {
+    currentMonth++;
+    if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+    renderCalendar(currentMonth, currentYear);
+}
+
+function prevMonth() {
+    currentMonth--;
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    }
+    renderCalendar(currentMonth, currentYear);
+}
+
+// ===== ФУНКЦИЯ ДЛЯ КНОПКИ ПЛЮС =====
+function openAddForm() {
+    switchTab('addForm');
+    var scrollEl = document.getElementById('mainScroll');
+    if (scrollEl) {
+        setTimeout(function() {
+            scrollEl.scrollTop = 0;
+        }, 100);
+    }
+}
+
+// ===== МОДАЛЬНОЕ ОКНО =====
+function showModal() {
+    document.getElementById('successModal').classList.add('show');
+}
+
+function closeModal() {
+    document.getElementById('successModal').classList.remove('show');
+}
 
 // ===== ОСНОВНОЙ СКРИПТ CRM =====
 var bookings = [];
@@ -551,7 +828,8 @@ function saveData() {
 }
 
 function renderAll() {
-    renderCalendar();
+    renderCalendar(currentMonth, currentYear);
+    renderCalendarLoad();
     renderClientsTable();
     renderDeliveriesTable();
     updateFinance();
@@ -561,6 +839,35 @@ function renderAll() {
             renderCharts();
         }, 200);
     }
+}
+
+function renderCalendarLoad() {
+    var months = {};
+    for (var i = 0; i < bookings.length; i++) {
+        var b = bookings[i];
+        var isWedding = b.name.toLowerCase().includes('свадьб') || 
+                        b.name.toLowerCase().includes('wedding') ||
+                        b.contract.toLowerCase().includes('св') ||
+                        b.instagram.toLowerCase().includes('wed');
+        var m = new Date(b.date).getMonth();
+        if (isWedding) {
+            months[m] = (months[m] || 0) + 1;
+        } else {
+            months[m] = (months[m] || 0) + 1;
+        }
+    }
+    var html = '';
+    for (var i = 0; i < 12; i++) {
+        var count = months[i] || 0;
+        var cls = 'default';
+        if (count >= 8) {
+            cls = 'overloaded';
+        } else if (count >= 5) {
+            cls = 'warning';
+        }
+        html += '<div class="month ' + cls + '"><h3>' + monthNames[i] + '</h3><p>' + count + '</p></div>';
+    }
+    document.getElementById('monthGrid').innerHTML = html;
 }
 
 // ===== ИСТОРИЧЕСКИЕ ДАННЫЕ =====
@@ -701,37 +1008,6 @@ function renderChart(canvasId, key, bgColor, borderColor, histBgColor, histBorde
     } catch(e) {
         showToast('Ошибка графика');
     }
-}
-
-// ===== ОБНОВЛЕННЫЙ РЕНДЕР КАЛЕНДАРЯ (ПО СВАДЬБАМ) =====
-function renderCalendar() {
-    var months = {};
-    for (var i = 0; i < bookings.length; i++) {
-        var b = bookings[i];
-        var isWedding = b.name.toLowerCase().includes('свадьб') || 
-                        b.name.toLowerCase().includes('wedding') ||
-                        b.contract.toLowerCase().includes('св') ||
-                        b.instagram.toLowerCase().includes('wed');
-        var m = new Date(b.date).getMonth();
-        if (isWedding) {
-            months[m] = (months[m] || 0) + 1;
-        } else {
-            months[m] = (months[m] || 0) + 1;
-        }
-    }
-    
-    var html = '';
-    for (var i = 0; i < 12; i++) {
-        var count = months[i] || 0;
-        var cls = 'default';
-        if (count >= 8) {
-            cls = 'overloaded';
-        } else if (count >= 5) {
-            cls = 'warning';
-        }
-        html += '<div class="month ' + cls + '"><h3>' + monthNames[i] + '</h3><p>' + count + '</p></div>';
-    }
-    document.getElementById('monthGrid').innerHTML = html;
 }
 
 function renderClientsTable() {
@@ -930,7 +1206,7 @@ function editBooking(id) {
     f.agency.value = b.agency;
     f.total.value = b.total;
     document.getElementById('submitBtn').textContent = 'Обновить';
-    switchTab('weddings');
+    switchTab('addForm');
     var scrollEl = document.getElementById('mainScroll');
     if (scrollEl) {
         setTimeout(function() {
@@ -970,7 +1246,7 @@ function switchTab(tabId) {
     }
     
     if (tabId === 'load') {
-        renderCalendar();
+        renderCalendarLoad();
     }
     if (tabId === 'clients') {
         renderClientsTable();
@@ -984,6 +1260,9 @@ function switchTab(tabId) {
             renderCharts();
         }, 200);
     }
+    if (tabId === 'weddings') {
+        renderCalendar(currentMonth, currentYear);
+    }
     
     var scrollEl = document.getElementById('mainScroll');
     if (scrollEl) {
@@ -993,6 +1272,11 @@ function switchTab(tabId) {
 
 function init() {
     loadData();
+    
+    // Инициализация календаря
+    renderCalendar(currentMonth, currentYear);
+    initSwipe();
+    
     document.getElementById('date').min = new Date().toISOString().split('T')[0];
     document.getElementById('phone').addEventListener('input', function() {
         formatPhone(this);
@@ -1054,12 +1338,13 @@ function init() {
             }
             editingId = null;
             document.getElementById('submitBtn').textContent = 'Добавить';
+            showToast('Съемка обновлена!');
         } else {
             bookings.push(booking);
+            showModal();
         }
         f.reset();
         saveData();
-        showToast('Съемка добавлена!');
     });
     
     renderAll();
