@@ -25,7 +25,7 @@ position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(13
 /* ===== ОСНОВНОЙ КОНТЕНТ ===== */
 #mainContent{display:none;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
-/* ===== ДИНАМИЧЕСКАЯ ШАПКА ===== */
+/* ===== ШАПКА ===== */
 .header{
 background:linear-gradient(135deg,#D81B60,#FF7EB9);
 padding:14px 16px 0 16px;
@@ -112,69 +112,6 @@ transition:all 0.3s
 background:#fff;
 width:24px;
 border-radius:4px
-}
-
-/* ===== КАЛЕНДАРЬ ===== */
-.calendar-section{
-flex-shrink:0;
-padding:12px 12px 4px 12px;
-background:#FFF9FB;
-position:relative;
-z-index:10
-}
-.calendar-container{
-background:#fff;
-border-radius:16px;
-padding:16px;
-box-shadow:0 2px 12px rgba(0,0,0,0.06)
-}
-.calendar-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:12px
-}
-.calendar-header h3{
-font-size:18px;
-font-weight:700;
-color:#333
-}
-.calendar-grid{
-display:grid;
-grid-template-columns:repeat(7,1fr);
-gap:4px;
-text-align:center
-}
-.calendar-grid .weekday{
-font-size:11px;
-font-weight:600;
-color:#888;
-padding:4px 0
-}
-.calendar-grid .day{
-font-size:14px;
-font-weight:500;
-color:#333;
-padding:6px 0;
-border-radius:8px;
-transition:all 0.15s
-}
-.calendar-grid .day.today{
-background:#FF7EB9;
-color:#fff;
-font-weight:700
-}
-.calendar-grid .day.other-month{
-color:#ccc
-}
-.calendar-grid .day.has-wedding{
-background:#7AFCFF;
-color:#333;
-font-weight:600
-}
-.calendar-grid .day.has-wedding.today{
-background:#FF7EB9;
-color:#fff
 }
 
 /* ===== СКРОЛЛИРУЕМЫЙ КОНТЕНТ ===== */
@@ -321,10 +258,6 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .header-logo{height:30px}
 .stat-value{font-size:28px}
 .stat-label{font-size:12px}
-.calendar-section{padding:8px 8px 0 8px}
-.calendar-container{padding:12px}
-.calendar-header h3{font-size:16px}
-.calendar-grid .day{font-size:12px;padding:4px 0}
 .bottom-nav{padding:6px 4px 10px 4px}
 .nav-item .nav-icon{font-size:18px}
 .nav-item .nav-label{font-size:8px}
@@ -354,7 +287,7 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 <!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
 <div id="mainContent">
 
-<!-- ===== ДИНАМИЧЕСКАЯ ШАПКА ===== -->
+<!-- ===== ШАПКА ===== -->
 <div class="header">
 <div class="header-top">
 <img class="header-logo" src="logo.png" alt="GetWeddy" onerror="this.style.display='none'">
@@ -392,21 +325,11 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 </div>
 </div>
 
-<!-- ===== СТАТИЧНЫЙ КАЛЕНДАРЬ ===== -->
-<div class="calendar-section">
-<div class="calendar-container">
-<div class="calendar-header">
-<h3 id="calendarMonth">Июль 2026</h3>
-</div>
-<div class="calendar-grid" id="calendarGrid"></div>
-</div>
-</div>
-
 <!-- ===== СКРОЛЛИРУЕМЫЙ КОНТЕНТ ===== -->
 <div class="scroll-content" id="scrollContent">
 
 <!-- ===== КОНТЕНТЫ ВКЛАДОК ===== -->
-<div id="weddings" class="content">
+<div id="weddings" class="content active">
 <h2>Добавить съемку</h2>
 <form id="bookingForm">
 <div class="form-group"><label>ФИО</label><input type="text" id="name" placeholder="Иванова Анна" required></div>
@@ -505,13 +428,9 @@ Made By Deepseek-Bratishka &amp; Volchik-Programmist
 
 <!-- ===== НИЖНЕЕ МЕНЮ (СТАТИЧНОЕ) ===== -->
 <div class="bottom-nav" id="bottomNav">
-<div class="nav-item active" data-tab="calendar" onclick="switchBottomTab('calendar')">
-<span class="nav-icon">📅</span>
-<span class="nav-label">Календарь</span>
-</div>
-<div class="nav-item" data-tab="weddings" onclick="switchBottomTab('weddings')">
-<span class="nav-icon">➕</span>
-<span class="nav-label">Добавить</span>
+<div class="nav-item active" data-tab="weddings" onclick="switchBottomTab('weddings')">
+<span class="nav-icon">🏠</span>
+<span class="nav-label">Главная</span>
 </div>
 <div class="nav-item" data-tab="load" onclick="switchBottomTab('load')">
 <span class="nav-icon">📊</span>
@@ -540,63 +459,6 @@ Made By Deepseek-Bratishka &amp; Volchik-Programmist
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== КАЛЕНДАРЬ =====
-var currentDate = new Date();
-var currentMonth = currentDate.getMonth();
-var currentYear = currentDate.getFullYear();
-var monthNamesFull = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
-
-function renderCalendar(month, year) {
-    var grid = document.getElementById('calendarGrid');
-    var header = document.getElementById('calendarMonth');
-    header.textContent = 'Календарь свадеб — ' + monthNamesFull[month] + ' ' + year;
-    
-    var firstDay = new Date(year, month, 1).getDay();
-    var daysInMonth = new Date(year, month + 1, 0).getDate();
-    var daysInPrevMonth = new Date(year, month, 0).getDate();
-    
-    var today = new Date();
-    var todayDate = today.getDate();
-    var todayMonth = today.getMonth();
-    var todayYear = today.getFullYear();
-    
-    var weddingDates = {};
-    for (var i = 0; i < bookings.length; i++) {
-        var b = bookings[i];
-        var d = new Date(b.date);
-        var key = d.getDate() + '-' + d.getMonth() + '-' + d.getFullYear();
-        weddingDates[key] = true;
-    }
-    
-    var html = '';
-    var weekdays = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
-    for (var w = 0; w < 7; w++) {
-        html += '<div class="weekday">' + weekdays[w] + '</div>';
-    }
-    
-    var startOffset = firstDay === 0 ? 6 : firstDay - 1;
-    for (var i = startOffset - 1; i >= 0; i--) {
-        var prevDay = daysInPrevMonth - i;
-        html += '<div class="day other-month">' + prevDay + '</div>';
-    }
-    
-    for (var d = 1; d <= daysInMonth; d++) {
-        var cls = 'day';
-        var isToday = (d === todayDate && month === todayMonth && year === todayYear);
-        var isWedding = weddingDates[d + '-' + month + '-' + year];
-        if (isToday) cls += ' today';
-        if (isWedding) cls += ' has-wedding';
-        html += '<div class="' + cls + '">' + d + '</div>';
-    }
-    
-    var totalCells = startOffset + daysInMonth;
-    var remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
-    for (var r = 1; r <= remainingCells; r++) {
-        html += '<div class="day other-month">' + r + '</div>';
-    }
-    grid.innerHTML = html;
-}
-
 // ===== АНИМАЦИЯ СЛОГАНА =====
 (function() {
     var splashScreen = document.getElementById('splashScreen');
@@ -691,34 +553,24 @@ function switchBottomTab(tabId) {
     });
     
     var contents = document.querySelectorAll('.content');
-    contents.forEach(function(content) { content.classList.remove('active'); });
+    contents.forEach(function(content) {
+        content.classList.remove('active');
+    });
     
-    var calendarSection = document.querySelector('.calendar-section');
-    var scrollContent = document.getElementById('scrollContent');
+    var targetContent = document.getElementById(tabId);
+    if (targetContent) {
+        targetContent.classList.add('active');
+    }
     
-    if (tabId === 'calendar') {
-        calendarSection.style.display = 'block';
-        scrollContent.style.display = 'block';
-        // скрываем все контенты
-        contents.forEach(function(c) { c.style.display = 'none'; });
-    } else {
-        calendarSection.style.display = 'none';
-        scrollContent.style.display = 'block';
-        var targetContent = document.getElementById(tabId);
-        if (targetContent) {
-            targetContent.style.display = 'block';
-            targetContent.classList.add('active');
-        }
-        if (tabId === 'load') renderCalendarStats();
-        if (tabId === 'clients') renderClientsTable();
-        if (tabId === 'deliveries') renderDeliveriesTable();
-        if (tabId === 'finance') {
-            updateFinance();
-            setTimeout(function() { 
-                renderChart('financeChart', 'amountInHand', 'rgba(122,252,255,0.7)', 'rgba(122,252,255,1)');
-                renderChart('prepaymentChart', 'prepayment', 'rgba(255,165,0,0.7)', 'rgba(255,165,0,1)');
-            }, 200);
-        }
+    if (tabId === 'load') renderCalendarStats();
+    if (tabId === 'clients') renderClientsTable();
+    if (tabId === 'deliveries') renderDeliveriesTable();
+    if (tabId === 'finance') {
+        updateFinance();
+        setTimeout(function() { 
+            renderChart('financeChart', 'amountInHand', 'rgba(122,252,255,0.7)', 'rgba(122,252,255,1)');
+            renderChart('prepaymentChart', 'prepayment', 'rgba(255,165,0,0.7)', 'rgba(255,165,0,1)');
+        }, 200);
     }
 }
 
@@ -762,7 +614,6 @@ function renderAll() {
     renderDeliveriesTable();
     updateFinance();
     updateHeaderStats();
-    renderCalendar(currentMonth, currentYear);
     var financeContent = document.getElementById('finance');
     if (financeContent.classList.contains('active')) {
         setTimeout(function() { 
@@ -972,13 +823,13 @@ function deleteBooking(id) {
 
 function init() {
     loadData();
-    renderCalendar(currentMonth, currentYear);
     document.getElementById('date').min = new Date().toISOString().split('T')[0];
     document.getElementById('phone').addEventListener('input', function() { formatPhone(this); });
     
-    document.querySelectorAll('.content').forEach(function(c) { c.classList.remove('active'); c.style.display = 'none'; });
-    document.querySelector('.calendar-section').style.display = 'block';
-    document.getElementById('scrollContent').style.display = 'block';
+    document.querySelectorAll('.content').forEach(function(c) {
+        c.classList.remove('active');
+    });
+    document.getElementById('weddings').classList.add('active');
     
     document.getElementById('bookingForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -1015,7 +866,6 @@ function init() {
         f.reset();
         saveData();
         showToast('Съемка добавлена!');
-        switchBottomTab('calendar');
     });
     
     setTimeout(function() { initCarousel(); updateCarousel(0); }, 100);
