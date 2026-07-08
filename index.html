@@ -20,16 +20,12 @@ position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(13
 .slogan-word.show{opacity:1;transform:scale(1)}
 .slogan-word.hide{opacity:0;transform:scale(1.2)}
 
-/* ===== ОСНОВНОЙ КОНТЕНТ ===== */
-#mainContent{display:none;flex-direction:column;height:100vh;overflow:hidden}
-
-/* ===== ШАПКА С ЛОГОТИПОМ (ТОЧНО ВИДНА) ===== */
+/* ===== ШАПКА (ВСЕГДА ВИДНА, СВЕРХУ) ===== */
 .header{
 background:linear-gradient(to right,#FF8AAC,#FF7EB9,#FFB3C6);
 padding:14px 16px;
 flex-shrink:0;
-position:sticky;
-top:0;
+position:relative;
 z-index:100;
 width:100%
 }
@@ -58,6 +54,17 @@ letter-spacing:1.5px;
 margin:0;
 text-shadow:0 2px 4px rgba(0,0,0,0.12);
 text-align:center
+}
+
+/* ===== ОСНОВНОЙ КОНТЕНТ (СКРЫТ ПОКА НЕ ЗАГРУЗИТСЯ) ===== */
+#mainContent{
+display:none;
+flex-direction:column;
+flex:1;
+overflow:hidden
+}
+#mainContent.visible{
+display:flex
 }
 
 /* ===== СТАТИСТИКА ===== */
@@ -118,7 +125,7 @@ box-shadow:0 2px 8px rgba(255,126,185,0.3)
 
 .footer{text-align:center;padding:16px 12px 10px;color:#aaa;font-size:12px;border-top:1px solid #f0f0f0;margin-top:12px;font-weight:400;letter-spacing:0.5px}
 
-/* ===== ОСТАЛЬНЫЕ СТИЛИ (БЕЗ ИЗМЕНЕНИЙ) ===== */
+/* ===== ОСТАЛЬНЫЕ СТИЛИ ===== */
 form{max-width:500px;margin:0 auto}
 .form-group{margin-bottom:14px}
 .form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:4px;color:#555;text-align:center}
@@ -230,6 +237,14 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 </head>
 <body>
 
+<!-- ===== ШАПКА (ВСЕГДА ВИДНА, ВНЕ MAINCONTENT) ===== -->
+<div class="header">
+<div class="header-inner">
+<img class="header-logo" src="logo.png" alt="GetWeddy" onerror="this.style.display='none'">
+<h1>GetWeddy</h1>
+</div>
+</div>
+
 <!-- ===== ЭКРАН-ЗАСТАВКА ===== -->
 <div id="splashScreen">
 <div class="splash-text">GetWeddy</div>
@@ -243,14 +258,6 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 
 <!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
 <div id="mainContent">
-
-<!-- ===== ШАПКА С ЛОГОТИПОМ (ТОЧНО ВИДНА) ===== -->
-<div class="header">
-<div class="header-inner">
-<img class="header-logo" src="logo.png" alt="GetWeddy" onerror="this.style.display='none'">
-<h1>GetWeddy</h1>
-</div>
-</div>
 
 <!-- ===== СТАТИСТИКА ===== -->
 <div class="stats-section" id="statsSection">
@@ -432,13 +439,17 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 
     function showMain() {
         splash.classList.add('hide');
-        main.style.display = 'flex';
+        main.classList.add('visible');
         document.body.style.overflow = 'hidden';
         sessionStorage.setItem('splashShown', 'true');
         done = true;
     }
 
-    if (sessionStorage.getItem('splashShown')) { showMain(); return; }
+    if (sessionStorage.getItem('splashShown')) { 
+        splash.style.display = 'none';
+        main.classList.add('visible');
+        return; 
+    }
 
     function nextWord() {
         if (idx > 0) { words[idx - 1].classList.remove('show'); words[idx - 1].classList.add('hide'); }
