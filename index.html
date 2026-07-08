@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<!-- ===== ИКОНКА ДЛЯ РАБОЧЕГО СТОЛА IPHONE ===== -->
 <link rel="apple-touch-icon" href="/logo.png">
 <title>GetWeddy — CRM</title>
 <style>
@@ -11,7 +12,8 @@ body{font-family:system-ui,-apple-system,sans-serif;background:#FFF9FB;color:#33
 
 /* ===== ЭКРАН-ЗАСТАВКА ===== */
 #splashScreen{
-position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#D81B60,#FF7EB9);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.6s ease}
+position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#D81B60,#FF7EB9);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.6s ease
+}
 #splashScreen.hide{opacity:0;pointer-events:none}
 .splash-text{font-family:'Playfair Display',serif;font-size:56px;font-weight:700;color:#fff;text-shadow:0 4px 24px rgba(0,0,0,0.2);letter-spacing:3px;margin-bottom:12px;text-align:center}
 .splash-sub{font-size:24px;color:rgba(255,255,255,0.9);letter-spacing:6px;font-weight:300;text-shadow:0 2px 12px rgba(0,0,0,0.1);text-align:center}
@@ -21,91 +23,184 @@ position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(13
 .slogan-word.hide{opacity:0;transform:scale(1.2)}
 
 /* ===== ОСНОВНОЙ КОНТЕНТ ===== */
-#mainContent{display:none}
+#mainContent{display:none;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
-/* ===== ШАПКА ===== */
+/* ===== ДИНАМИЧЕСКАЯ ШАПКА ===== */
 .header{
 background:linear-gradient(135deg,#D81B60,#FF7EB9);
 padding:14px 16px 0 16px;
-position:sticky;
-top:0;
-z-index:100;
+flex-shrink:0;
 border-radius:0 0 28px 28px;
-box-shadow:0 4px 20px rgba(216,27,96,0.3)
+box-shadow:0 4px 20px rgba(216,27,96,0.3);
+z-index:100;
+position:relative
 }
+
 .header-top{
 display:flex;
 align-items:center;
 justify-content:space-between;
 margin-bottom:12px
 }
-.header-logo{height:36px;width:auto;display:block;border-radius:8px}
-.header-title{font-size:24px;font-weight:700;color:#fff;letter-spacing:1.5px;text-shadow:0 2px 8px rgba(0,0,0,0.12)}
-.carousel-wrapper{overflow:hidden;position:relative;touch-action:pan-y}
-.carousel-track{display:flex;transition:transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94);will-change:transform}
-.carousel-slide{flex:0 0 100%;padding:12px 0 16px 0;display:flex;justify-content:space-around;align-items:center}
-.stat-item{text-align:center;flex:1}
-.stat-value{font-size:34px;font-weight:800;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,0.15);letter-spacing:0.5px;line-height:1.1}
-.stat-label{font-size:13px;font-weight:500;color:rgba(255,255,255,0.85);letter-spacing:0.5px;margin-top:4px}
-.dots{display:flex;justify-content:center;gap:8px;padding-bottom:12px}
-.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.4);transition:all 0.3s}
-.dot.active{background:#fff;width:24px;border-radius:4px}
 
-/* ===== ОСНОВНОЙ КОНТЕНТ ===== */
-.scroll-content{
-height:calc(100vh - 290px);
-overflow-y:auto;
-padding:16px 12px 0 12px;
-background:#FFF9FB
+.header-logo{
+height:36px;
+width:auto;
+display:block;
+border-radius:8px
 }
 
-/* ===== КАЛЕНДАРЬ (НЕАКТИВНЫЙ) ===== */
+.header-title{
+font-size:24px;
+font-weight:700;
+color:#fff;
+letter-spacing:1.5px;
+text-shadow:0 2px 8px rgba(0,0,0,0.12)
+}
+
+/* ===== КАРУСЕЛЬ ===== */
+.carousel-wrapper{
+overflow:hidden;
+position:relative;
+touch-action:pan-y
+}
+.carousel-track{
+display:flex;
+transition:transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
+will-change:transform
+}
+.carousel-slide{
+flex:0 0 100%;
+padding:12px 0 16px 0;
+display:flex;
+justify-content:space-around;
+align-items:center
+}
+.stat-item{
+text-align:center;
+flex:1
+}
+.stat-value{
+font-size:34px;
+font-weight:800;
+color:#fff;
+text-shadow:0 2px 12px rgba(0,0,0,0.15);
+letter-spacing:0.5px;
+line-height:1.1
+}
+.stat-label{
+font-size:13px;
+font-weight:500;
+color:rgba(255,255,255,0.85);
+letter-spacing:0.5px;
+margin-top:4px
+}
+.dots{
+display:flex;
+justify-content:center;
+gap:8px;
+padding-bottom:12px
+}
+.dot{
+width:8px;
+height:8px;
+border-radius:50%;
+background:rgba(255,255,255,0.4);
+transition:all 0.3s
+}
+.dot.active{
+background:#fff;
+width:24px;
+border-radius:4px
+}
+
+/* ===== КАЛЕНДАРЬ (СТАТИЧНЫЙ) ===== */
+.calendar-section{
+flex-shrink:0;
+padding:16px 12px 8px 12px;
+background:#FFF9FB;
+position:relative;
+z-index:10
+}
 .calendar-container{
 background:#fff;
 border-radius:16px;
 padding:16px;
-box-shadow:0 2px 12px rgba(0,0,0,0.06);
-margin-bottom:16px;
-touch-action:pan-y;
-user-select:none;
--webkit-user-select:none
+box-shadow:0 2px 12px rgba(0,0,0,0.06)
 }
 .calendar-header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:12px;
-pointer-events:none
+margin-bottom:12px
 }
-.calendar-header h3{font-size:18px;font-weight:700;color:#333;pointer-events:none}
-.calendar-nav{display:flex;gap:12px;pointer-events:none}
-.calendar-nav button{background:none;border:none;font-size:20px;color:#FF7EB9;padding:0 4px;pointer-events:none}
+.calendar-header h3{
+font-size:18px;
+font-weight:700;
+color:#333
+}
 .calendar-grid{
 display:grid;
 grid-template-columns:repeat(7,1fr);
 gap:4px;
 text-align:center;
-pointer-events:none
+transition:opacity 0.3s ease
 }
-.calendar-grid .weekday{font-size:11px;font-weight:600;color:#888;padding:4px 0}
-.calendar-grid .day{font-size:14px;font-weight:500;color:#333;padding:6px 0;border-radius:8px}
-.calendar-grid .day.today{background:#FF7EB9;color:#fff;font-weight:700}
-.calendar-grid .day.other-month{color:#ccc}
-.calendar-grid .day.event{position:relative}
-.calendar-grid .day.event::after{content:'';position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:#FF7EB9}
+.calendar-grid .weekday{
+font-size:11px;
+font-weight:600;
+color:#888;
+padding:4px 0
+}
+.calendar-grid .day{
+font-size:14px;
+font-weight:500;
+color:#333;
+padding:6px 0;
+border-radius:8px;
+transition:all 0.15s
+}
+.calendar-grid .day.today{
+background:#FF7EB9;
+color:#fff;
+font-weight:700
+}
+.calendar-grid .day.other-month{
+color:#ccc
+}
+.calendar-grid .day.has-wedding{
+background:#7AFCFF;
+color:#333;
+font-weight:600
+}
+.calendar-grid .day.has-wedding.today{
+background:#FF7EB9;
+color:#fff
+}
 
-/* ===== НИЖНЕЕ МЕНЮ С ВЫСТУПАЮЩИМ ПЛЮСОМ ===== */
+/* ===== СКРОЛЛИРУЕМЫЙ КОНТЕНТ ===== */
+.scroll-content{
+flex:1;
+overflow-y:auto;
+padding:0 12px 0 12px;
+background:#FFF9FB
+}
+
+/* ===== КОНТЕНТЫ ВКЛАДОК ===== */
+.content{display:none;padding:12px 0 20px 0}
+.content.active{display:block}
+
+/* ===== НИЖНЕЕ МЕНЮ (С ГРАДИЕНТОМ) ===== */
 .bottom-nav{
 background:linear-gradient(135deg,#FF7EB9,#FF65A3);
-padding:8px 12px 12px 12px;
+padding:8px 8px 12px 8px;
 border-radius:20px 20px 0 0;
 box-shadow:0 -4px 20px rgba(255,126,185,0.2);
-position:sticky;
-bottom:0;
-z-index:99;
+flex-shrink:0;
 display:flex;
 justify-content:space-around;
-align-items:flex-end;
+align-items:center;
+z-index:99;
 position:relative
 }
 .nav-item{
@@ -123,32 +218,20 @@ touch-action:manipulation;
 min-width:50px;
 color:rgba(255,255,255,0.75)
 }
-.nav-item.active{background:rgba(255,255,255,0.2);color:#fff}
-.nav-item .nav-icon{font-size:22px;line-height:1}
-.nav-item .nav-label{font-size:9px;font-weight:600;margin-top:2px;letter-spacing:0.3px}
-
-/* ===== ВЫСТУПАЮЩАЯ КНОПКА ПЛЮС ===== */
-.nav-plus{
-position:relative;
-margin-top:-20px;
-background:linear-gradient(135deg,#FF4081,#D81B60);
-width:64px;
-height:64px;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-border:none;
-cursor:pointer;
-box-shadow:0 4px 16px rgba(216,27,96,0.4);
-transition:all 0.2s ease;
-touch-action:manipulation;
-color:#fff;
-font-size:32px;
-font-weight:300;
-z-index:10
+.nav-item.active{
+background:rgba(255,255,255,0.2);
+color:#fff
 }
-.nav-plus:active{transform:scale(0.92);box-shadow:0 2px 8px rgba(216,27,96,0.3)}
+.nav-item .nav-icon{
+font-size:22px;
+line-height:1
+}
+.nav-item .nav-label{
+font-size:9px;
+font-weight:600;
+margin-top:2px;
+letter-spacing:0.3px
+}
 
 /* ===== ФОРМА ===== */
 form{max-width:500px;margin:0 auto}
@@ -168,9 +251,11 @@ th{background:#FF7EB9;color:#fff;padding:12px 6px;font-size:12px;font-weight:600
 td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-align:middle}
 .status-upcoming td{background:#fff8e1!important}
 .status-overdue td{background:#ffebee!important}
+
 .clickable-name{color:#333;font-weight:600;cursor:pointer;padding:4px 8px;border-radius:6px;transition:all 0.15s ease;display:inline-block;touch-action:manipulation}
 .clickable-name:active{transform:scale(0.92)}
 .clickable-name.expanded{color:#FF7EB9;text-decoration:underline}
+
 .expandable-row{display:none}
 .expandable-row.open{display:table-row}
 .expandable-row td{padding:12px 10px;background:#f9f9f9;font-size:11px;color:#555;border-bottom:1px solid #ddd}
@@ -180,7 +265,7 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .expandable-row .detail-item span:last-child{font-weight:600;color:#333}
 .expandable-row .detail-actions{display:flex;gap:8px;justify-content:center;margin-top:6px}
 
-/* ===== МЕСЯЦЫ ===== */
+/* ===== МЕСЯЦЫ (Загрузка) ===== */
 .month-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:15px auto 0;max-width:400px}
 .month{padding:14px 6px;border-radius:12px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
 .month:active{transform:scale(0.95)}
@@ -224,7 +309,7 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .action-btn:active{transform:scale(0.88)}
 .action-btn.edit{background:#FFC107;color:#333}
 .action-btn.delete{background:#F44336;color:#fff}
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:9999;display:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:90%;text-align:center;pointer-events:none}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:9999;display:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:90%;text-align:center;pointer-events:none}
 
 @media(max-width:480px){
 .header{padding:12px 12px 0 12px}
@@ -232,19 +317,17 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .header-logo{height:30px}
 .stat-value{font-size:28px}
 .stat-label{font-size:12px}
-.scroll-content{height:calc(100vh - 280px);padding:12px 8px 0 8px}
-.bottom-nav{padding:6px 8px 10px 8px}
-.nav-item .nav-icon{font-size:18px}
-.nav-item .nav-label{font-size:8px}
-.nav-plus{width:56px;height:56px;font-size:28px;margin-top:-16px}
+.calendar-section{padding:12px 8px 4px 8px}
 .calendar-container{padding:12px}
 .calendar-header h3{font-size:16px}
 .calendar-grid .day{font-size:12px;padding:4px 0}
+.bottom-nav{padding:6px 4px 10px 4px}
+.nav-item .nav-icon{font-size:18px}
+.nav-item .nav-label{font-size:8px}
+.scroll-content{padding:0 8px 0 8px}
 }
 @media(max-width:380px){
-.scroll-content{height:calc(100vh - 250px)}
 .nav-item{min-width:40px;padding:4px 6px}
-.nav-plus{width:48px;height:48px;font-size:24px;margin-top:-12px}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -266,13 +349,14 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 <!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
 <div id="mainContent">
 
-<!-- ===== ШАПКА ===== -->
+<!-- ===== ДИНАМИЧЕСКАЯ ШАПКА ===== -->
 <div class="header">
 <div class="header-top">
 <img class="header-logo" src="logo.png" alt="GetWeddy" onerror="this.style.display='none'">
 <span class="header-title">GetWeddy</span>
 <div style="width:36px;"></div>
 </div>
+
 <div class="carousel-wrapper" id="carouselWrapper">
 <div class="carousel-track" id="carouselTrack">
 <div class="carousel-slide">
@@ -303,23 +387,21 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 </div>
 </div>
 
-<!-- ===== СКРОЛЛИРУЕМЫЙ КОНТЕНТ ===== -->
-<div class="scroll-content" id="scrollContent">
-
-<!-- ===== КАЛЕНДАРЬ (НЕАКТИВНЫЙ, ПРОСМОТР) ===== -->
-<div class="calendar-container" id="calendarContainer">
+<!-- ===== СТАТИЧНЫЙ КАЛЕНДАРЬ ===== -->
+<div class="calendar-section">
+<div class="calendar-container">
 <div class="calendar-header">
 <h3 id="calendarMonth">Июль 2026</h3>
-<div class="calendar-nav">
-<button id="prevMonthBtn">‹</button>
-<button id="nextMonthBtn">›</button>
-</div>
 </div>
 <div class="calendar-grid" id="calendarGrid"></div>
 </div>
+</div>
 
-<!-- ===== ВКЛАДКИ (КОНТЕНТ) ===== -->
-<div id="weddings" class="content" style="display:none;">
+<!-- ===== СКРОЛЛИРУЕМЫЙ КОНТЕНТ ===== -->
+<div class="scroll-content" id="scrollContent">
+
+<!-- ===== КОНТЕНТЫ ВКЛАДОК ===== -->
+<div id="weddings" class="content">
 <h2>Добавить съемку</h2>
 <form id="bookingForm">
 <div class="form-group"><label>ФИО</label><input type="text" id="name" placeholder="Иванова Анна" required></div>
@@ -338,37 +420,52 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 </form>
 </div>
 
-<div id="load" class="content" style="display:none;">
+<div id="load" class="content">
 <h2>Загрузка сезона</h2>
 <p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 8px;">Часы по месяцам</p>
 <div class="month-grid" id="monthGrid"></div>
 </div>
 
-<div id="clients" class="content" style="display:none;">
+<div id="clients" class="content">
 <h2>Клиентская база</h2>
 <input type="text" class="search-input" id="searchClients" placeholder="🔍 Поиск..." oninput="filterClients(this.value)">
 <div class="table-wrap">
 <table>
-<thead><tr><th>№</th><th>ФИО</th><th>Тел</th></tr></thead>
+<thead>
+<tr>
+<th>№</th>
+<th>ФИО</th>
+<th>Тел</th>
+</tr>
+</thead>
 <tbody id="clientsTableBody"></tbody>
 </table>
 </div>
 <div id="emptyState" class="empty-state" style="display:none;"><div class="icon">📭</div><h3>Нет клиентов</h3><p>Добавьте первую съемку</p></div>
 </div>
 
-<div id="deliveries" class="content" style="display:none;">
+<div id="deliveries" class="content">
 <h2>Выдачи материалов</h2>
 <p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 12px;">Контроль сроков выдачи готовых материалов</p>
 <div class="table-wrap">
 <table>
-<thead><tr><th>№</th><th>ФИО</th><th>Дата съемки</th><th>Срок выдачи</th><th>Дата выдачи</th><th>Статус</th></tr></thead>
+<thead>
+<tr>
+<th>№</th>
+<th>ФИО</th>
+<th>Дата съемки</th>
+<th>Срок выдачи</th>
+<th>Дата выдачи</th>
+<th>Статус</th>
+</tr>
+</thead>
 <tbody id="deliveriesTableBody"></tbody>
 </table>
 </div>
 <div id="emptyDeliveries" class="empty-state" style="display:none;"><div class="icon">📦</div><h3>Нет выдач</h3><p>Добавьте съемки, чтобы отслеживать сроки выдачи</p></div>
 </div>
 
-<div id="links" class="content" style="display:none;">
+<div id="links" class="content">
 <h2>Полезные ссылки</h2>
 <p style="text-align:center;color:#999;font-size:13px;margin:-4px 0 14px;">Быстрый доступ к основным ресурсам</p>
 <div class="links-grid">
@@ -387,7 +484,7 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 </div>
 </div>
 
-<div id="finance" class="content" style="display:none;">
+<div id="finance" class="content">
 <h2>Анализ финансов</h2>
 <div class="stats-grid"><div class="stat-card"><h3>Выручка</h3><p id="totalRevenue">0 ₽</p></div><div class="stat-card"><h3>Предоплата</h3><p id="totalPrepayment">0 ₽</p></div><div class="stat-card"><h3>Агентские</h3><p id="totalAgency">0 ₽</p></div><div class="stat-card"><h3>На руки</h3><p id="totalInHand">0 ₽</p></div></div>
 <div class="chart-container"><div class="chart-title">📊 Доход на руки по месяцам</div><div class="chart-wrap"><canvas id="financeChart"></canvas></div></div>
@@ -396,7 +493,7 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 
 </div>
 
-<!-- ===== НИЖНЕЕ МЕНЮ С ВЫСТУПАЮЩИМ ПЛЮСОМ ===== -->
+<!-- ===== НИЖНЕЕ МЕНЮ ===== -->
 <div class="bottom-nav" id="bottomNav">
 <div class="nav-item active" data-tab="calendar" onclick="switchBottomTab('calendar')">
 <span class="nav-icon">📅</span>
@@ -410,10 +507,6 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 <span class="nav-icon">👥</span>
 <span class="nav-label">Клиенты</span>
 </div>
-
-<!-- ===== ВЫСТУПАЮЩИЙ ПЛЮС ===== -->
-<button class="nav-plus" onclick="openAddBooking()">＋</button>
-
 <div class="nav-item" data-tab="deliveries" onclick="switchBottomTab('deliveries')">
 <span class="nav-icon">📦</span>
 <span class="nav-label">Выдачи</span>
@@ -433,18 +526,23 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== КАЛЕНДАРЬ (СВАЙП) =====
+// ===== КАЛЕНДАРЬ =====
 var currentDate = new Date();
 var currentMonth = currentDate.getMonth();
 var currentYear = currentDate.getFullYear();
 var monthNamesFull = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
-var calendarStartX = 0;
-var calendarIsDragging = false;
+var isTransitioning = false;
 
 function renderCalendar(month, year) {
     var grid = document.getElementById('calendarGrid');
     var header = document.getElementById('calendarMonth');
-    header.textContent = monthNamesFull[month] + ' ' + year;
+    header.textContent = 'Календарь свадеб — ' + monthNamesFull[month] + ' ' + year;
+    
+    // Затемнение для плавного перехода
+    grid.style.opacity = '0.4';
+    setTimeout(function() {
+        grid.style.opacity = '1';
+    }, 150);
     
     var firstDay = new Date(year, month, 1).getDay();
     var daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -454,6 +552,15 @@ function renderCalendar(month, year) {
     var todayDate = today.getDate();
     var todayMonth = today.getMonth();
     var todayYear = today.getFullYear();
+    
+    // Собираем даты свадеб
+    var weddingDates = {};
+    for (var i = 0; i < bookings.length; i++) {
+        var b = bookings[i];
+        var d = new Date(b.date);
+        var key = d.getDate() + '-' + d.getMonth() + '-' + d.getFullYear();
+        weddingDates[key] = true;
+    }
     
     var html = '';
     var weekdays = ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
@@ -467,23 +574,14 @@ function renderCalendar(month, year) {
         html += '<div class="day other-month">' + prevDay + '</div>';
     }
     
-    // Проверяем, есть ли съемки в этот день
-    var bookingsByDate = {};
-    for (var b = 0; b < bookings.length; b++) {
-        var d = new Date(bookings[b].date);
-        var key = d.getFullYear() + '-' + d.getMonth() + '-' + d.getDate();
-        bookingsByDate[key] = true;
-    }
-    
     for (var d = 1; d <= daysInMonth; d++) {
         var cls = 'day';
-        if (d === todayDate && month === todayMonth && year === todayYear) {
-            cls += ' today';
-        }
-        var key = year + '-' + month + '-' + d;
-        if (bookingsByDate[key]) {
-            cls += ' event';
-        }
+        var isToday = (d === todayDate && month === todayMonth && year === todayYear);
+        var isWedding = weddingDates[d + '-' + month + '-' + year];
+        
+        if (isToday) cls += ' today';
+        if (isWedding) cls += ' has-wedding';
+        
         html += '<div class="' + cls + '">' + d + '</div>';
     }
     
@@ -497,39 +595,15 @@ function renderCalendar(month, year) {
 }
 
 function changeMonth(delta) {
+    if (isTransitioning) return;
+    isTransitioning = true;
     currentMonth += delta;
     if (currentMonth < 0) { currentMonth = 11; currentYear--; }
     if (currentMonth > 11) { currentMonth = 0; currentYear++; }
     renderCalendar(currentMonth, currentYear);
-}
-
-// Свайп для календаря
-function initCalendarSwipe() {
-    var container = document.getElementById('calendarContainer');
-    if (!container) return;
-    
-    container.addEventListener('touchstart', function(e) {
-        calendarStartX = e.touches[0].clientX;
-        calendarIsDragging = true;
-    }, { passive: true });
-    
-    container.addEventListener('touchmove', function(e) {
-        if (!calendarIsDragging) return;
-        e.preventDefault();
-    }, { passive: false });
-    
-    container.addEventListener('touchend', function(e) {
-        if (!calendarIsDragging) return;
-        calendarIsDragging = false;
-        var endX = e.changedTouches[0].clientX;
-        var diff = calendarStartX - endX;
-        if (Math.abs(diff) < 30) return;
-        if (diff > 0) {
-            changeMonth(1);
-        } else {
-            changeMonth(-1);
-        }
-    }, { passive: true });
+    setTimeout(function() {
+        isTransitioning = false;
+    }, 350);
 }
 
 // ===== АНИМАЦИЯ СЛОГАНА =====
@@ -546,8 +620,8 @@ function initCalendarSwipe() {
 
     function showMainContent() {
         splashScreen.classList.add('hide');
-        mainContent.style.display = 'block';
-        document.body.style.overflow = 'auto';
+        mainContent.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
         sessionStorage.setItem('splashShown', 'true');
         animationComplete = true;
     }
@@ -580,6 +654,7 @@ function initCalendarSwipe() {
     }
 
     setTimeout(showNextWord, 500);
+
     setTimeout(function() {
         if (!animationComplete) {
             showMainContent();
@@ -594,7 +669,7 @@ var financeChart = null;
 var prepaymentChart = null;
 var monthNames = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
 
-// ===== КАРУСЕЛЬ В ШАПКЕ =====
+// ===== КАРУСЕЛЬ =====
 var currentSlide = 0;
 var totalSlides = 2;
 var startX = 0;
@@ -647,7 +722,45 @@ function initCarousel() {
     });
 }
 
-// ===== ОБНОВЛЕНИЕ СТАТИСТИКИ =====
+// ===== НИЖНЕЕ МЕНЮ =====
+function switchBottomTab(tabId) {
+    var items = document.querySelectorAll('.nav-item');
+    items.forEach(function(item) {
+        item.classList.remove('active');
+        if (item.getAttribute('data-tab') === tabId) {
+            item.classList.add('active');
+        }
+    });
+    
+    // Показываем/скрываем контенты
+    var contents = document.querySelectorAll('.content');
+    contents.forEach(function(content) {
+        content.classList.remove('active');
+    });
+    
+    if (tabId === 'calendar') {
+        // Показываем календарь, скрываем все контенты
+        document.querySelector('.calendar-section').style.display = 'block';
+        contents.forEach(function(c) { c.classList.remove('active'); });
+    } else {
+        document.querySelector('.calendar-section').style.display = 'none';
+        var targetContent = document.getElementById(tabId);
+        if (targetContent) targetContent.classList.add('active');
+        // рендерим данные для вкладки
+        if (tabId === 'load') renderCalendarStats();
+        if (tabId === 'clients') renderClientsTable();
+        if (tabId === 'deliveries') renderDeliveriesTable();
+        if (tabId === 'finance') {
+            updateFinance();
+            setTimeout(function() { 
+                renderChart('financeChart', 'amountInHand', 'rgba(122,252,255,0.7)', 'rgba(122,252,255,1)');
+                renderChart('prepaymentChart', 'prepayment', 'rgba(255,165,0,0.7)', 'rgba(255,165,0,1)');
+            }, 200);
+        }
+    }
+}
+
+// ===== ОБНОВЛЕНИЕ СТАТИСТИКИ В ШАПКЕ =====
 function updateHeaderStats() {
     var totalIncome = 0;
     var totalClients = bookings.length;
@@ -701,68 +814,6 @@ function saveData() {
     }
 }
 
-// ===== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК (НИЖНЕЕ МЕНЮ) =====
-function switchBottomTab(tabId) {
-    var items = document.querySelectorAll('.nav-item');
-    items.forEach(function(item) {
-        item.classList.remove('active');
-        if (item.getAttribute('data-tab') === tabId) {
-            item.classList.add('active');
-        }
-    });
-    
-    var contents = document.querySelectorAll('.content');
-    contents.forEach(function(content) {
-        content.style.display = 'none';
-    });
-    
-    var calendar = document.querySelector('.calendar-container');
-    if (tabId === 'calendar') {
-        calendar.style.display = 'block';
-        contents.forEach(function(c) { c.style.display = 'none'; });
-        renderCalendar(currentMonth, currentYear);
-    } else {
-        calendar.style.display = 'none';
-        var targetContent = document.getElementById(tabId);
-        if (targetContent) targetContent.style.display = 'block';
-        contents.forEach(function(c) {
-            if (c.id !== tabId && c.id !== 'weddings') {
-                c.style.display = 'none';
-            }
-        });
-        if (tabId === 'load') renderCalendarStats();
-        if (tabId === 'clients') renderClientsTable();
-        if (tabId === 'deliveries') renderDeliveriesTable();
-        if (tabId === 'finance') {
-            updateFinance();
-            setTimeout(function() { 
-                renderChart('financeChart', 'amountInHand', 'rgba(122,252,255,0.7)', 'rgba(122,252,255,1)');
-                renderChart('prepaymentChart', 'prepayment', 'rgba(255,165,0,0.7)', 'rgba(255,165,0,1)');
-            }, 200);
-        }
-    }
-}
-
-// ===== ОТКРЫТИЕ ФОРМЫ ЧЕРЕЗ ПЛЮС =====
-function openAddBooking() {
-    switchBottomTab('weddings');
-    // активируем вкладку weddings в меню
-    var items = document.querySelectorAll('.nav-item');
-    items.forEach(function(item) {
-        item.classList.remove('active');
-        if (item.getAttribute('data-tab') === 'weddings') {
-            item.classList.add('active');
-        }
-    });
-    // прокручиваем к форме
-    var form = document.querySelector('#weddings form');
-    if (form) {
-        setTimeout(function() {
-            form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 300);
-    }
-}
-
 function renderAll() {
     renderCalendarStats();
     renderClientsTable();
@@ -771,7 +822,7 @@ function renderAll() {
     updateHeaderStats();
     renderCalendar(currentMonth, currentYear);
     var financeContent = document.getElementById('finance');
-    if (financeContent && financeContent.style.display !== 'none') {
+    if (financeContent.classList.contains('active')) {
         setTimeout(function() { 
             renderChart('financeChart', 'amountInHand', 'rgba(122,252,255,0.7)', 'rgba(122,252,255,1)');
             renderChart('prepaymentChart', 'prepayment', 'rgba(255,165,0,0.7)', 'rgba(255,165,0,1)');
@@ -854,11 +905,13 @@ function renderClientsTable() {
 function renderDeliveriesTable() {
     var tbody = document.getElementById('deliveriesTableBody');
     var empty = document.getElementById('emptyDeliveries');
+    
     if (!bookings.length) {
         tbody.innerHTML = '';
         empty.style.display = 'block';
         return;
     }
+    
     var sorted = bookings.slice().sort(function(a, b) {
         var dateA = new Date(a.date);
         dateA.setMonth(dateA.getMonth() + a.delivery);
@@ -866,20 +919,38 @@ function renderDeliveriesTable() {
         dateB.setMonth(dateB.getMonth() + b.delivery);
         return dateA - dateB;
     });
+    
     var today = new Date();
     today.setHours(0,0,0,0);
+    
     var html = '';
     for (var i = 0; i < sorted.length; i++) {
         var b = sorted[i];
         var deliveryDate = new Date(b.date);
         deliveryDate.setMonth(deliveryDate.getMonth() + b.delivery);
         deliveryDate.setHours(0,0,0,0);
+        
         var daysUntil = Math.ceil((deliveryDate - today) / 86400000);
         var statusText, statusClass;
-        if (daysUntil < 0) { statusText = '🔴 Просрочено'; statusClass = 'overdue'; }
-        else if (daysUntil <= 7) { statusText = '🟡 Скоро'; statusClass = 'soon'; }
-        else { statusText = '✅ В порядке'; statusClass = 'good'; }
-        html += '<tr><td>' + (i + 1) + '</td><td>' + b.name + '</td><td>' + new Date(b.date).toLocaleDateString('ru-RU') + '</td><td>' + b.delivery + ' мес.</td><td>' + deliveryDate.toLocaleDateString('ru-RU') + '</td><td><span class="delivery-status ' + statusClass + '">' + statusText + '</span></td></tr>';
+        if (daysUntil < 0) {
+            statusText = '🔴 Просрочено';
+            statusClass = 'overdue';
+        } else if (daysUntil <= 7) {
+            statusText = '🟡 Скоро';
+            statusClass = 'soon';
+        } else {
+            statusText = '✅ В порядке';
+            statusClass = 'good';
+        }
+        
+        html += '<tr>';
+        html += '<td>' + (i + 1) + '</td>';
+        html += '<td>' + b.name + '</td>';
+        html += '<td>' + new Date(b.date).toLocaleDateString('ru-RU') + '</td>';
+        html += '<td>' + b.delivery + ' мес.</td>';
+        html += '<td>' + deliveryDate.toLocaleDateString('ru-RU') + '</td>';
+        html += '<td><span class="delivery-status ' + statusClass + '">' + statusText + '</span></td>';
+        html += '</tr>';
     }
     tbody.innerHTML = html;
     empty.style.display = 'none';
@@ -933,28 +1004,43 @@ function updateFinance() {
 
 function renderChart(canvasId, key, bgColor, borderColor) {
     var content = document.getElementById('finance');
-    if (!content || content.style.display === 'none') return;
+    if (!content.classList.contains('active')) return;
+    
     var data = Array(12).fill(0);
     for (var i = 0; i < bookings.length; i++) {
         var m = new Date(bookings[i].date).getMonth();
         data[m] += bookings[i][key] || 0;
     }
+    
     var ctx = document.getElementById(canvasId).getContext('2d');
     var chart = canvasId === 'financeChart' ? financeChart : prepaymentChart;
     if (chart) { chart.destroy(); }
+    
     try {
         var newChart = new Chart(ctx, {
             type: 'bar',
-            data: { labels: monthNames, datasets: [{ data: data, backgroundColor: bgColor, borderColor: borderColor, borderWidth: 1, borderRadius: 3 }] },
+            data: {
+                labels: monthNames,
+                datasets: [{
+                    data: data,
+                    backgroundColor: bgColor,
+                    borderColor: borderColor,
+                    borderWidth: 1,
+                    borderRadius: 3
+                }]
+            },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
                     legend: { display: false },
                     datalabels: {
-                        anchor: 'end', align: 'top',
+                        anchor: 'end',
+                        align: 'top',
                         formatter: function(v) { return v > 0 ? v.toLocaleString('ru-RU') + '₽' : ''; },
-                        color: '#333', font: { size: 8, weight: 'bold' }, offset: 1
+                        color: '#333',
+                        font: { size: 8, weight: 'bold' },
+                        offset: 1
                     }
                 },
                 scales: {
@@ -963,8 +1049,15 @@ function renderChart(canvasId, key, bgColor, borderColor) {
                 }
             }
         });
-        if (canvasId === 'financeChart') { financeChart = newChart; } else { prepaymentChart = newChart; }
-    } catch(e) { showToast('Ошибка графика'); }
+        
+        if (canvasId === 'financeChart') {
+            financeChart = newChart;
+        } else {
+            prepaymentChart = newChart;
+        }
+    } catch(e) {
+        showToast('Ошибка графика');
+    }
 }
 
 function formatPhone(i) {
@@ -1009,7 +1102,18 @@ function editBooking(id) {
     f.agency.value = b.agency;
     f.total.value = b.total;
     document.getElementById('submitBtn').textContent = 'Обновить';
-    openAddBooking();
+    // Показываем вкладку с формой
+    document.getElementById('weddings').classList.add('active');
+    document.querySelector('.calendar-section').style.display = 'none';
+    document.querySelectorAll('.content').forEach(function(c) {
+        if (c.id !== 'weddings') c.classList.remove('active');
+    });
+    // Активный пункт меню
+    document.querySelectorAll('.nav-item').forEach(function(item) {
+        item.classList.remove('active');
+    });
+    document.querySelector('.nav-item[data-tab="weddings"]').classList.add('active');
+    f.scrollIntoView({ behavior: 'smooth' });
 }
 
 function deleteBooking(id) {
@@ -1027,16 +1131,26 @@ function init() {
     loadData();
     renderCalendar(currentMonth, currentYear);
     document.getElementById('date').min = new Date().toISOString().split('T')[0];
-    document.getElementById('phone').addEventListener('input', function() { formatPhone(this); });
-    
-    // Скрываем контенты, показываем календарь
-    document.querySelectorAll('.content').forEach(function(c) {
-        c.style.display = 'none';
+    document.getElementById('phone').addEventListener('input', function() {
+        formatPhone(this);
     });
-    document.querySelector('.calendar-container').style.display = 'block';
     
-    // Инициализация свайпа для календаря
-    initCalendarSwipe();
+    // По умолчанию показываем календарь
+    document.querySelectorAll('.content').forEach(function(c) {
+        c.classList.remove('active');
+    });
+    document.querySelector('.calendar-section').style.display = 'block';
+    
+    // Добавляем в меню пункт для формы (скрыто)
+    var nav = document.getElementById('bottomNav');
+    var weddingsItem = document.createElement('div');
+    weddingsItem.className = 'nav-item';
+    weddingsItem.setAttribute('data-tab', 'weddings');
+    weddingsItem.onclick = function() { switchBottomTab('weddings'); };
+    weddingsItem.innerHTML = '<span class="nav-icon">➕</span><span class="nav-label">Добавить</span>';
+    // вставляем между календарем и загрузкой
+    var children = nav.children;
+    nav.insertBefore(weddingsItem, children[1]);
     
     document.getElementById('bookingForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -1048,7 +1162,11 @@ function init() {
                 break;
             }
         }
-        if (dup) { showToast('Договор уже существует!'); f.contract.focus(); return; }
+        if (dup) {
+            showToast('Договор уже существует!');
+            f.contract.focus();
+            return;
+        }
         var maxId = 0;
         for (var i = 0; i < bookings.length; i++) {
             if (bookings[i].id > maxId) maxId = bookings[i].id;
@@ -1069,12 +1187,24 @@ function init() {
             total: parseInt(f.total.value) || 0,
             amountInHand: (parseInt(f.total.value) || 0) - (parseInt(f.prepayment.value) || 0) - (parseInt(f.agency.value) || 0)
         };
-        if (booking.prepayment + booking.agency > booking.total) { showToast('Предоплата + агентские > суммы!'); return; }
-        if (booking.amountInHand < 0) { showToast('Сумма на руки отрицательная!'); return; }
-        if (booking.hours <= 0) { showToast('Часы должны быть > 0'); return; }
+        if (booking.prepayment + booking.agency > booking.total) {
+            showToast('Предоплата + агентские > суммы!');
+            return;
+        }
+        if (booking.amountInHand < 0) {
+            showToast('Сумма на руки отрицательная!');
+            return;
+        }
+        if (booking.hours <= 0) {
+            showToast('Часы должны быть > 0');
+            return;
+        }
         if (editingId) {
             for (var i = 0; i < bookings.length; i++) {
-                if (bookings[i].id === editingId) { bookings[i] = booking; break; }
+                if (bookings[i].id === editingId) {
+                    bookings[i] = booking;
+                    break;
+                }
             }
             editingId = null;
             document.getElementById('submitBtn').textContent = 'Добавить';
@@ -1084,6 +1214,7 @@ function init() {
         f.reset();
         saveData();
         showToast('Съемка добавлена!');
+        // Возвращаемся на календарь
         switchBottomTab('calendar');
     });
     
