@@ -25,7 +25,7 @@ position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(13
 /* ===== ОСНОВНОЙ КОНТЕЙНЕР ===== */
 #mainContent{display:none;flex-direction:column;height:100vh;overflow:hidden}
 
-/* ===== ШАПКА (УМЕНЬШЕНА) ===== */
+/* ===== ШАПКА ===== */
 .header{background:linear-gradient(to right,#FF8AAC,#FF7EB9,#FFB3C6);padding:10px 16px;flex-shrink:0;z-index:100}
 .header-inner{display:flex;align-items:center;justify-content:center;position:relative;max-width:100%;margin:0 auto}
 .header-logo{height:32px;width:auto;display:block;border-radius:6px;position:absolute;left:0;top:50%;transform:translateY(-50%)}
@@ -37,14 +37,17 @@ flex:1;
 overflow-y:auto;
 -webkit-overflow-scrolling:touch;
 padding:0;
+display:flex;
+flex-direction:column;
 }
 
-/* ===== КАЛЕНДАРЬ (УМЕНЬШЕН) ===== */
+/* ===== КАЛЕНДАРЬ (ФИКСИРОВАННАЯ ВЫСОТА) ===== */
 .calendar-fixed-area{
 padding:4px 12px 2px;
 max-width:600px;
 margin:0 auto;
 width:100%;
+flex-shrink:0;
 }
 .calendar-title{
 text-align:center;
@@ -62,6 +65,7 @@ margin:4px auto 0;
 border-radius:2px;
 }
 
+/* ФИКСИРОВАННАЯ ВЫСОТА — ВСЕГДА 6 СТРОК (280px) */
 .calendar-swipe-container{
 overflow:hidden;
 position:relative;
@@ -69,6 +73,7 @@ touch-action:pan-x;
 cursor:grab;
 user-select:none;
 -webkit-user-select:none;
+min-height:280px;
 }
 .calendar-swipe-container:active{cursor:grabbing}
 
@@ -108,7 +113,6 @@ touch-action:manipulation;
 display:grid;
 grid-template-columns:repeat(7,1fr);
 gap:2px;
-min-height:200px;
 align-content:start;
 }
 .calendar-grid .day-name{
@@ -156,7 +160,7 @@ box-shadow:0 2px 8px rgba(255,126,185,0.3);
 }
 .calendar-grid .day:active{transform:scale(0.92)}
 
-/* ===== СТАТИСТИКА (УМЕНЬШЕНА) ===== */
+/* ===== СТАТИСТИКА (ПРИЖАТА К НИЗУ КАЛЕНДАРЯ) ===== */
 .stats-blocks{
 display:grid;
 grid-template-columns:1fr 1fr;
@@ -166,6 +170,7 @@ margin:4px auto 6px;
 padding:0 12px;
 width:100%;
 flex-shrink:0;
+margin-top:auto;
 }
 .stat-block{
 padding:10px 8px;
@@ -281,10 +286,15 @@ box-shadow:0 4px 16px rgba(255,64,129,0.4),inset 0 1px 0 rgba(255,255,255,0.2);
 display:none;
 padding:0!important;
 background:#FFF9FB;
+display:flex;
+flex-direction:column;
+flex:1;
 }
-#weddings.active{display:block}
+#weddings.active{
+display:flex;
+}
 
-/* ===== ОСТАЛЬНЫЕ СТИЛИ (БЕЗ ИЗМЕНЕНИЙ) ===== */
+/* ===== ОСТАЛЬНЫЕ СТИЛИ ===== */
 .modal-overlay{
 display:none;
 position:fixed;
@@ -419,7 +429,7 @@ td{padding:8px 4px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-al
 .content h2{font-size:18px}
 .calendar-title{font-size:16px}
 .calendar-fixed-area{padding:2px 8px 0}
-.calendar-grid{min-height:170px}
+.calendar-swipe-container{min-height:230px}
 .calendar-grid .day{padding:4px 0;font-size:11px}
 .calendar-grid .day-name{font-size:9px;padding:2px 0}
 .calendar-header .month-year{font-size:14px}
@@ -455,7 +465,7 @@ th,td{padding:4px 2px}
 @media(max-width:380px){
 .tab{font-size:10px;padding:6px 2px;height:32px;max-width:70px}
 .fab{width:32px;height:32px;font-size:18px}
-.calendar-grid{min-height:150px}
+.calendar-swipe-container{min-height:200px}
 .calendar-grid .day{padding:3px 0;font-size:10px}
 .calendar-grid .day-name{font-size:8px}
 .calendar-header .month-year{font-size:12px}
@@ -833,6 +843,7 @@ function nextMonth(e) {
         currentYear++;
     }
     renderCalendar(currentMonth, currentYear);
+    updateMainStats(); // ОБНОВЛЯЕМ СТАТИСТИКУ
 }
 
 function prevMonth(e) {
@@ -843,6 +854,7 @@ function prevMonth(e) {
         currentYear--;
     }
     renderCalendar(currentMonth, currentYear);
+    updateMainStats(); // ОБНОВЛЯЕМ СТАТИСТИКУ
 }
 
 // ===== СВАЙП =====
@@ -882,14 +894,20 @@ function initSwipe() {
     }, {passive: true});
 }
 
-// ===== СТАТИСТИКА =====
+// ===== СТАТИСТИКА (ПО МЕСЯЦУ) =====
 function updateMainStats() {
-    var totalWeddings = bookings.length;
+    var totalWeddings = 0;
     var totalIncome = 0;
+    
     for (var i = 0; i < bookings.length; i++) {
         var b = bookings[i];
-        totalIncome += b.amountInHand || 0;
+        var d = new Date(b.date);
+        if (d.getMonth() === currentMonth && d.getFullYear() === currentYear) {
+            totalWeddings++;
+            totalIncome += b.amountInHand || 0;
+        }
     }
+    
     document.getElementById('totalWeddings').textContent = totalWeddings;
     document.getElementById('totalIncome').textContent = totalIncome.toLocaleString('ru-RU') + ' ₽';
 }
