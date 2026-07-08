@@ -23,22 +23,40 @@ position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(13
 .slogan-word.hide{opacity:0;transform:scale(1.2)}
 
 /* ===== ОСНОВНОЙ КОНТЕНТ ===== */
-#mainContent{display:none}
+#mainContent{display:none;display:flex;flex-direction:column;min-height:100vh}
 
 /* ===== ШАПКА ===== */
-.header{background:linear-gradient(to right,#FF8AAC,#FF7EB9,#FFB3C6);padding:14px 16px;position:sticky;top:0;z-index:100}
+.header{background:linear-gradient(to right,#FF8AAC,#FF7EB9,#FFB3C6);padding:14px 16px;position:sticky;top:0;z-index:100;flex-shrink:0}
 .header-inner{display:flex;align-items:center;justify-content:center;position:relative;max-width:100%;margin:0 auto}
 .header-logo{height:38px;width:auto;display:block;border-radius:6px;position:absolute;left:0;top:50%;transform:translateY(-50%)}
 .header h1{font-size:32px;color:#fff;letter-spacing:1.5px;margin:0;text-shadow:0 2px 4px rgba(0,0,0,0.12)}
 
-/* ===== ВКЛАДКИ ===== */
-.tabs{display:flex;flex-direction:column;gap:12px;padding:16px 12px;background:#fff;border-bottom:1px solid #eee;position:sticky;top:68px;z-index:99}
-.tabs-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+/* ===== ОСНОВНАЯ ОБЛАСТЬ (СКРОЛЛИМАЯ) ===== */
+.main-scroll{
+flex:1;
+overflow-y:auto;
+-webkit-overflow-scrolling:touch;
+padding-bottom:8px;
+}
+
+/* ===== ВКЛАДКИ (ПЕРЕНЕСЕНЫ ВНИЗ) ===== */
+.tabs{
+background:#fff;
+border-top:1px solid #eee;
+padding:10px 12px 12px;
+position:sticky;
+bottom:0;
+z-index:99;
+flex-shrink:0;
+box-shadow:0 -2px 12px rgba(0,0,0,0.06);
+}
+.tabs-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.tabs-row + .tabs-row{margin-top:8px}
 .tab{
 display:flex;
 align-items:center;
 justify-content:center;
-padding:16px 8px;
+padding:14px 8px;
 border-radius:30px;
 font-size:17px;
 font-weight:600;
@@ -54,7 +72,7 @@ letter-spacing:0.3px;
 flex:1;
 min-width:0;
 max-width:150px;
-height:60px;
+height:54px;
 white-space:nowrap;
 }
 .tab:active{transform:scale(0.95)}
@@ -176,15 +194,16 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 .action-btn:active{transform:scale(0.88)}
 .action-btn.edit{background:#FFC107;color:#333}
 .action-btn.delete{background:#F44336;color:#fff}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:9999;display:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:90%;text-align:center;pointer-events:none}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.8);color:#fff;padding:8px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:9999;display:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:90%;text-align:center;pointer-events:none}
 
 @media(max-width:480px){
 .header{padding:10px 12px}
 .header-logo{height:28px}
 .header h1{font-size:24px}
-.tabs{top:62px;padding:12px 8px;gap:10px}
-.tabs-row{gap:8px}
-.tab{font-size:14px;padding:12px 6px;height:50px;max-width:120px}
+.tabs{padding:8px 8px 10px}
+.tabs-row{gap:6px}
+.tabs-row + .tabs-row{margin-top:6px}
+.tab{font-size:14px;padding:10px 6px;height:44px;max-width:110px}
 .content{padding:16px 8px 8px}
 .content h2{font-size:20px;padding-top:4px}
 .footer{font-size:11px;padding:16px 8px 8px}
@@ -209,10 +228,11 @@ table{font-size:10px;min-width:350px}
 th,td{padding:6px 3px}
 .form-group input,.form-group select{font-size:14px;padding:6px 8px}
 .expandable-row .detail-grid{grid-template-columns:1fr}
+.toast{bottom:70px;font-size:12px;padding:6px 16px}
 }
 @media(max-width:380px){
 .links-grid{grid-template-columns:1fr}
-.tab{font-size:13px;padding:10px 4px;height:44px;max-width:100px}
+.tab{font-size:13px;padding:8px 4px;height:40px;max-width:90px}
 .slogan-word{font-size:32px}
 .splash-text{font-size:30px}
 .splash-sub{font-size:15px}
@@ -238,6 +258,7 @@ th,td{padding:6px 3px}
 <!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
 <div id="mainContent">
 
+<!-- ===== ШАПКА ===== -->
 <div class="header">
 <div class="header-inner">
 <img class="header-logo" src="logo.png" alt="GetWeddy" onerror="this.style.display='none'">
@@ -245,18 +266,8 @@ th,td{padding:6px 3px}
 </div>
 </div>
 
-<div class="tabs">
-<div class="tabs-row">
-<div class="tab active" onclick="switchTab('weddings')">Главная</div>
-<div class="tab" onclick="switchTab('load')">Загрузка</div>
-<div class="tab" onclick="switchTab('clients')">Клиенты</div>
-</div>
-<div class="tabs-row">
-<div class="tab" onclick="switchTab('deliveries')">Выдачи</div>
-<div class="tab" onclick="switchTab('links')">Ссылки</div>
-<div class="tab" onclick="switchTab('finance')">Финансы</div>
-</div>
-</div>
+<!-- ===== СКРОЛЛИМАЯ ОБЛАСТЬ ===== -->
+<div class="main-scroll" id="mainScroll">
 
 <div id="weddings" class="content active">
 <h2>Добавить съемку</h2>
@@ -384,7 +395,23 @@ th,td{padding:6px 3px}
 <div class="footer">Made By Deepseek-Bratishka &amp; Volchik-Programmist</div>
 </div>
 
+</div><!-- /main-scroll -->
+
+<!-- ===== ВКЛАДКИ (ПЕРЕНЕСЕНЫ ВНИЗ) ===== -->
+<div class="tabs">
+<div class="tabs-row">
+<div class="tab active" onclick="switchTab('weddings')">Главная</div>
+<div class="tab" onclick="switchTab('load')">Загрузка</div>
+<div class="tab" onclick="switchTab('clients')">Клиенты</div>
 </div>
+<div class="tabs-row">
+<div class="tab" onclick="switchTab('deliveries')">Выдачи</div>
+<div class="tab" onclick="switchTab('links')">Ссылки</div>
+<div class="tab" onclick="switchTab('finance')">Финансы</div>
+</div>
+</div>
+
+</div><!-- /mainContent -->
 
 <div class="toast" id="toast"></div>
 
@@ -403,7 +430,7 @@ th,td{padding:6px 3px}
 
     function showMainContent() {
         splashScreen.classList.add('hide');
-        mainContent.style.display = 'block';
+        mainContent.style.display = 'flex';
         document.body.style.overflow = 'auto';
         sessionStorage.setItem('splashShown', 'true');
         animationComplete = true;
@@ -517,7 +544,6 @@ function saveHistoricalData() {
 function clearHistoricalData() {
     if (!confirm('Очистить все данные за 2025 год?')) return;
     localStorage.removeItem('historicalData_2025');
-    // Очищаем поля ввода
     var inputs = document.querySelectorAll('.historical-item input');
     inputs.forEach(function(input) { input.value = ''; });
     showToast('Данные 2025 удалены');
@@ -548,7 +574,6 @@ function fillHistoricalFields() {
 // ===== ГРАФИКИ =====
 function renderCharts() {
     renderChart('financeChart', 'amountInHand', 'rgba(122,252,255,0.7)', 'rgba(122,252,255,1)', 'rgba(255,165,0,0.7)', 'rgba(255,165,0,1)');
-    // Для графика потерь используем агентские (agency)
     renderChart('prepaymentChart', 'agency', 'rgba(255,165,0,0.7)', 'rgba(255,165,0,1)', null, null);
 }
 
@@ -571,7 +596,6 @@ function renderChart(canvasId, key, bgColor, borderColor, histBgColor, histBorde
     
     var datasets = [];
     
-    // Основной набор данных (текущий год)
     datasets.push({
         label: 'Текущий год',
         data: data,
@@ -581,7 +605,6 @@ function renderChart(canvasId, key, bgColor, borderColor, histBgColor, histBorde
         borderRadius: 3
     });
     
-    // Исторические данные (2025) — только для главного графика
     if (canvasId === 'financeChart' && hasHistorical && histBgColor) {
         datasets.push({
             label: '2025 год',
@@ -638,21 +661,16 @@ function renderChart(canvasId, key, bgColor, borderColor, histBgColor, histBorde
 // ===== ОБНОВЛЕННЫЙ РЕНДЕР КАЛЕНДАРЯ (ПО СВАДЬБАМ) =====
 function renderCalendar() {
     var months = {};
-    // Считаем количество свадеб по месяцам
     for (var i = 0; i < bookings.length; i++) {
         var b = bookings[i];
-        // Определяем, является ли съемка свадьбой
         var isWedding = b.name.toLowerCase().includes('свадьб') || 
                         b.name.toLowerCase().includes('wedding') ||
                         b.contract.toLowerCase().includes('св') ||
                         b.instagram.toLowerCase().includes('wed');
-        // Если в названии нет явного указания, считаем все съемки свадьбами (для простоты)
-        // Но лучше оставить логику определения — если есть хоть один признак
         var m = new Date(b.date).getMonth();
         if (isWedding) {
             months[m] = (months[m] || 0) + 1;
         } else {
-            // Если не определили как свадьбу, всё равно считаем (так как у тебя все съемки — свадьбы)
             months[m] = (months[m] || 0) + 1;
         }
     }
@@ -660,13 +678,12 @@ function renderCalendar() {
     var html = '';
     for (var i = 0; i < 12; i++) {
         var count = months[i] || 0;
-        var cls = 'default'; // зелёный по умолчанию
+        var cls = 'default';
         if (count >= 8) {
-            cls = 'overloaded'; // красный
+            cls = 'overloaded';
         } else if (count >= 5) {
-            cls = 'warning'; // жёлтый
+            cls = 'warning';
         }
-        // Для 0 свадеб тоже зелёный (default) — норма
         html += '<div class="month ' + cls + '"><h3>' + monthNames[i] + '</h3><p>' + count + '</p></div>';
     }
     document.getElementById('monthGrid').innerHTML = html;
@@ -847,40 +864,6 @@ function clearForm() {
     document.getElementById('submitBtn').textContent = 'Добавить';
 }
 
-function exportData() {
-    if (!bookings.length) { showToast('Нет данных'); return; }
-    var blob = new Blob([JSON.stringify(bookings, null, 2)], {type:'application/json'});
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'getweddy_backup.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(a.href);
-    showToast('Экспорт выполнен');
-}
-
-function importData(e) {
-    var file = e.target.files[0];
-    if (!file) return;
-    var reader = new FileReader();
-    reader.onload = function(e) {
-        try {
-            var data = JSON.parse(e.target.result);
-            if (!Array.isArray(data)) throw new Error('Неверный формат');
-            if (confirm('Заменить данные?')) {
-                bookings = data;
-                saveData();
-                showToast('Импорт выполнен');
-                document.getElementById('importInput').value = '';
-            }
-        } catch(err) {
-            showToast('Ошибка: ' + err.message);
-        }
-    };
-    reader.readAsText(file);
-}
-
 function editBooking(id) {
     var b = null;
     for (var i = 0; i < bookings.length; i++) {
@@ -903,7 +886,12 @@ function editBooking(id) {
     f.total.value = b.total;
     document.getElementById('submitBtn').textContent = 'Обновить';
     switchTab('weddings');
-    f.scrollIntoView({ behavior: 'smooth' });
+    var scrollEl = document.getElementById('mainScroll');
+    if (scrollEl) {
+        setTimeout(function() {
+            scrollEl.scrollTop = 0;
+        }, 100);
+    }
 }
 
 function deleteBooking(id) {
@@ -950,6 +938,11 @@ function switchTab(tabId) {
         setTimeout(function() { 
             renderCharts();
         }, 200);
+    }
+    
+    var scrollEl = document.getElementById('mainScroll');
+    if (scrollEl) {
+        scrollEl.scrollTop = 0;
     }
 }
 
