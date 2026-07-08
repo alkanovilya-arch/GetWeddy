@@ -180,11 +180,11 @@ display:none;
 }
 .calendar-slide.active{
 display:block;
-animation:fadeSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+animation:fadeSlide 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 @keyframes fadeSlide{
-0%{opacity:0.3;transform:translateX(20px) scale(0.97)}
-100%{opacity:1;transform:translateX(0) scale(1)}
+0%{opacity:0.5;transform:translateX(15px)}
+100%{opacity:1;transform:translateX(0)}
 }
 
 /* ===== СТАТИСТИЧЕСКИЕ БЛОКИ ===== */
@@ -195,6 +195,7 @@ gap:14px;
 max-width:600px;
 margin:12px auto 0;
 padding:0 16px;
+will-change:transform;
 }
 .stat-block{
 padding:18px 12px;
@@ -205,6 +206,7 @@ box-shadow:0 8px 24px rgba(255,126,185,0.35);
 color:#fff;
 transition:all 0.2s ease;
 border:1px solid rgba(255,255,255,0.15);
+will-change:transform;
 }
 .stat-block:active{
 transform:scale(0.96);
@@ -225,6 +227,7 @@ margin-bottom:6px;
 font-size:28px;
 font-weight:700;
 text-shadow:0 2px 8px rgba(0,0,0,0.1);
+transition:all 0.1s ease;
 }
 .stat-block .stat-value.ruble{
 font-size:24px;
@@ -878,7 +881,7 @@ function renderCalendar(month, year) {
     slide.classList.remove('active');
     setTimeout(function() {
         slide.classList.add('active');
-    }, 10);
+    }, 20);
 }
 
 function initSwipe() {
@@ -899,7 +902,7 @@ function initSwipe() {
         if (!isSwiping || isAnimating) return;
         isSwiping = false;
         var diff = touchStartX - touchEndX;
-        if (Math.abs(diff) > 40) {
+        if (Math.abs(diff) > 35) {
             isAnimating = true;
             if (diff > 0) {
                 nextMonth();
@@ -908,7 +911,7 @@ function initSwipe() {
             }
             setTimeout(function() {
                 isAnimating = false;
-            }, 500);
+            }, 550);
         }
     }, {passive: true});
 }
