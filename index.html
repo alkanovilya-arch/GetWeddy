@@ -3,14 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<!-- ===== ИКОНКА ДЛЯ РАБОЧЕГО СТОЛА IPHONE ===== -->
 <link rel="apple-touch-icon" href="/logo.png">
 <title>GetWeddy — CRM</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:system-ui,-apple-system,sans-serif;background:#FFF9FB;color:#333;padding-bottom:0;overflow:hidden;height:100vh}
 
-/* ===== ЭКРАН-ЗАСТАВКА ===== */
 #splashScreen{
 position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#D81B60,#FF7EB9);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.6s ease
 }
@@ -22,10 +20,8 @@ position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(13
 .slogan-word.show{opacity:1;transform:scale(1)}
 .slogan-word.hide{opacity:0;transform:scale(1.2)}
 
-/* ===== ОСНОВНОЙ КОНТЕНТ ===== */
 #mainContent{display:none;height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
-/* ===== ДИНАМИЧЕСКАЯ ШАПКА ===== */
 .header{
 background:linear-gradient(135deg,#D81B60,#FF7EB9);
 padding:14px 16px 0 16px;
@@ -54,8 +50,6 @@ color:#fff;
 letter-spacing:1.5px;
 text-shadow:0 2px 8px rgba(0,0,0,0.12)
 }
-
-/* ===== КАРУСЕЛЬ (верхняя) ===== */
 .carousel-wrapper{
 overflow:hidden;
 position:relative;
@@ -110,8 +104,6 @@ background:#fff;
 width:24px;
 border-radius:4px
 }
-
-/* ===== КАЛЕНДАРЬ ===== */
 .calendar-section{
 flex-shrink:0;
 padding:12px 12px 8px 12px;
@@ -177,8 +169,6 @@ font-weight:600
 background:#FF7EB9;
 color:#fff
 }
-
-/* ===== СКРОЛЛ КОНТЕНТ ===== */
 .scroll-content{
 flex:1;
 overflow-y:auto;
@@ -187,8 +177,6 @@ background:#FFF9FB
 }
 .content{display:none;padding:8px 0 12px 0}
 .content.active{display:block}
-
-/* ===== НИЖНЕЕ МЕНЮ ===== */
 .bottom-nav{
 background:linear-gradient(135deg,#FF7EB9,#FF65A3);
 padding:8px 4px 12px 4px;
@@ -226,8 +214,6 @@ font-size:20px;line-height:1
 .nav-item .nav-label{
 font-size:8px;font-weight:600;margin-top:1px;letter-spacing:0.2px
 }
-
-/* ===== ОСТАЛЬНЫЕ СТИЛИ ===== */
 form{max-width:500px;margin:0 auto}
 .form-group{margin-bottom:12px}
 .form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:4px;color:#555;text-align:center}
@@ -317,7 +303,6 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 </head>
 <body>
 
-<!-- ===== ЭКРАН-ЗАСТАВКА ===== -->
 <div id="splashScreen">
 <div class="splash-text">GetWeddy</div>
 <div class="splash-sub">CRM для свадебного фотографа</div>
@@ -328,10 +313,8 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 </div>
 </div>
 
-<!-- ===== ОСНОВНОЙ КОНТЕНТ ===== -->
 <div id="mainContent">
 
-<!-- ===== ШАПКА ===== -->
 <div class="header">
 <div class="header-top">
 <img class="header-logo" src="logo.png" alt="GetWeddy" onerror="this.style.display='none'">
@@ -356,7 +339,6 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 </div>
 </div>
 
-<!-- ===== КАЛЕНДАРЬ (с тапом) ===== -->
 <div class="calendar-section" id="calendarSection">
 <div class="calendar-container" id="calendarContainer">
 <div class="calendar-header">
@@ -366,7 +348,6 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 </div>
 </div>
 
-<!-- ===== СКРОЛЛ-КОНТЕНТ ===== -->
 <div class="scroll-content" id="scrollContent">
 <div id="weddings" class="content">
 <h2>Добавить съемку</h2>
@@ -425,7 +406,6 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 </div>
 </div>
 
-<!-- ===== НИЖНЕЕ МЕНЮ ===== -->
 <div class="bottom-nav" id="bottomNav">
 <div class="nav-item active" data-tab="calendar" onclick="switchBottomTab('calendar')"><span class="nav-icon">📅</span><span class="nav-label">Календарь</span></div>
 <div class="nav-item" data-tab="weddings" onclick="switchBottomTab('weddings')"><span class="nav-icon">➕</span><span class="nav-label">Добавить</span></div>
@@ -438,7 +418,6 @@ td{padding:10px 6px;border-bottom:1px solid #f0f0f0;text-align:center;vertical-a
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== КАЛЕНДАРЬ =====
 var currentDate = new Date();
 var currentMonth = currentDate.getMonth();
 var currentYear = currentDate.getFullYear();
@@ -491,7 +470,6 @@ function changeMonth(delta) {
     setTimeout(function(){ isTransitioning = false; }, 300);
 }
 
-// ===== ТАП ПО КАЛЕНДАРЮ =====
 function initCalendarSwipe() {
     var container = document.getElementById('calendarContainer');
     if (!container) return;
@@ -507,7 +485,6 @@ function initCalendarSwipe() {
     }, { passive: true });
 }
 
-// ===== АНИМАЦИЯ СЛОГАНА =====
 (function() {
     var splashScreen = document.getElementById('splashScreen');
     var mainContent = document.getElementById('mainContent');
@@ -554,7 +531,6 @@ function initCalendarSwipe() {
     setTimeout(function() { if (!animationComplete) showMainContent(); }, 5000);
 })();
 
-// ===== ОСНОВНОЙ СКРИПТ =====
 var bookings = [];
 var editingId = null;
 var financeChart = null;
